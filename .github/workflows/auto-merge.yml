@@ -2,9 +2,9 @@ name: auto-merge
 
 on:
   pull_request:
-    paths:
-    - automatic-merge/**/*
-    - automatic-merge/*
+    paths-ignore:
+    - '!automatic-merge/**/*'
+    - '!automatic-merge/*'
 
 jobs:
   auto-merge:
