@@ -1,0 +1,18 @@
+name: auto-approve
+
+on:
+  pull_request:
+    paths:
+    - automatic-approval/**/*
+    - automatic-approval/*
+    - .github/workflows/auto-approve.yml 
+
+jobs:
+  auto-approve:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Approve Pull Request
+      uses: juliangruber/approve-pull-request-action@v1
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        number: 1
