@@ -10,8 +10,13 @@ jobs:
   auto-approve:
     runs-on: ubuntu-latest
     steps:
+    - name: Get Pull Request Number
+      run: |
+        PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+        echo "pr: $PR_NUMBER"
+        echo "::set-env name=PR_NUMBER::$PR_NUMBER"
     - name: Approve Pull Request
       uses: juliangruber/approve-pull-request-action@v1
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        number: 1
+        number: ${{ env.PR_NUMBER }}
