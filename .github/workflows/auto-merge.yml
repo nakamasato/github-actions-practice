@@ -3,7 +3,6 @@ name: auto-merge
 on:
   pull_request:
     paths-ignore:
-    - '!automatic-merge/**/*'
     - '!automatic-merge/*'
 
 jobs:
