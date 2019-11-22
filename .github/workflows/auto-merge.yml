@@ -15,9 +15,14 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         number: 2
+    - name: Get Pull Request Number
+      run: |
+        PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+        echo "pr: $PR_NUMBER"
+        echo "::set-env name=PR_NUMBER::$PR_NUMBER"
     - name: Merge Pull Request
       uses: juliangruber/merge-pull-request-action@v1
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        number: 2
+        number: ${{ env.PR_NUMBER }}
         method: squash
