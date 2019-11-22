@@ -5,7 +5,6 @@ on:
     paths:
     - automatic-approval/**/*
     - automatic-approval/*
-    - .github/workflows/auto-approve.yml 
 
 jobs:
   auto-approve:
