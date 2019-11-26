@@ -4,9 +4,6 @@ on:
   pull_request:
     paths-ignore:
     - '!automatic-merge/**'
-    - 'not-automated/**'
-    - 'automatic-approval/**'
-    - '.github/**'
 
 jobs:
   auto-merge:
