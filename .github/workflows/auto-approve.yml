@@ -6,6 +6,7 @@ on:
     - '!automatic-approval/**'
     - 'automatic-merge/**'
     - 'not-automated/**'
+    - '.github/**'
 
 jobs:
   auto-approve:
