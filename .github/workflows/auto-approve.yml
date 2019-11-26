@@ -4,6 +4,8 @@ on:
   pull_request:
     paths-ignore:
     - '!automatic-approval/**'
+    - 'automatic-merge/**'
+    - 'not-automated/**'
 
 jobs:
   auto-approve:
