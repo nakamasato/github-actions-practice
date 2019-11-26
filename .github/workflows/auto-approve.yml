@@ -6,7 +6,7 @@ on:
     - 'automatic-approval/**'
     paths-ignore:
     - '!automatic-approval/**'
-
+    - 'not-automated/**'
 
 jobs:
   auto-approve:
