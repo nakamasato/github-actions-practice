@@ -1,0 +1,21 @@
+name: branch & tag
+
+on:
+  push:
+    branch:
+    - merge
+    tags:
+    - v1.*
+
+jobs:
+  merge-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Merge to master branch
+        uses: devmasx/merge-branch@v1.1.0
+        with:
+          type: now
+          target_branch: 'master'
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
