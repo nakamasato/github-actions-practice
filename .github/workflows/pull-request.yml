@@ -31,6 +31,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: pull-request merged
+      - name: pull-request open
         run: |
           echo "Pull Request"
