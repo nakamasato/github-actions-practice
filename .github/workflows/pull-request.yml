@@ -1,0 +1,36 @@
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  merge:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: pull-request merged
+        run: |
+          echo "::set-env name=release_tag::v$(date '+%Y%m%d_%H%M%S')"
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.release_tag }}
+          release_name: Release ${{ env.release_tag }}
+          body: "${{github.event.pull_request.body}}"
+          draft: false
+          prerelease: false
+
+  pull_request:
+    if: github.event.pull_request.merged != true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: pull-request open
+        run: |
+          echo "Pull Request"
