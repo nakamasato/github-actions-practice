@@ -1,0 +1,14 @@
+name: awscli
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/awscli.yml
+
+jobs:
+  jq:
+    runs-on: ubuntu-latest
+    steps:
+      - name: awscli
+        run: |
+          aws --version
