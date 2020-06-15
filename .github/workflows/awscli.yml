@@ -6,7 +6,7 @@ on:
       - .github/workflows/awscli.yml
 
 jobs:
-  jq:
+  awscli:
     runs-on: ubuntu-latest
     steps:
       - name: awscli
