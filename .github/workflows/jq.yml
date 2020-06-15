@@ -1,0 +1,15 @@
+name: jq
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/jq.yml
+
+jobs:
+  jq:
+    runs-on: ubuntu-latest
+    steps:
+      - name: jq
+        run: |
+          PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+          echo "pr: $PR_NUMBER"
