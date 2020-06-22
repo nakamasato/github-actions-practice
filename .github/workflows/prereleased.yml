@@ -1,0 +1,33 @@
+name: prereleased
+
+on:
+  release:
+    types: [prereleased]
+
+jobs:
+  check-tag-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: get tag commit hash
+        id: tag-commit-hash
+        run: echo "::set-output name=tag-hash::${{ github.sha }}"
+      - name: checkout master
+        uses: actions/checkout@v2
+        with:
+          ref: master
+      - name: get latest master commit hash
+        id: master-commit-hash
+        run: |
+          hash=$(git log -n1 --format=format:"%H")
+          echo "::set-output name=master-hash::${hash}"
+      - name: exit if tag commit hash doesn't match with the master commit hash
+        if: steps.tag-commit-hash.outputs.tag-hash != steps.master-commit-hash.outputs.master-hash
+        run: exit 1
+  deploy:
+    needs: check-tag-branch
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: deploy
+      run: |
+        echo "preleased"
