@@ -2,8 +2,8 @@ name: auto-approve
 
 on:
   pull_request:
-    paths-ignore:
-      - "!automatic-approval/**"
+    paths:
+      - "automatic-approval/**"
 
 jobs:
   auto-approve:
