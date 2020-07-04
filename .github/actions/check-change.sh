@@ -18,11 +18,12 @@ if [ "$AUTO_MERGE_NOT_MATCH_FILE_NUM" == 0 ];then
     AUTO_MERGE_NOT_MATCH_LINE_NUM=$(git diff origin/master HEAD | grep -vE "$AUTO_MERGE_ALLOWED_REGEX" | wc -l)
     if [ "$AUTO_MERGE_NOT_MATCH_LINE_NUM" == 0 ];then
         change_check='x'
+        message="all passed"
         # echo "**message:** auto-approved" >> $PR_COMMENT_CONTENT_TMP_FILE
     else
         # echo "**message:** auto-approve is skipped as following lines are changed:" >> $PR_COMMENT_CONTENT_TMP_FILE
         # { echo "\`\`\`"; git diff origin/master HEAD | grep -vE "$AUTO_MERGE_ALLOWED_REGEX"; echo "\`\`\`"; } >> $PR_COMMENT_CONTENT_TMP_FILE
-        change_check_detail="**message:** auto-approve is skipped as following lines are changed:
+        message="skipped as following lines are changed
         \`\`\`
         $(git diff origin/master HEAD | grep -vE $AUTO_MERGE_ALLOWED_REGEX)
         \`\`\`
@@ -31,19 +32,18 @@ if [ "$AUTO_MERGE_NOT_MATCH_FILE_NUM" == 0 ];then
 else
     # echo "**message:** auto-approve is skipped as the following files are changed:" >> $PR_COMMENT_CONTENT_TMP_FILE
     # { echo "\`\`\`"; git diff --name-only origin/master HEAD | grep -vE "$AUTO_MERGE_FILE_PATH_REGEX"; echo "\`\`\`"; } >> $PR_COMMENT_CONTENT_TMP_FILE
-    file_check_detail="**message:** auto-approve is skipped as the following files are changed:
-    \`\`\`
-    $(git diff --name-only origin/master HEAD | grep -vE $AUTO_MERGE_FILE_PATH_REGEX)
-    \`\`\`
-    "
+    message="skipped as the following files are changed
+\`\`\`
+$(git diff --name-only origin/master HEAD | grep -vE $AUTO_MERGE_FILE_PATH_REGEX)
+\`\`\`
+"
 fi
 
 echo "
-auto-approve condition (defined in \`.github/actions/check-change.sh\`) is:
-- [$file_check] files: \`$AUTO_MERGE_FILE_PATH_REGEX\`
-    ${file_check_detail:-}
-- [$change_check] changes: \`$AUTO_MERGE_ALLOWED_REGEX\`
-    ${change_check_detail:-}
+auto-approve condition (defined in \`.github/actions/check-change.sh\`):
+1. [$file_check] files: \`$AUTO_MERGE_FILE_PATH_REGEX\`
+1. [$change_check] changes: \`$AUTO_MERGE_ALLOWED_REGEX\`
+message: ${message:-}
 " >> $PR_COMMENT_CONTENT_TMP_FILE
 sed -i -z 's/\n/\\n/g' $PR_COMMENT_CONTENT_TMP_FILE
 
