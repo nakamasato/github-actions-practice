@@ -40,10 +40,12 @@ $(git diff --name-only origin/master HEAD | grep -vE $AUTO_MERGE_FILE_PATH_REGEX
 fi
 
 echo "
-- auto-approve condition (defined in \`.github/actions/check-change.sh\`):
-    1. [$file_check] files: \`$AUTO_MERGE_FILE_PATH_REGEX\`
-    1. [$change_check] changes: \`$AUTO_MERGE_ALLOWED_REGEX\`
-- message: ${message:-}
+## auto-approve condition 
+(defined in \`.github/actions/check-change.sh\`):
+1. [$file_check] files: \`$AUTO_MERGE_FILE_PATH_REGEX\`
+1. [$change_check] changes: \`$AUTO_MERGE_ALLOWED_REGEX\`
+## message
+${message:-}
 " >> $PR_COMMENT_CONTENT_TMP_FILE
 sed -i -z 's/\n/\\n/g' $PR_COMMENT_CONTENT_TMP_FILE
 
