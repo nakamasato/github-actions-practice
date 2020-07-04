@@ -13,6 +13,6 @@ else
     echo "\`\`\`" >> comments
 fi
 
-echo "auto-approve condition is: \`$AUTO_MERGE_DIR_REGEX\`"
+echo "auto-approve condition is: \`$AUTO_MERGE_DIR_REGEX\`" >> comments
 
 sed -i -z 's/\n/\\n/g' comments
