@@ -11,31 +11,39 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Get Pull Request Number
-        run: |
-          PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
-          echo "pr: $PR_NUMBER"
-          echo "::set-env name=PR_NUMBER::$PR_NUMBER"
-      - name: Check change and create comments
+
+      - name: Check change and create comment
+        id: check-change-and-create-comment
         run: |
           cd .github/actions
           bash ./check-change.sh
 
-      - name: Post multi-line comments
+      - name: Post comment on PR
+        id: post-comment-on-pr
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           URL: ${{ github.event.pull_request.comments_url }}
         run: |
+          cd .github/actions
           status_code=$(curl -o /dev/null -w '%{http_code}\n' -s -X POST \
               -H "Authorization: token ${GITHUB_TOKEN}" \
-              -d "{\"body\": \"$(cat .github/actions/comments)\"}" \
+              -d "{\"body\": \"$(cat comments)\"}" \
               ${URL})
           echo $status_code
           if [[ $status_code != 201 ]];then
               exit 1
           fi
-      # - name: Approve Pull Request
-      #   uses: juliangruber/approve-pull-request-action@v1
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     number: ${{ env.PR_NUMBER }}
+
+      - name: Get PR number
+        id: get-pull-request-num
+        run: |
+          PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+          echo "pr: $PR_NUMBER"
+          echo "::set-env name=PR_NUMBER::$PR_NUMBER"
+
+      - name: Approve Pull Request
+        if: ${{ steps.post-comment-on-pr.outcome == success }}
+        uses: juliangruber/approve-pull-request-action@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          number: ${{ env.PR_NUMBER }}
