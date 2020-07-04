@@ -11,5 +11,8 @@ else
     echo "\`\`\`" >> comments
     git diff --name-only origin/master HEAD | grep -vE $AUTO_MERGE_DIR_REGEX >> comments
     echo "\`\`\`" >> comments
-    sed -i -z 's/\n/\\n/g' comments
 fi
+
+echo "auto-approve condition is: \`$AUTO_MERGE_DIR_REGEX\`"
+
+sed -i -z 's/\n/\\n/g' comments
