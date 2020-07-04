@@ -13,6 +13,6 @@ else
     echo "\`\`\`" >> comments
 fi
 
-echo "auto-approve condition is: \`$AUTO_MERGE_DIR_REGEX\`" >> comments
+echo "auto-approve condition is: \`$AUTO_MERGE_DIR_REGEX\` defined in [.github/actions/check-change.sh]()" >> comments
 
 sed -i -z 's/\n/\\n/g' comments
