@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+set -eu
 
 AUTO_MERGE_DIR_REGEX='check-change/.*/auto-merge/.*.yaml'
 PR_COMMENT_CONTENT_TMP_FILE=comment
