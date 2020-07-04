@@ -19,10 +19,9 @@ jobs:
         run: |
           cd .github/actions
           bash ./check-change.sh
-          echo $AUTO_MERGE_NOT_MATCH_FILE_NUM
-          echo $SEND_MESSAGE
 
       - name: Post comment on PR
+        if: ${{ env.SEND_MESSAGE == '1' }} # set in check-change.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           URL: ${{ github.event.pull_request.comments_url }}
@@ -38,6 +37,7 @@ jobs:
           fi
 
       - name: Get PR number
+        if: ${{ env.AUTO_APPROVE == '1' }} # set in check-change.sh
         run: |
           PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
           echo "pr: $PR_NUMBER"
