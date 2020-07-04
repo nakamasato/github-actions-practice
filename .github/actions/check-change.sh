@@ -9,14 +9,14 @@ BASE_BRANCH=${BASE_BRANCH:-master}
 SOURCE_BRANCH=${SOURCE_BRANCH:-$(git rev-parse --abbrev-ref HEAD)}
 
 git fetch origin "$BASE_BRANCH"
-AUTO_APPROVE_NOT_MATCH_FILE_NUM=$(git diff --name-only "origin/$BASE_BRANCH" HEAD | grep -cvE "$AUTO_APPROVE_FILE_PATH_REGEX" | sed 's/ //g')
+AUTO_APPROVE_NOT_MATCH_FILE_NUM=$(git diff --name-only "origin/$BASE_BRANCH" HEAD | grep -cvE "$AUTO_APPROVE_FILE_PATH_REGEX")
 
 file_check=' '
 change_check=' '
 if [ "$AUTO_APPROVE_NOT_MATCH_FILE_NUM" == 0 ];then
     POST_COMMENT=1
     file_check='x'
-    AUTO_APPROVE_NOT_MATCH_LINE_NUM=$(git diff origin/master HEAD | grep -cvE "$AUTO_APPROVE_ALLOWED_REGEX" | sed 's/ //g')
+    AUTO_APPROVE_NOT_MATCH_LINE_NUM=$(git diff origin/master HEAD | grep -cvE "$AUTO_APPROVE_ALLOWED_REGEX")
     if [ "$AUTO_APPROVE_NOT_MATCH_LINE_NUM" == 0 ];then
         change_check='x'
         message="all passed"
