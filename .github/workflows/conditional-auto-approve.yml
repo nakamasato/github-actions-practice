@@ -1,4 +1,4 @@
-name: check-change
+name: conditional-auto-approve
 
 on:
   pull_request:
@@ -7,22 +7,21 @@ on:
       - .github/actions/check-change.sh
 
 jobs:
-  check-change:
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
       - name: Check change and create comment
-        id: check-change-and-create-comment
         env:
           SOURCE_BRANCH: ${{ github.head_ref }}
           BASE_BRANCH: ${{ github.base_ref }}
         run: |
           cd .github/actions
           bash ./check-change.sh
+          printenv
 
       - name: Post comment on PR
-        id: post-comment-on-pr
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           URL: ${{ github.event.pull_request.comments_url }}
@@ -38,7 +37,6 @@ jobs:
           fi
 
       - name: Get PR number
-        id: get-pull-request-num
         run: |
           PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
           echo "pr: $PR_NUMBER"
