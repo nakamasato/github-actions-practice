@@ -12,6 +12,8 @@ else
     { echo "\`\`\`"; git diff --name-only origin/master HEAD | grep -vE "$AUTO_MERGE_DIR_REGEX"; echo "\`\`\`"; } >> $PR_COMMENT_CONTENT_TMP_FILE
 fi
 echo "GITHUB_REF: $GITHUB_REF"
+echo "GITHUB_SHA: $GITHUB_SHA"
+echo "branch ${GITHUB_REF##*/}"
 echo "auto-approve condition is: \`$AUTO_MERGE_DIR_REGEX\` defined in $GITHUB_REPOSITORY/.github/actions/check-change.sh" >> $PR_COMMENT_CONTENT_TMP_FILE
 sed -i -z 's/\n/\\n/g' $PR_COMMENT_CONTENT_TMP_FILE
 
