@@ -19,6 +19,12 @@
 0 directories, 12 files
 ```
 
+## Triggers
+
+- pull request
+    > Note: By default, a workflow only runs when a pull_request's activity type is `opened`, `synchronize`, or `reopened`.
+- release
+
 ## Example: Conditional auto approve
 
 Configuration:
