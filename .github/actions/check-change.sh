@@ -49,4 +49,4 @@ sed -i -z 's/\n/\\n/g' $PR_COMMENT_CONTENT_TMP_FILE
 echo "::set-output name=AUTO_APPROVE::${AUTO_APPROVE:-0}"
 echo "::set-output name=POST_COMMENT::${POST_COMMENT:-0}"
 
-echo "Done"
+echo "Done (file_check: $file_check, change_check: $change_check)"
