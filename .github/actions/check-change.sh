@@ -46,7 +46,8 @@ ${message:-}
 " >> $PR_COMMENT_CONTENT_TMP_FILE
 sed -i -z 's/\n/\\n/g' $PR_COMMENT_CONTENT_TMP_FILE
 
-
+echo "::set-output name=AUTO_APPROVE::${AUTO_APPROVE:-0}"
+echo "::set-output name=SEND_MESSAGE::${SEND_MESSAGE:-0}"
 echo "::set-env name=AUTO_APPROVE::${AUTO_APPROVE:-0}"
 echo "::set-env name=SEND_MESSAGE::${SEND_MESSAGE:-0}"
 
