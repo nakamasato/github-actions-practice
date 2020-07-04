@@ -22,13 +22,13 @@
 ## Triggers
 
 - pull request
-    > Note: By default, a workflow only runs when a pull_request's activity type is `opened`, `synchronize`, or `reopened`.
+    > Note: By default, a workflow only runs when a pull_request's activity type is `opened`, `synchronize`, or `reopened`. (https://docs.github.com/en/actions/reference/events-that-trigger-workflows#pull-request-event-pull_request)
 - release
 
 ## Example: Conditional auto approve
 
 Configuration:
-- `AUTO_APPROVE_FILE_PATH_REGEX`: All the changed files in a PR need to match the regular expression. e.g. `check-change/.*/auto-merge/.*.yaml` <- 
+- `AUTO_APPROVE_FILE_PATH_REGEX`: All the changed files in a PR need to match the regular expression. e.g. `check-change/.*/auto-merge/.*.yaml` <-
 - `AUTO_APPROVE_ALLOWED_REGEX`: All the changed lines need to match the regular expression. e.g. `'(image)'`
 
 Github Actions:
