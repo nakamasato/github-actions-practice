@@ -14,7 +14,7 @@ AUTO_MERGE_NOT_MATCH_FILE_NUM=$(git diff --name-only "origin/$BASE_BRANCH" HEAD 
 file_check=' '
 change_check=' '
 if [ "$AUTO_MERGE_NOT_MATCH_FILE_NUM" == 0 ];then
-    SEND_MESSAGE=1
+    POST_COMMENT=1
     file_check='x'
     AUTO_MERGE_NOT_MATCH_LINE_NUM=$(git diff origin/master HEAD | grep -cvE "$AUTO_MERGE_ALLOWED_REGEX" | sed 's/ //g')
     if [ "$AUTO_MERGE_NOT_MATCH_LINE_NUM" == 0 ];then
@@ -47,8 +47,6 @@ ${message:-}
 sed -i -z 's/\n/\\n/g' $PR_COMMENT_CONTENT_TMP_FILE
 
 echo "::set-output name=AUTO_APPROVE::${AUTO_APPROVE:-0}"
-echo "::set-output name=SEND_MESSAGE::${SEND_MESSAGE:-0}"
-echo "::set-env name=AUTO_APPROVE::${AUTO_APPROVE:-0}"
-echo "::set-env name=SEND_MESSAGE::${SEND_MESSAGE:-0}"
+echo "::set-output name=POST_COMMENT::${POST_COMMENT:-0}"
 
 echo "Done"
