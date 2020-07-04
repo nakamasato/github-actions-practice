@@ -1,5 +1,24 @@
 # github-actions-practice
 
+```
+± tree .github/workflows/
+.github/workflows/
+├── auto-approve.yml
+├── auto-merge.yml
+├── awscli.yml
+├── branch-and-tag.yml
+├── check-change.yml
+├── jq.yml
+├── pip-cache.yml
+├── pip-no-cache.yml
+├── prereleased.yml
+├── pull-request.yml
+├── released.yml
+└── zip.yml
+
+0 directories, 12 files
+```
+
 ## Example 1. Test mvn with MySQL
 
 ```

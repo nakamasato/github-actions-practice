@@ -12,6 +12,9 @@ jobs:
           PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
           echo "pr: $PR_NUMBER"
           echo "::set-env name=PR_NUMBER::$PR_NUMBER"
+      - name: check change
+        run: |
+          ls
       # - name: Approve Pull Request
       #   uses: juliangruber/approve-pull-request-action@v1
       #   with:
