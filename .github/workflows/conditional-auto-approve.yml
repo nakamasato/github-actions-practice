@@ -19,7 +19,8 @@ jobs:
         run: |
           cd .github/actions
           bash ./check-change.sh
-          printenv
+          echo $AUTO_MERGE_NOT_MATCH_FILE_NUM
+          echo $SEND_MESSAGE
 
       - name: Post comment on PR
         env:
