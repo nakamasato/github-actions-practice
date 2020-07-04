@@ -17,7 +17,7 @@ change_check=' '
 if [ "$AUTO_APPROVE_NOT_MATCH_FILE_NUM" == 0 ];then
     POST_COMMENT=1
     file_check='x'
-    AUTO_APPROVE_NOT_MATCH_LINE_NUM=$(git diff --unified=0 origin/$BASE_BRANCH HEAD | grep '^[+-] ' | grep -cvE "$AUTO_APPROVE_ALLOWED_REGEX" | sed 's/ //g')
+    AUTO_APPROVE_NOT_MATCH_LINE_NUM=$(git diff --unified=0 "origin/$BASE_BRANCH" HEAD | grep '^[+-] ' | grep -cvE "$AUTO_APPROVE_ALLOWED_REGEX" | sed 's/ //g')
     if [ "$AUTO_APPROVE_NOT_MATCH_LINE_NUM" == 0 ];then
         change_check='x'
         message="all passed"
@@ -25,14 +25,14 @@ if [ "$AUTO_APPROVE_NOT_MATCH_FILE_NUM" == 0 ];then
     else
         message="skipped as following lines are changed
 \`\`\`
-$(git diff origin/$BASE_BRANCH HEAD | grep -vE "$AUTO_APPROVE_ALLOWED_REGEX")
+$(git diff "origin/$BASE_BRANCH" HEAD | grep -vE "$AUTO_APPROVE_ALLOWED_REGEX")
 \`\`\`
 "
     fi
 else
     message="skipped as the following files are changed
 \`\`\`
-$(git diff --name-only origin/$BASE_BRANCH HEAD | grep -vE "$AUTO_APPROVE_FILE_PATH_REGEX")
+$(git diff --name-only "origin/$BASE_BRANCH" HEAD | grep -vE "$AUTO_APPROVE_FILE_PATH_REGEX")
 \`\`\`
 "
 fi
