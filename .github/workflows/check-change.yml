@@ -26,10 +26,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           URL: ${{ github.event.pull_request.comments_url }}
         run: |
-          curl -X POST \
+          status_code=$(curl -o /dev/null -w '%{http_code}\n' -s -X POST \
               -H "Authorization: token ${GITHUB_TOKEN}" \
               -d "{\"body\": \"$(cat comments)\"}" \
-              ${URL}          
+              ${URL})
+          if [[ $status_code != 200 ]];then
+              exit 1
+          fi
       # - name: Approve Pull Request
       #   uses: juliangruber/approve-pull-request-action@v1
       #   with:
