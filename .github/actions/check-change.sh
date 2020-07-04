@@ -19,6 +19,7 @@ if [ "$AUTO_MERGE_NOT_MATCH_FILE_NUM" == 0 ];then
     if [ "$AUTO_MERGE_NOT_MATCH_LINE_NUM" == 0 ];then
         change_check='x'
         message="all passed"
+        AUTO_APPROVE=1
     else
         message="skipped as following lines are changed
         \`\`\`
@@ -45,6 +46,6 @@ ${message:-}
 sed -i -z 's/\n/\\n/g' $PR_COMMENT_CONTENT_TMP_FILE
 
 export AUTO_MERGE_NOT_MATCH_FILE_NUM=$AUTO_MERGE_NOT_MATCH_FILE_NUM
-echo "AUTO_MERGE_NOT_MATCH_FILE_NUM: $AUTO_MERGE_NOT_MATCH_FILE_NUM"
+echo "::set-env name=AUTO_APPROVE::${AUTO_APPROVE:-0}"
 
 echo "Done"

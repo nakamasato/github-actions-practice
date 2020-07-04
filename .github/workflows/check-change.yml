@@ -20,7 +20,6 @@ jobs:
         run: |
           cd .github/actions
           bash ./check-change.sh
-          echo "AUTO_MERGE_NOT_MATCH_FILE_NUM: $AUTO_MERGE_NOT_MATCH_FILE_NUM"
 
       - name: Post comment on PR
         id: post-comment-on-pr
@@ -46,7 +45,7 @@ jobs:
           echo "::set-env name=PR_NUMBER::$PR_NUMBER"
 
       - name: Approve Pull Request
-        if: ${{ steps.post-comment-on-pr.outcome == 'success' }}
+        if: ${{ env.AUTO_APPROVE == '1' }}
         uses: juliangruber/approve-pull-request-action@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
