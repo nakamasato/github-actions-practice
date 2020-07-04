@@ -14,6 +14,8 @@ jobs:
 
       - name: Check change and create comment
         id: check-change-and-create-comment
+        env:
+          SOURCE_BRANCH: ${{ github.head_ref }}
         run: |
           cd .github/actions
           bash ./check-change.sh
