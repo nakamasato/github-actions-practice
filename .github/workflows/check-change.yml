@@ -28,7 +28,7 @@ jobs:
         run: |
           status_code=$(curl -o /dev/null -w '%{http_code}\n' -s -X POST \
               -H "Authorization: token ${GITHUB_TOKEN}" \
-              -d "{\"body\": \"$(cat comments)\"}" \
+              -d "{\"body\": \"$(cat .github/actions/comments)\"}" \
               ${URL})
           echo $status_code
           if [[ $status_code != 200 ]];then
