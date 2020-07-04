@@ -13,7 +13,8 @@ else
 fi
 echo "GITHUB_REF: $GITHUB_REF"
 echo "GITHUB_SHA: $GITHUB_SHA"
-echo "branch $SOURCE_BRANCH"
+echo "SOURCE_BRANCH $SOURCE_BRANCH"
+echo "BASE_BRANCH $BASE_BRANCH"
 echo "auto-approve condition is: \`$AUTO_MERGE_DIR_REGEX\` defined in $GITHUB_REPOSITORY/.github/actions/check-change.sh" >> $PR_COMMENT_CONTENT_TMP_FILE
 sed -i -z 's/\n/\\n/g' $PR_COMMENT_CONTENT_TMP_FILE
 
