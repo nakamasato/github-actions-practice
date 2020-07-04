@@ -2,6 +2,7 @@ name: conditional-auto-approve
 
 on:
   pull_request:
+    types: [assigned, opened, synchronize, reopened, ready_for_review]
     path:
       - check-change**
       - .github/actions/check-change.sh
@@ -9,6 +10,7 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
     steps:
       - uses: actions/checkout@v2
 
