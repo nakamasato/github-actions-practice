@@ -42,7 +42,7 @@ jobs:
           echo "::set-env name=PR_NUMBER::$PR_NUMBER"
 
       - name: Approve Pull Request
-        if: ${{ steps.post-comment-on-pr.outcome == success }}
+        if: ${{ steps.post-comment-on-pr.outcome == 'success' }}
         uses: juliangruber/approve-pull-request-action@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
