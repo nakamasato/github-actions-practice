@@ -31,7 +31,7 @@ jobs:
               -d "{\"body\": \"$(cat .github/actions/comments)\"}" \
               ${URL})
           echo $status_code
-          if [[ $status_code != 200 ]];then
+          if [[ $status_code != 201 ]];then
               exit 1
           fi
       # - name: Approve Pull Request
