@@ -1,6 +1,6 @@
 name: check-change
 
-on: 
+on:
   pull_request:
     path:
       - check-change**
