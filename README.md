@@ -19,7 +19,16 @@
 0 directories, 12 files
 ```
 
-## Example 1. Test mvn with MySQL
+## Example: Conditional auto approve
+
+Configuration:
+- `AUTO_APPROVE_FILE_PATH_REGEX`: All the changed files in a PR need to match the regular expression. e.g. `check-change/.*/auto-merge/.*.yaml` <- 
+- `AUTO_APPROVE_ALLOWED_REGEX`: All the changed lines need to match the regular expression. e.g. `'(image)'`
+
+Github Actions:
+- `.github/workflows/conditional-auto-approve.yml`
+
+## Example: Test mvn with MySQL
 
 ```
   test:
