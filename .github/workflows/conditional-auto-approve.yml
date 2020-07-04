@@ -1,0 +1,52 @@
+name: conditional-auto-approve
+
+on:
+  pull_request:
+    path:
+      - check-change**
+      - .github/actions/check-change.sh
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Check change and create comment
+        id: check-change-and-create-comment
+        env:
+          SOURCE_BRANCH: ${{ github.head_ref }}
+          BASE_BRANCH: ${{ github.base_ref }}
+        working-directory: .github/actions
+        run: |
+          bash ./check-change.sh
+
+      - name: Post comment on PR
+        if: ${{ steps.check-change-and-create-comment.outputs.POST_COMMENT == '1' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          URL: ${{ github.event.pull_request.comments_url }}
+        working-directory: .github/actions
+        run: |
+          status_code=$(curl -o /dev/null -w '%{http_code}\n' -s -X POST \
+              -H "Authorization: token ${GITHUB_TOKEN}" \
+              -d "{\"body\": \"$(cat comment)\"}" \
+              ${URL})
+          echo $status_code
+          if [[ $status_code != 201 ]];then
+              exit 1
+          fi
+
+      - name: Get PR number
+        if: ${{ steps.check-change-and-create-comment.outputs.AUTO_APPROVE == '1' }}
+        run: |
+          PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+          echo "pr: $PR_NUMBER"
+          echo "::set-env name=PR_NUMBER::$PR_NUMBER"
+
+      - name: Approve Pull Request
+        if: ${{ steps.check-change-and-create-comment.outputs.AUTO_APPROVE == '1' }}
+        uses: juliangruber/approve-pull-request-action@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          number: ${{ env.PR_NUMBER }}
