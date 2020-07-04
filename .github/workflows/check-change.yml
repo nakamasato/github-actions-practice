@@ -19,7 +19,7 @@ jobs:
       - name: Check change and create comments
         run: |
           cd .github/actions
-          sh ./check-change.sh
+          bash ./check-change.sh
 
       - name: Post multi-line comments
         env:
