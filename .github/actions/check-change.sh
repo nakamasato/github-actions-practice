@@ -11,7 +11,8 @@ else
     echo "auto-approve is skipped as the following files are changed:" >> $PR_COMMENT_CONTENT_TMP_FILE
     { echo "\`\`\`"; git diff --name-only origin/master HEAD | grep -vE "$AUTO_MERGE_DIR_REGEX"; echo "\`\`\`"; } >> $PR_COMMENT_CONTENT_TMP_FILE
 fi
-echo "auto-approve condition is: \`$AUTO_MERGE_DIR_REGEX\` defined in /.github/actions/check-change.sh" >> $PR_COMMENT_CONTENT_TMP_FILE
+echo "GITHUB_REF: $GITHUB_REF"
+echo "auto-approve condition is: \`$AUTO_MERGE_DIR_REGEX\` defined in $GITHUB_REPOSITORY/.github/actions/check-change.sh" >> $PR_COMMENT_CONTENT_TMP_FILE
 sed -i -z 's/\n/\\n/g' $PR_COMMENT_CONTENT_TMP_FILE
 
 export NON_AUTOMERGE_FILE_NUM=$NON_AUTOMERGE_FILE_NUM
