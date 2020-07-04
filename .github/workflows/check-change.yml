@@ -1,6 +1,10 @@
 name: check-change
 
-on: [pull_request]
+on: 
+  pull_request:
+    path:
+      - check-change**
+      - .github/actions/check-change.sh
 
 jobs:
   check-change:
@@ -14,7 +18,8 @@ jobs:
           echo "::set-env name=PR_NUMBER::$PR_NUMBER"
       - name: check change
         run: |
-          ls
+          cd .github/actions
+          sh ./check-change.sh
       # - name: Approve Pull Request
       #   uses: juliangruber/approve-pull-request-action@v1
       #   with:
