@@ -2,7 +2,7 @@
 set -eu
 
 AUTO_APPROVE_FILE_PATH_REGEX='check-change/.*/auto-merge/.*.yaml'
-AUTO_APPROVE_ALLOWED_REGEX='(image)'
+AUTO_APPROVE_ALLOWED_REGEX='(image|replicas)'
 PR_COMMENT_CONTENT_TMP_FILE=comment
 if [ -f $PR_COMMENT_CONTENT_TMP_FILE ]; then rm $PR_COMMENT_CONTENT_TMP_FILE; fi
 BASE_BRANCH=${BASE_BRANCH:-master}
