@@ -30,6 +30,7 @@ jobs:
               -H "Authorization: token ${GITHUB_TOKEN}" \
               -d "{\"body\": \"$(cat comments)\"}" \
               ${URL})
+          echo $status_code
           if [[ $status_code != 200 ]];then
               exit 1
           fi
