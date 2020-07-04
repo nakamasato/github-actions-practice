@@ -9,20 +9,17 @@ BASE_BRANCH=${BASE_BRANCH:-master}
 SOURCE_BRANCH=${SOURCE_BRANCH:-$(git rev-parse --abbrev-ref HEAD)}
 
 git fetch origin "$BASE_BRANCH"
-AUTO_MERGE_NOT_MATCH_FILE_NUM=$(git diff --name-only "origin/$BASE_BRANCH" HEAD | grep -vE "$AUTO_MERGE_FILE_PATH_REGEX" | wc -l)
+AUTO_MERGE_NOT_MATCH_FILE_NUM=$(git diff --name-only "origin/$BASE_BRANCH" HEAD | grep -vE "$AUTO_MERGE_FILE_PATH_REGEX" | wc -l | sed 's/ //g')
 
 file_check=' '
 change_check=' '
 if [ "$AUTO_MERGE_NOT_MATCH_FILE_NUM" == 0 ];then
     file_check='x'
-    AUTO_MERGE_NOT_MATCH_LINE_NUM=$(git diff origin/master HEAD | grep -vE "$AUTO_MERGE_ALLOWED_REGEX" | wc -l)
+    AUTO_MERGE_NOT_MATCH_LINE_NUM=$(git diff origin/master HEAD | grep -vE "$AUTO_MERGE_ALLOWED_REGEX" | wc -l | sed 's/ //g')
     if [ "$AUTO_MERGE_NOT_MATCH_LINE_NUM" == 0 ];then
         change_check='x'
         message="all passed"
-        # echo "**message:** auto-approved" >> $PR_COMMENT_CONTENT_TMP_FILE
     else
-        # echo "**message:** auto-approve is skipped as following lines are changed:" >> $PR_COMMENT_CONTENT_TMP_FILE
-        # { echo "\`\`\`"; git diff origin/master HEAD | grep -vE "$AUTO_MERGE_ALLOWED_REGEX"; echo "\`\`\`"; } >> $PR_COMMENT_CONTENT_TMP_FILE
         message="skipped as following lines are changed
         \`\`\`
         $(git diff origin/master HEAD | grep -vE $AUTO_MERGE_ALLOWED_REGEX)
@@ -30,8 +27,6 @@ if [ "$AUTO_MERGE_NOT_MATCH_FILE_NUM" == 0 ];then
         "
     fi
 else
-    # echo "**message:** auto-approve is skipped as the following files are changed:" >> $PR_COMMENT_CONTENT_TMP_FILE
-    # { echo "\`\`\`"; git diff --name-only origin/master HEAD | grep -vE "$AUTO_MERGE_FILE_PATH_REGEX"; echo "\`\`\`"; } >> $PR_COMMENT_CONTENT_TMP_FILE
     message="skipped as the following files are changed
 \`\`\`
 $(git diff --name-only origin/master HEAD | grep -vE $AUTO_MERGE_FILE_PATH_REGEX)
@@ -50,4 +45,6 @@ ${message:-}
 sed -i -z 's/\n/\\n/g' $PR_COMMENT_CONTENT_TMP_FILE
 
 export AUTO_MERGE_NOT_MATCH_FILE_NUM=$AUTO_MERGE_NOT_MATCH_FILE_NUM
+echo "AUTO_MERGE_NOT_MATCH_FILE_NUM: $AUTO_MERGE_NOT_MATCH_FILE_NUM"
+
 echo "Done"

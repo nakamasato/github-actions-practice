@@ -20,7 +20,7 @@ jobs:
         run: |
           cd .github/actions
           bash ./check-change.sh
-          echo "NON_AUTOMERGE_FILE_NUM: $NON_AUTOMERGE_FILE_NUM"
+          echo "AUTO_MERGE_NOT_MATCH_FILE_NUM: $AUTO_MERGE_NOT_MATCH_FILE_NUM"
 
       - name: Post comment on PR
         id: post-comment-on-pr
