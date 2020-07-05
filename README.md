@@ -19,11 +19,49 @@
 0 directories, 12 files
 ```
 
-## Triggers
-
+## Reference
+### Triggers
 - pull request
     > Note: By default, a workflow only runs when a pull_request's activity type is `opened`, `synchronize`, or `reopened`. (https://docs.github.com/en/actions/reference/events-that-trigger-workflows#pull-request-event-pull_request)
+    
+    - specify types:
+    ```
+    on:
+      pull_request:
+        types: [assigned, opened, synchronize, reopened, ready_for_review]
+    ```
 - release
+### Outputs
+- https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+
+    set outputs:
+
+    ```
+    echo "::set-output name=<your var name>::<value>"
+    ```
+    use:
+    
+    ```
+    ${{ steps.<step_id>.outputs.<your var name> }}
+    ```
+### Context
+- https://docs.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#contexts
+example:
+- skip draft PR
+    ```
+    if: github.event.pull_request.draft == false
+    ```
+### Env
+- [default environment variables](https://docs.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables#default-environment-variables)
+
+Example:
+- source branch and base brach of PR
+    
+    ```
+    env:
+      SOURCE_BRANCH: ${{ github.head_ref }}
+      BASE_BRANCH: ${{ github.base_ref }}
+    ```
 
 ## Example: Conditional auto approve
 
