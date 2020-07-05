@@ -7,7 +7,6 @@ on:
       - synchronize # default
       - reopened # default
       - ready_for_review # draft -> ready
-      - edited # change base branch
     path:
       - check-change**
       - .github/actions/check-change.sh
