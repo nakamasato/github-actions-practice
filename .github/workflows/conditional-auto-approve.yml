@@ -36,6 +36,8 @@ jobs:
               ${URL})
           echo $status_code
           if [[ $status_code != 201 ]];then
+              echo "failed to post with comment:"
+              cat $comment
               exit 1
           fi
 
