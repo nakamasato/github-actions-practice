@@ -35,6 +35,7 @@ jobs:
           URL: ${{ github.event.pull_request.comments_url }}
         working-directory: .github/actions
         run: |
+          echo "{\"body\": \"$(cat comment)\"}"
           status_code=$(curl -o /dev/null -w '%{http_code}\n' -s -X POST \
               -H "Authorization: token ${GITHUB_TOKEN}" \
               -d "{\"body\": \"$(cat comment)\"}" \
@@ -42,7 +43,6 @@ jobs:
           echo $status_code
           if [[ $status_code != 201 ]];then
               echo "failed to post with comment:"
-              cat $comment
               exit 1
           fi
 
