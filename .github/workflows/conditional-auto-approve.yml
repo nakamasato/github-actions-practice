@@ -2,7 +2,12 @@ name: conditional-auto-approve
 
 on:
   pull_request:
-    types: [assigned, opened, synchronize, reopened, ready_for_review]
+    types:
+      - opened # default
+      - synchronize # default
+      - reopened # default
+      - ready_for_review # draft -> ready
+      - edited # change base branch
     path:
       - check-change**
       - .github/actions/check-change.sh
