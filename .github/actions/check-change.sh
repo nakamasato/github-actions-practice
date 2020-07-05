@@ -25,7 +25,7 @@ if [ "$AUTO_APPROVE_NOT_MATCH_FILE_NUM" == 0 ];then
     else
         message="skipped as following lines are changed
 \`\`\`
-$(git diff "origin/$BASE_BRANCH" HEAD | grep -vE "$AUTO_APPROVE_ALLOWED_REGEX")
+$(git diff --unified=0  "origin/$BASE_BRANCH" HEAD | grep '^[+-] ' | grep -vE "$AUTO_APPROVE_ALLOWED_REGEX")
 \`\`\`
 "
     fi
