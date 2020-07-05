@@ -39,10 +39,10 @@ jobs:
           URL: ${{ github.event.pull_request.comments_url }}
         working-directory: .github/actions
         run: |
-          echo "{\"body\": \"$(cat comment)\"}"
+          echo "{\"body\": \"$(cat $PR_COMMENT_CONTENT_TMP_FILE)\"}"
           status_code=$(curl -o /dev/null -w '%{http_code}\n' -s -X POST \
               -H "Authorization: token ${GITHUB_TOKEN}" \
-              -d "{\"body\": \"$(cat comment)\"}" \
+              -d "{\"body\": \"$(cat $PR_COMMENT_CONTENT_TMP_FILE)\"}" \
               ${URL})
           echo $status_code
           if [[ $status_code != 201 ]];then
