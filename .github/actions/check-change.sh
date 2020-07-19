@@ -1,11 +1,18 @@
 #!/bin/bash
 set -eu
 
-AUTO_APPROVE_FILE_PATH_REGEX='check-change/.*/auto-merge/.*.yaml'
-AUTO_APPROVE_ALLOWED_REGEX='(image|replicas)'
-PR_COMMENT_CONTENT_TMP_FILE=comment
-if [ -f $PR_COMMENT_CONTENT_TMP_FILE ]; then rm $PR_COMMENT_CONTENT_TMP_FILE; fi
-BASE_BRANCH=${BASE_BRANCH:-check-change}
+if [[ -z "${AUTO_APPROVE_FILE_PATH_REGEX:-}" ]]; then
+    echo "Please set AUTO_APPROVE_FILE_PATH_REGEX. e.g. \`export AUTO_APPROVE_FILE_PATH_REGEX='check-change/.*/auto-merge/.*.yaml'\`"
+    exit 1
+fi
+if [[ -z "${AUTO_APPROVE_ALLOWED_REGEX:-}" ]]; then
+    echo "Please set AUTO_APPROVE_ALLOWED_REGEX. e.g. \`export AUTO_APPROVE_ALLOWED_REGEX='(image|replicas)'\`"
+    exit 1
+fi
+
+PR_COMMENT_CONTENT_TMP_FILE=${PR_COMMENT_CONTENT_TMP_FILE:-comment}
+if [ -f "$PR_COMMENT_CONTENT_TMP_FILE" ]; then rm "$PR_COMMENT_CONTENT_TMP_FILE"; fi
+BASE_BRANCH=${BASE_BRANCH:-master}
 SOURCE_BRANCH=${SOURCE_BRANCH:-$(git rev-parse --abbrev-ref HEAD)}
 echo "BASE_BRANCH: $BASE_BRANCH, SOURCE_BRANCH: $SOURCE_BRANCH"
 
@@ -17,7 +24,7 @@ change_check=' '
 if [ "$AUTO_APPROVE_NOT_MATCH_FILE_NUM" == 0 ];then
     POST_COMMENT=1
     file_check='x'
-    AUTO_APPROVE_NOT_MATCH_LINE_NUM=$(git diff --unified=0 "origin/$BASE_BRANCH" HEAD | grep '^[+-] ' | grep -cvE "$AUTO_APPROVE_ALLOWED_REGEX" | sed 's/ //g')
+    AUTO_APPROVE_NOT_MATCH_LINE_NUM=$(git diff --ignore-space-at-eol --unified=0 "origin/$BASE_BRANCH" HEAD | grep '^[+-] ' | grep -cvE "$AUTO_APPROVE_ALLOWED_REGEX" | sed 's/ //g')
     if [ "$AUTO_APPROVE_NOT_MATCH_LINE_NUM" == 0 ];then
         change_check='x'
         message="all passed"
@@ -25,7 +32,7 @@ if [ "$AUTO_APPROVE_NOT_MATCH_FILE_NUM" == 0 ];then
     else
         message="skipped as following lines are changed
 \`\`\`
-$(git diff "origin/$BASE_BRANCH" HEAD | grep -vE "$AUTO_APPROVE_ALLOWED_REGEX")
+$(git diff --ignore-space-at-eol --unified=0 "origin/$BASE_BRANCH" HEAD | grep '^[+-] ' | grep -vE "$AUTO_APPROVE_ALLOWED_REGEX")
 \`\`\`
 "
     fi
@@ -44,8 +51,8 @@ echo "
 1. [$change_check] changes: \`$AUTO_APPROVE_ALLOWED_REGEX\`
 ## message
 ${message:-}
-" >> $PR_COMMENT_CONTENT_TMP_FILE
-sed -i -z 's/\n/\\n/g' $PR_COMMENT_CONTENT_TMP_FILE
+" >> "$PR_COMMENT_CONTENT_TMP_FILE"
+sed -i -z 's/\n/\\n/g' "$PR_COMMENT_CONTENT_TMP_FILE"
 
 echo "::set-output name=AUTO_APPROVE::${AUTO_APPROVE:-0}"
 echo "::set-output name=POST_COMMENT::${POST_COMMENT:-0}"

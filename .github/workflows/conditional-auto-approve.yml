@@ -2,13 +2,21 @@ name: conditional-auto-approve
 
 on:
   pull_request:
-    types: [assigned, opened, synchronize, reopened, ready_for_review]
+    types:
+      - opened # default
+      - synchronize # default
+      - reopened # default
+      - ready_for_review # draft -> ready
     path:
       - check-change**
       - .github/actions/check-change.sh
 
 jobs:
   check:
+    env:
+      AUTO_APPROVE_FILE_PATH_REGEX: 'check-change/.*/auto-merge/.*.yaml'
+      AUTO_APPROVE_ALLOWED_REGEX: '(image|replicas)'
+      PR_COMMENT_CONTENT_TMP_FILE: comment
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
     steps:
@@ -30,12 +38,14 @@ jobs:
           URL: ${{ github.event.pull_request.comments_url }}
         working-directory: .github/actions
         run: |
+          echo "{\"body\": \"$(cat $PR_COMMENT_CONTENT_TMP_FILE)\"}"
           status_code=$(curl -o /dev/null -w '%{http_code}\n' -s -X POST \
               -H "Authorization: token ${GITHUB_TOKEN}" \
-              -d "{\"body\": \"$(cat comment)\"}" \
+              -d "{\"body\": \"$(cat $PR_COMMENT_CONTENT_TMP_FILE)\"}" \
               ${URL})
           echo $status_code
           if [[ $status_code != 201 ]];then
+              echo "failed to post with comment:"
               exit 1
           fi
 
