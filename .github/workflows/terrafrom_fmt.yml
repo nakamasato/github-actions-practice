@@ -1,0 +1,40 @@
+name: terraform fmt
+
+on:
+  pull_request:
+    paths:
+      - "**.tf"
+
+jobs:
+  fmt:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@master
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: "Terraform Format"
+        id: terraform_fmt
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: 0.12.28
+          tf_actions_subcommand: "fmt"
+          tf_actions_comment: true
+          tf_actions_fmt_write: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: 'Commit changes and push'
+        if: ${{ steps.terraform_fmt.outputs.tf_actions_fmt_written }}
+        run: |
+          git status
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "Auto-commit terraform fmt"
+      - name: Push changes
+        if: ${{ steps.terraform_fmt.outputs.tf_actions_fmt_written }}
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.head_ref }}
