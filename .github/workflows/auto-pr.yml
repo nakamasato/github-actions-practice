@@ -23,7 +23,7 @@ jobs:
     - env:
         NAMESPACE: eai-staging
       run: |
-        sed -i "s#guestbook#GUESTBOOK#;" k8s-deploy-test/apps/guestbook/deployment.yaml
+        sed -i "s#guestbook#GUESTBOOK#;" apps/guestbook/deployment.yaml
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v3
       env:
