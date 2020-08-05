@@ -5,7 +5,7 @@ on:
     types: [prereleased]
 
 jobs:
-  deploy:
+  preleased:
     if: github.event.release.target_commitish == 'master'
     runs-on: ubuntu-latest
     steps:
