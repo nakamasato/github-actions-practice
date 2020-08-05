@@ -1,0 +1,38 @@
+name: release
+
+on:
+  release:
+    types: [released]
+
+env:
+  IMAGE_NAME: usergram/gram-agent
+
+jobs:
+  build:
+    if: github.event.release.target_commitish == 'master'
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set env
+      run: |
+        echo ::set-env name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
+    - uses: actions/checkout@v2
+      with:
+        token: ${{ secrets.TEST_GITHUB_TOKEN }}
+        repository: nakamasato/k8s-deploy-test
+    - env:
+        NAMESPACE: eai-staging
+      run: |
+        sed -i "s#guestbook#GUESTBOOK#;" k8s-deploy-test/apps/guestbook/deployment.yaml
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v3
+      env:
+        NAMESPACE: test
+      with:
+        token: ${{ secrets.TEST_GITHUB_TOKEN }}
+        title: "[${{ env.NAMESPACE }}] Internal release test [${{ env.RELEASE_VERSION }}]"
+        body: |
+          # Why
+          - To perform internal release for test [${{ env.RELEASE_VERSION }}](https://github.com/nakamasato/github-actions-practice/releases/tag/${{ env.RELEASE_VERSION }})
+          # What
+          - Change image tag of test for ${{ env.NAMESPACE }}
