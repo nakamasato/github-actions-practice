@@ -2,6 +2,11 @@ name: auto-merge
 
 on:
   pull_request:
+    types:
+      - opened # default
+      - synchronize # default
+      - reopened # default
+      - ready_for_review # draft -> ready
     paths:
       - "automatic-merge/**"
 
@@ -20,9 +25,19 @@ jobs:
           PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
           echo "pr: $PR_NUMBER"
           echo "::set-env name=PR_NUMBER::$PR_NUMBER"
+      - name: Approve Pull Request
+        uses: juliangruber/approve-pull-request-action@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          number: ${{ env.PR_NUMBER }}
       - name: Merge Pull Request
         uses: juliangruber/merge-pull-request-action@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           number: ${{ env.PR_NUMBER }}
           method: squash
+      - uses: actions-ecosystem/action-add-labels@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          labels: |
+            auto-merged
