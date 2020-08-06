@@ -2,6 +2,11 @@ name: auto-merge
 
 on:
   pull_request:
+    types:
+      - opened # default
+      - synchronize # default
+      - reopened # default
+      - ready_for_review # draft -> ready
     paths:
       - "automatic-merge/**"
 
