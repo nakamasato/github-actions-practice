@@ -64,6 +64,7 @@ jobs:
           number: ${{ env.PR_NUMBER }}
 
       - name: Merge Pull Request
+        if: ${{ steps.check-change-and-create-comment.outputs.AUTO_APPROVE == '1' }}
         uses: juliangruber/merge-pull-request-action@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
