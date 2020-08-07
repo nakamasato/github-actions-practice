@@ -1,4 +1,4 @@
-name: conditional-auto-approve
+name: conditional-auto-merge
 
 on:
   pull_request:
@@ -7,7 +7,7 @@ on:
       - synchronize # default
       - reopened # default
       - ready_for_review # draft -> ready
-    path:
+    paths:
       - check-change**
       - .github/actions/check-change.sh
 
@@ -62,3 +62,11 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           number: ${{ env.PR_NUMBER }}
+
+      - name: Merge Pull Request
+        if: ${{ steps.check-change-and-create-comment.outputs.AUTO_APPROVE == '1' }}
+        uses: juliangruber/merge-pull-request-action@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          number: ${{ env.PR_NUMBER }}
+          method: squash
