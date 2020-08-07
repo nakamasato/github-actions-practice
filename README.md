@@ -113,3 +113,13 @@ Github Actions:
 ### Docker Layer Cache
 
 https://github.com/marketplace/actions/docker-layer-caching
+
+Example Docker image:
+First time:
+    - Run satackey/action-docker-layer-caching@v0.0.5: 1s
+    - Build the Docker image: 2m 47s
+    - Post Run satackey/action-docker-layer-caching@v0.0.5 1m 38s
+Second time:
+    - Run satackey/action-docker-layer-caching@v0.0.5: 2m 17s
+    - Build the Docker image: 1s
+    - Run satackey/action-docker-layer-caching@v0.0.5: 0s
