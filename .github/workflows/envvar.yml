@@ -21,6 +21,12 @@ jobs:
           echo ::set-env name=TEST::TEST_VALUE
           echo ::set-output name=TEST::TEST_VALUE
 
+      - uses: actions/checkout@v2
+      - name: Get env
+        run: |
+          echo ${{ env.TEST }}
+          echo ${{ steps.first-job.outputs.TEST }}
+
   second:
     runs-on: ubuntu-latest
     steps:
