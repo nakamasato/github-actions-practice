@@ -35,3 +35,5 @@ jobs:
         run: |
           echo ${{ env.TEST }}
           echo ${{ steps.first-job.outputs.TEST }}
+          PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+          echo "PR: $PR_NUMBER"
