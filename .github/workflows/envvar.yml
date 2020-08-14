@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set env
-        run: echo ::set-env name=TEST::TEST_VALUE)
+        run: echo ::set-env name=TEST::TEST_VALUE
 
   second:
     runs-on: ubuntu-latest
