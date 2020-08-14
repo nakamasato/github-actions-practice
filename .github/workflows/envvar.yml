@@ -1,0 +1,24 @@
+name: envvar
+
+on:
+  pull_request:
+    types:
+      - opened # default
+      - synchronize # default
+      - reopened # default
+      - ready_for_review # draft -> ready
+
+jobs:
+  first:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set env
+        run: echo ::set-env name=TEST::TEST_VALUE)
+
+  second:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get env
+        run: echo ${{ env.TEST }}
