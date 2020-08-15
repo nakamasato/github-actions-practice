@@ -16,3 +16,16 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - if: ${{ github.event_name == 'pull_request' && github.event.action == 'labeled' && !contains(["test", "build"], github.event.label.name) }}
+        id: skip
+        name: ignore unrelavant labels
+        run: echo ::set-output name=SKIP::TRUE
+
+      - name: Dump GitHub context
+        if: ${{ steps.skip.outputs.SKIP != TRUE }}
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
