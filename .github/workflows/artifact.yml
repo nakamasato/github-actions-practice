@@ -23,7 +23,7 @@ jobs:
     steps:
       - shell: bash
         run: |
-          echo ${ github.sha } > github-sha.txt
+          echo ${{ github.sha }} > github-sha.txt
       - name: Upload github-sha
         uses: actions/upload-artifact@v2
         with:
