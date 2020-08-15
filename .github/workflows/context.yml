@@ -20,15 +20,15 @@ jobs:
   label:
     runs-on: ubuntu-latest
     env:
-      SKIP: FALSE
+      SKIP: 'FALSE'
     steps:
       - if: ${{ github.event.action == 'labeled' && !contains(toJson('["test", "build"]'), github.event.label.name) }}
         id: skip
         name: ignore unrelavant labels
-        run: echo ::set-env name=SKIP::TRUE
+        run: echo ::set-env name=SKIP::'TRUE'
 
       - name: Dump GitHub context
-        if: ${{ env.SKIP != TRUE }}
+        if: ${{ env.SKIP != 'TRUE' }}
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
