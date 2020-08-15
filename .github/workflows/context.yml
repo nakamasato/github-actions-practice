@@ -19,7 +19,7 @@ jobs:
   label:
     runs-on: ubuntu-latest
     steps:
-      - if: ${{ github.event_name == 'pull_request' && github.event.action == 'labeled' && !contains(["test", "build"], github.event.label.name) }}
+      - if: ${{ github.event_name == 'pull_request' && github.event.action == 'labeled' && !contains(toJson('["test", "build"]'), github.event.label.name) }}
         id: skip
         name: ignore unrelavant labels
         run: echo ::set-output name=SKIP::TRUE
