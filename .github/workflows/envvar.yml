@@ -1,0 +1,40 @@
+name: envvar
+
+on:
+  pull_request:
+    types:
+      - opened # default
+      - synchronize # default
+      - reopened # default
+      - ready_for_review # draft -> ready
+
+jobs:
+  first:
+    env:
+      NAMESPACE: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set env ${{ env.NAMESPACE }}
+        id: first-job
+        run: |
+          echo ::set-env name=TEST::TEST_VALUE
+          echo ::set-output name=TEST::TEST_VALUE
+
+      - uses: actions/checkout@v2
+      - name: Get env
+        run: |
+          echo ${{ env.TEST }}
+          echo ${{ steps.first-job.outputs.TEST }}
+
+  second:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get env
+        run: |
+          echo ${{ env.TEST }}
+          echo ${{ steps.first-job.outputs.TEST }}
+          echo $GITHUB_REF
+          PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+          echo "PR: $PR_NUMBER"
