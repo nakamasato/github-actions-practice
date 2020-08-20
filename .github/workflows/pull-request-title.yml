@@ -11,9 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: check the change
-      run: |
-        git diff remotes/origin/${{ github.base_ref }} --name-only
+#     - name: check the change
+#       run: |
+#         git diff remotes/origin/${{ github.base_ref }} --name-only
     - name: pull-request
       uses: repo-sync/pull-request@v2
       with:
