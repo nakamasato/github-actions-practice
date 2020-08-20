@@ -2,7 +2,9 @@ name: pull-request-title
 
 on:
   pull_request:
-    types: opened
+    types:
+      - ready_for_review
+      - opened
 
 jobs:
   title:
