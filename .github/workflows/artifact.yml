@@ -1,0 +1,31 @@
+name: artifact
+
+on: 
+  pull_request:
+    types:
+      - opened
+      - synchronize # default
+      - ready_for_review
+      - labeled
+      - unlabeled
+
+jobs:
+  check:
+    name: Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download github-sha
+        uses: actions/download-artifact@v2
+        with:
+          name: github-sha
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - shell: bash
+        run: |
+          echo ${{ github.sha }} > github-sha.txt
+      - name: Upload github-sha
+        uses: actions/upload-artifact@v2
+        with:
+          name: github-sha
+          path: github-sha.txt
