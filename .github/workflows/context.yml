@@ -1,0 +1,34 @@
+name: github context
+
+on: 
+  pull_request:
+    types:
+      - opened
+      - synchronize # default
+      - ready_for_review
+      - labeled
+      - unlabeled
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+  label:
+    runs-on: ubuntu-latest
+    env:
+      SKIP: 'FALSE'
+    steps:
+      - if: ${{ github.event.action == 'labeled' && !contains(toJson('["test", "build"]'), github.event.label.name) }}
+        id: skip
+        name: ignore unrelavant labels
+        run: echo ::set-env name=SKIP::'TRUE'
+
+      - name: Dump GitHub context
+        if: ${{ env.SKIP != 'TRUE' }}
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"

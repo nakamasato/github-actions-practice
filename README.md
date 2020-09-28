@@ -1,25 +1,27 @@
 # github-actions-practice
 
-```
-± tree .github/workflows/
-.github/workflows/
-├── auto-approve.yml
-├── auto-merge.yml
-├── awscli.yml
-├── branch-and-tag.yml
-├── check-change.yml
-├── jq.yml
-├── pip-cache.yml
-├── pip-no-cache.yml
-├── prereleased.yml
-├── pull-request.yml
-├── released.yml
-└── zip.yml
-
-0 directories, 12 files
-```
-
 ## Reference
+
+### Event
+
+1. event: `pull_request`
+    - Get PR number: `PR_NUMBER=${{ github.event.number }}`
+    - Get sha: `${{ github.sha }}`
+    - Get repository: `${{ github.repository }}`
+    - Get label name for `labeled` type: `${{ github.event.label.name }}`
+    - Get source branch: `${{ github.head_ref }}`
+    - Get base branch: `${{ github.base_ref }}`
+    - Whether the PR is `draft`
+        ```
+        if: github.event.pull_request.draft == false
+        ```
+    - Whether the label is in the whitelist
+        ```
+        if: ${{ github.event.action == 'labeled' && contains(toJson('["test", "build"]'), github.event.label.name) }}
+        ```
+1. event: `push`
+
+
 ### Triggers
 - pull request
     > Note: By default, a workflow only runs when a pull_request's activity type is `opened`, `synchronize`, or `reopened`. (https://docs.github.com/en/actions/reference/events-that-trigger-workflows#pull-request-event-pull_request)
@@ -44,6 +46,7 @@
     ```
     ${{ steps.<step_id>.outputs.<your var name> }}
     ```
+
 ### Context
 - https://docs.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#contexts
 example:
@@ -51,6 +54,34 @@ example:
     ```
     if: github.event.pull_request.draft == false
     ```
+    
+### Senarios
+
+- Whether commit message contains `[skip ci]`:
+    ```
+    if: contains(github.event.head_commit.message, '[skip ci]') == false
+    ```
+    
+- Skip next job
+
+```
+  skipci:
+    runs-on: ubuntu-18.04
+    outputs:
+      is_skip: ${{ steps.is_skip.outputs.is_skip }}
+    steps:
+      - name: Set is_skip
+        id: is_skip
+        run: echo "::set-output name=is_skip::${{ contains(github.event.head_commit.message, '[skip ci]') }}"
+      - run: echo "[skip ci] ${{ steps.is_skip.outputs.is_skip }}"
+
+  test:
+    runs-on: ubuntu-18.04
+    needs: skipci
+    if: ${{ ! needs.skipci.outputs.is_skip }}
+    steps:
+```
+
 ### Env
 - [default environment variables](https://docs.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables#default-environment-variables)
 
@@ -123,3 +154,24 @@ Example Docker image:
     - Run satackey/action-docker-layer-caching@v0.0.5: 2m 17s
     - Build the Docker image: 1s
     - Run satackey/action-docker-layer-caching@v0.0.5: 0s
+
+# Directory
+
+```
+± tree .github/workflows/
+.github/workflows/
+├── auto-approve.yml
+├── auto-merge.yml
+├── awscli.yml
+├── branch-and-tag.yml
+├── check-change.yml
+├── jq.yml
+├── pip-cache.yml
+├── pip-no-cache.yml
+├── prereleased.yml
+├── pull-request.yml
+├── released.yml
+└── zip.yml
+
+0 directories, 12 files
+```
