@@ -3,6 +3,9 @@ name: schedule
 on:
   schedule:
     - cron:  '* * * * *'
+  pull_request:
+    paths:
+      - '*'
     
 jobs:
   test:
