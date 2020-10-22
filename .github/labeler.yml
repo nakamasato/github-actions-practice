@@ -1,4 +1,2 @@
-version: 1
-labels:
-- label: "konmari"
-  title: ".*konmari.*"
+title:
+  konmari: '.*konmari.*'
