@@ -1,5 +1,2 @@
 title:
   - konmari: '.*konmari.*'
-changed_file:
-  github-actions:
-    - .github/workflows/**/*
