@@ -1,2 +1,2 @@
 title:
-  konmari: '/.*konmari.*/'
+  konmari: '/.*(konmari).*/'
