@@ -1,5 +1,2 @@
 title:
-  konmari: '.*(k|K)onmari.*'
-changed_file:
-  github:
-    - .github/**
+  konmari: '.*konmari.*'
