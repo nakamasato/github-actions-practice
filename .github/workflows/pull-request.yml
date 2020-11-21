@@ -15,7 +15,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
       - name: pull-request merged
         run: |
-          echo "::set-env name=release_tag::v$(date '+%Y%m%d_%H%M%S')"
+          echo "release_tag=v$(date '+%Y%m%d_%H%M%S')" >> $GITHUB_ENV
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1

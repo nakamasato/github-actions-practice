@@ -1,6 +1,6 @@
 name: artifact
 
-on: 
+on:
   pull_request:
     types:
       - opened
@@ -10,20 +10,19 @@ on:
       - unlabeled
 
 jobs:
-  check:
-    name: Check
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download github-sha
-        uses: actions/download-artifact@v2
-        with:
-          name: github-sha
+  # check:
+  #   name: Check
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Download github-sha
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: github-sha
   build:
     runs-on: ubuntu-latest
     steps:
       - shell: bash
-        run: |
-          echo ${{ github.sha }} > github-sha.txt
+        run: echo ${{ github.sha }} > github-sha.txt
       - name: Upload github-sha
         uses: actions/upload-artifact@v2
         with:
