@@ -28,8 +28,7 @@ jobs:
           SOURCE_BRANCH: ${{ github.head_ref }}
           BASE_BRANCH: ${{ github.base_ref }}
         working-directory: .github/actions
-        run: |
-          bash ./check-change.sh
+        run: bash ./check-change.sh
 
       - name: Post comment on PR
         if: ${{ steps.check-change-and-create-comment.outputs.POST_COMMENT == '1' }}
@@ -54,7 +53,7 @@ jobs:
         run: |
           PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
           echo "pr: $PR_NUMBER"
-          echo "::set-env name=PR_NUMBER::$PR_NUMBER"
+          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
 
       - name: Approve Pull Request
         if: ${{ steps.check-change-and-create-comment.outputs.AUTO_APPROVE == '1' }}
