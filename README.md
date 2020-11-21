@@ -25,7 +25,7 @@
 ### Triggers
 - pull request
     > Note: By default, a workflow only runs when a pull_request's activity type is `opened`, `synchronize`, or `reopened`. (https://docs.github.com/en/actions/reference/events-that-trigger-workflows#pull-request-event-pull_request)
-    
+
     - specify types:
     ```
     on:
@@ -42,7 +42,7 @@
     echo "::set-output name=<your var name>::<value>"
     ```
     use:
-    
+
     ```
     ${{ steps.<step_id>.outputs.<your var name> }}
     ```
@@ -54,14 +54,14 @@ example:
     ```
     if: github.event.pull_request.draft == false
     ```
-    
+
 ### Senarios
 
 - Whether commit message contains `[skip ci]`:
     ```
     if: contains(github.event.head_commit.message, '[skip ci]') == false
     ```
-    
+
 - Skip next job
 
 ```
@@ -87,7 +87,7 @@ example:
 
 Example:
 - source branch and base brach of PR
-    
+
     ```
     env:
       SOURCE_BRANCH: ${{ github.head_ref }}

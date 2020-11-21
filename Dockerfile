@@ -10,4 +10,3 @@ FROM bebit/python-mecab:release-1.0 as base
 ARG DEBIAN_FRONTEND=noninteractive
 ARG DEBCONF_NOWARNINGS=yes
 COPY --from=builder /usr/local /usr/local
-

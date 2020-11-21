@@ -45,7 +45,7 @@ $(git diff --name-only "origin/$BASE_BRANCH" HEAD | grep -vE "$AUTO_APPROVE_FILE
 fi
 
 echo "
-## auto-approve condition 
+## auto-approve condition
 (defined in \`.github/actions/check-change.sh\`)
 1. [$file_check] files: \`$AUTO_APPROVE_FILE_PATH_REGEX\`
 1. [$change_check] changes: \`$AUTO_APPROVE_ALLOWED_REGEX\`
