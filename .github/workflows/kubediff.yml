@@ -15,3 +15,4 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: nakamasato/kubediff@dev
+      - uses: nakamasato/typescript-action@naka-test
