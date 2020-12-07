@@ -12,12 +12,15 @@ jobs:
       - name: run minio
         run: |
           docker run -d -p 9000:9000 --name minio \
-                     -e "MINIO_ACCESS_KEY=AKIAIOSFODNN7EXAMPLE" \
-                     -e "MINIO_SECRET_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" \
+                     -e "MINIO_ACCESS_KEY=ABCDEFGHIJKLMN" \
+                     -e "MINIO_SECRET_KEY=0123456789" \
                      -v /tmp/data:/data \
                      -v /tmp/config:/root/.minio \
                      minio/minio server /data
       - name: check s3 command
+        env:
+          MINO_ACCESS_KEY: "ABCDEFGHIJKLMN"
+          MINIO_SECRET_KEY: "0123456789"
         run: |
           aws --endpoint-url http://127.0.0.1:9000/ s3 mb s3://bucket01
 
