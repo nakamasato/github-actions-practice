@@ -19,7 +19,7 @@ jobs:
                      minio/minio server /data
       - name: check s3 command
         env:
-          MINO_ACCESS_KEY: "ABCDEFGHIJKLMN"
+          MINIO_ACCESS_KEY: "ABCDEFGHIJKLMN"
           MINIO_SECRET_KEY: "0123456789"
         run: |
           aws --endpoint-url http://127.0.0.1:9000/ s3 mb s3://bucket01
