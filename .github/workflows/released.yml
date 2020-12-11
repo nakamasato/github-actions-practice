@@ -16,6 +16,7 @@ jobs:
 
     - name: git commit
       run: |
+        git add test.txt
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git commit -am "release commit"
