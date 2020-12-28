@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - run: |
+        echo $GITHUB_REF
         echo $GITHUB_REF | grep -cE '^v[0-9]+.[0-9]+.[0-9]+$'
     - uses: actions/checkout@v1
     - name: create a file
