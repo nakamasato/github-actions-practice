@@ -1,0 +1,31 @@
+name: pull-request-title
+
+on:
+  pull_request:
+    types:
+      - ready_for_review
+      - opened
+
+jobs:
+  title:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+#     - name: check the change
+#       run: |
+#         git diff remotes/origin/${{ github.base_ref }} --name-only
+    - name: pull-request
+      uses: repo-sync/pull-request@v2
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        source_branch: ${{ github.head_ref }}
+        destination_branch: ${{ github.base_ref }}
+        pr_title: "TK-xx [component] "
+        pr_body: ":crown: *An automated PR*"              # Full markdown support, requires pr_title to be set
+        pr_label: "auto-pr"                               # Comma-separated list (no spaces)
+        pr_draft: true                                    # Creates pull request as draft
+    - name: update-pull-request
+      uses: kt3k/update-pr-description@v1.0.0
+      with:
+        pr_body: "**test description**"
+        github_token: ${{ secrets.GITHUB_TOKEN }}
