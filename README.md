@@ -55,7 +55,7 @@ example:
     if: github.event.pull_request.draft == false
     ```
 
-### Senarios
+### Scenarios
 
 - Whether commit message contains `[skip ci]`:
     ```
