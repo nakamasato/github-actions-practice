@@ -1,4 +1,4 @@
-name: no-cache-pip
+name: pip-no-cache
 
 on: push
 

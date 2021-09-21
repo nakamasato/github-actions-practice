@@ -1,4 +1,4 @@
-name: cache-pip
+name: pip-cache
 
 on: push
 

@@ -2,7 +2,8 @@ name: Assign auto
 
 on:
   pull_request:
-    types: opened
+    types:
+      - opened
 
 jobs:
   assign:
