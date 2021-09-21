@@ -1,5 +1,32 @@
 # github-actions-practice
 
+## Github Actions Table
+|GitHub Actions|Trigger|Description|
+|---|---|---|
+|**artifact**| pull_request | Upload `github-sha.txt` to artifact. Wanted to download if exists but not worked -> commented out.|
+|**auto-approve**|pull_request| If change is under `automatic-approval`, any PR will be automatically approved.|
+|**auto-assign**|pull_request| Set PR author to the assignee when a PR is created.|
+|**auto-merge**|pull_request| If change is under `automatic-merge`, any PR will be automatically merged.|
+|**auto-pr**|release| When a release is published from `master` branch, update a kubernetes yaml file in another repository `nakamasato/k8s-deploy-test` and create a pr in the repository.|
+|**awscli**|pull_request| Just to confirm `aws` cli is available by default.|
+|**branch-and-tag**|push| If change is pushed to `merge` branch or tagged as `v1.*`, the branch will be merged to `master` branch.|
+|**conditional-auto-merge**|pull_request|If PR's changed files and changes match `AUTO_APPROVE_ALLOWED_REGEX` and `AUTO_APPROVE_FILE_PATH_REGEX` respectively, the pr will be automatically merged. |
+|**context**|pull_request|Echo GitHub context `toJson(github)` for checking.|
+|**docker-layer-cache**|pull_request|Use `satackey/action-docker-layer-caching`.|
+|**envvar**|pull_request|How to set env var and use it.|
+|**jq**|pull_request|Just to confirm `jq` is available by default.|
+|**labeler**|pull_request|Add `label` to a pr based on the title.|
+|**pip-cache**|push|Use `actions/cache` for caching `~/.cache/pip`|
+|**pip-no-cache**|push|For comparison with **pip-cache**|
+|**pre-commit**|pull_request|Run `pre-commit`.|
+|**prereleased**|release|When release is prereleased from master branch, echo "prereleased".|
+|**pull-request**|pull_request|If a PR is merged, create a release. If a PR is not merged, echo "Pull Request".|
+|**released**|release|If a release is published from master branch, push a commit to `master` branch.|
+|**s3-local**|pull_request|Use `minio` for s3 mock in GitHub Actions.|
+|**schedule**|schedule|Echo "test" at 00:00 every Monday.|
+|**terrraform_fmt**|pull_request|Run `terraform fmt` for `**.tf`.|
+|**zip**|pull_request|Just to confirm `zip` command is available by default.|
+
 ## Reference
 
 ### Event
@@ -20,7 +47,6 @@
         if: ${{ github.event.action == 'labeled' && contains(toJson('["test", "build"]'), github.event.label.name) }}
         ```
 1. event: `push`
-
 
 ### Triggers
 - pull request
@@ -154,24 +180,3 @@ Example Docker image:
     - Run satackey/action-docker-layer-caching@v0.0.5: 2m 17s
     - Build the Docker image: 1s
     - Run satackey/action-docker-layer-caching@v0.0.5: 0s
-
-# Directory
-
-```
-± tree .github/workflows/
-.github/workflows/
-├── auto-approve.yml
-├── auto-merge.yml
-├── awscli.yml
-├── branch-and-tag.yml
-├── check-change.yml
-├── jq.yml
-├── pip-cache.yml
-├── pip-no-cache.yml
-├── prereleased.yml
-├── pull-request.yml
-├── released.yml
-└── zip.yml
-
-0 directories, 12 files
-```

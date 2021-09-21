@@ -4,9 +4,6 @@ on:
   release:
     types: [released]
 
-env:
-  IMAGE_NAME: usergram/gram-agent
-
 jobs:
   build:
     if: github.event.release.target_commitish == 'master'

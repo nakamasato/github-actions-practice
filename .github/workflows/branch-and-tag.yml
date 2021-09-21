@@ -2,10 +2,10 @@ name: branch & tag
 
 on:
   push:
-    branch:
-    - merge
+    branches:
+      - merge
     tags:
-    - v1.*
+      - v1.*
 
 jobs:
   merge-branch:
