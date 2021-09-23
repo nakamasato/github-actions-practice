@@ -6,38 +6,39 @@ ENV DEBIAN_FRONTEND=noninteractive
 # apt install
 RUN apt update && apt install -y \
     curl \
-    groff \
-    jq \
-    less \
-    git \
-    openssh-server \
-    cron \
-    sudo \
-    supervisor \
-    python3-distutils \
-    gnupg \
-    make \
-    zsh \
-    tmux \
-    tree \
-    netcat \
-    dnsutils \
-    unzip \
-    mysql-client \
-    postgresql-client \
-    redis-server \
-    stunnel \
-    tig \
-    vim \
-    unzip \
-    python3-boto3 \
-    python3-pandas
+    unzip
+    # groff \
+    # jq \
+    # less \
+    # git \
+    # openssh-server \
+    # cron \
+    # sudo \
+    # supervisor \
+    # python3-distutils \
+    # gnupg \
+    # make \
+    # zsh \
+    # tmux \
+    # tree \
+    # netcat \
+    # dnsutils \
+    # unzip \
+    # mysql-client \
+    # postgresql-client \
+    # redis-server \
+    # stunnel \
+    # tig \
+    # vim \
+    # unzip \
+    # python3-boto3 \
+    # python3-pandas
 
 # Install awscli latest version https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-linux.html#cliv2-linux-install
-# RUN curl -sSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" >/tmp/awscliv2.zip &&\
-#     unzip -q /tmp/awscliv2.zip &&\
-#     /tmp/aws/install &&\
-#     rm -rf /tmp/aws*
+RUN curl -sSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" >/tmp/awscliv2.zip &&\
+    unzip -q /tmp/awscliv2.zip &&\
+    /tmp/aws/install &&\
+    rm -rf /tmp/aws*
 
 # Install aws-rotate-iam-keys https://github.com/rhyeal/aws-rotate-iam-keys#other-linux
 RUN git clone https://github.com/rhyeal/aws-rotate-iam-keys.git && \
