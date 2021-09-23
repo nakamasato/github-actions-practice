@@ -1,5 +1,6 @@
 FROM ubuntu:21.10
 
+ENV DEBIAN_FRONTEND=noninteractive
 # COPY aws-ec2-ssh /aws-ec2-ssh
 
 # apt install
@@ -46,9 +47,11 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2
 # COPY startup.sh /startup.sh
 # RUN chmod 744 /startup.sh
 
+# Install pip
+RUN curl "https://bootstrap.pypa.io/get-pip.py" | python3
+
 # Install pip libraries
-ARG PyMySQL_version="0.9.3"
-RUN pip install PyMySQL==${PyMySQL_version} pre-commit cryptography
+RUN pip install PyMySQL=="0.9.3" pre-commit cryptography
 
 # Install kubectl
 RUN curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.17.11/2020-09-18/bin/linux/amd64/kubectl && \
@@ -63,11 +66,6 @@ RUN curl -O -L  https://github.com/projectcalico/calicoctl/releases/download/v3.
 # Install kubeseal
 RUN wget https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.13.1/kubeseal-linux-amd64 -O kubeseal && \
     sudo install -m 755 kubeseal /usr/local/bin/kubeseal
-
-# Install aws-iam-authenticator
-RUN curl -o aws-iam-authenticator https://amazon-eks.s3.us-west-2.amazonaws.com/1.18.8/2020-09-18/bin/linux/amd64/aws-iam-authenticator && \
-    chmod +x ./aws-iam-authenticator && \
-    cp ./aws-iam-authenticator /usr/bin/aws-iam-authenticator
 
 # Install google cloud sdk
 RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | \
