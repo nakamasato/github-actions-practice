@@ -11,11 +11,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-
-    # In this step, this action saves a list of existing images,
-    # the cache is created without them in the post run.
-    # It also restores the cache if it exists.
     - uses: satackey/action-docker-layer-caching@v0.0.8
-
     - name: Build the Docker image
-      run: docker build .
+      run: |
+        docker build -t test-image .
+        docker run --rm test-image aws --version
