@@ -1,4 +1,4 @@
-FROM ubuntu:21.10
+FROM ubuntu:latest
 
 ENV DEBIAN_FRONTEND=noninteractive
 # COPY aws-ec2-ssh /aws-ec2-ssh
@@ -6,33 +6,32 @@ ENV DEBIAN_FRONTEND=noninteractive
 # apt install
 RUN apt update && apt install -y \
     curl \
-    unzip
-    # groff \
-    # jq \
-    # less \
-    # git \
-    # openssh-server \
-    # cron \
-    # sudo \
-    # supervisor \
-    # python3-distutils \
-    # gnupg \
-    # make \
-    # zsh \
-    # tmux \
-    # tree \
-    # netcat \
-    # dnsutils \
-    # unzip \
-    # mysql-client \
-    # postgresql-client \
-    # redis-server \
-    # stunnel \
-    # tig \
-    # vim \
-    # unzip \
-    # python3-boto3 \
-    # python3-pandas
+    groff \
+    jq \
+    less \
+    git \
+    openssh-server \
+    cron \
+    sudo \
+    supervisor \
+    python3-distutils \
+    gnupg \
+    make \
+    zsh \
+    tmux \
+    tree \
+    netcat \
+    dnsutils \
+    unzip \
+    mysql-client \
+    postgresql-client \
+    redis-server \
+    stunnel \
+    tig \
+    vim \
+    unzip \
+    python3-boto3 \
+    python3-pandas
 
 # Install awscli latest version https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-linux.html#cliv2-linux-install
 RUN curl -sSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" >/tmp/awscliv2.zip &&\
