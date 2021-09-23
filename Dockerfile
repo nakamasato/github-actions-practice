@@ -34,9 +34,10 @@ RUN apt update && apt install -y \
     python3-pandas
 
 # Install awscli latest version
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
-    unzip awscliv2.zip && \
-    ./aws/install
+RUN curl -sSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" >/tmp/awscliv2.zip &&\
+    unzip -q /tmp/awscliv2.zip &&\
+    /tmp/aws/install &&\
+    rm -rf /tmp/aws*
 
 # Install aws-rotate-iam-keys https://github.com/rhyeal/aws-rotate-iam-keys#other-linux
 RUN git clone https://github.com/rhyeal/aws-rotate-iam-keys.git && \
