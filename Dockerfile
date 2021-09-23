@@ -55,7 +55,7 @@ RUN git clone https://github.com/rhyeal/aws-rotate-iam-keys.git && \
 RUN curl "https://bootstrap.pypa.io/get-pip.py" | python3
 
 # Install pip libraries
-RUN pip install PyMySQL=="0.9.3" pre-commit cryptography
+RUN pip install PyMySQL=="0.9.3" pre-commit cryptography cassandra-driver==3.24
 
 # Install kubectl
 RUN curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.17.11/2020-09-18/bin/linux/amd64/kubectl && \

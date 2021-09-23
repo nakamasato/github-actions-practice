@@ -11,13 +11,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: docker/setup-qemu-action@v1
-      - uses: docker/setup-buildx-action@v1
-      # - uses: satackey/action-docker-layer-caching@v0.0.8
-      - uses: docker/build-push-action@v2
-        with:
-          push: true
-          tags: test-image:latest
+      - uses: satackey/action-docker-layer-caching@v0.0.8
       - name: Check
         run: |
+          docker build -t test-image:latest . -f Dockerfile
           docker run --rm test-image:latest /bin/bash -c "aws-rotate-iam-keys --version; kubectl version --client --short; kubeseal --version;"
