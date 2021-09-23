@@ -29,7 +29,6 @@ RUN apt update && apt install -y \
     stunnel \
     tig \
     vim \
-    emacs \
     unzip \
     python3-boto3 \
     python3-pandas
