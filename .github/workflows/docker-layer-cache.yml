@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - Dockerfile
+      - .github/workflows/docker-layer-cache.yml
 
 jobs:
   build:
@@ -16,4 +17,4 @@ jobs:
         run: |
           docker build -t test-image:latest . -f Dockerfile
       - name: check
-          docker run --rm test-image:latest /bin/bash -c "aws --version; aws-rotate-iam-keys --version; kubectl version --client --short; kubeseal --version;"
+          docker run --rm test-image:latest /bin/bash -c "aws --version; aws-rotate-iam-keys --version; kubectl version --client --short; kubeseal --version; cqlsh --version;"
