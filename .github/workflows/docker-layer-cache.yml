@@ -15,4 +15,4 @@ jobs:
     - name: Build the Docker image
       run: |
         docker build -t test-image .
-        docker run --rm test-image /bin/bash -c "aws --version; aws-rotate-iam-keys --version; kubectl version --client --short; kubeseal --version;"
+        docker run --rm test-image /bin/bash -c "aws-rotate-iam-keys --version; kubectl version --client --short; kubeseal --version;"
