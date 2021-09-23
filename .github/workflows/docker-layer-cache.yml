@@ -17,7 +17,6 @@ jobs:
         with:
           push: true
           tags: test-image:latest
-      - name: Build the Docker image
+      - name: Check
         run: |
-          docker build -t test-image .
-          docker run --rm test-image /bin/bash -c "aws-rotate-iam-keys --version; kubectl version --client --short; kubeseal --version;"
+          docker run --rm test-image:latest /bin/bash -c "aws-rotate-iam-keys --version; kubectl version --client --short; kubeseal --version;"
