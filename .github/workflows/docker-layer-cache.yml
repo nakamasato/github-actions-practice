@@ -12,7 +12,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: satackey/action-docker-layer-caching@v0.0.8
-      - name: Check
+      - name: build
         run: |
           docker build -t test-image:latest . -f Dockerfile
-          docker run --rm test-image:latest /bin/bash -c "aws-rotate-iam-keys --version; kubectl version --client --short; kubeseal --version;"
+      - name: check
+          docker run --rm test-image:latest /bin/bash -c "aws --version; aws-rotate-iam-keys --version; kubectl version --client --short; kubeseal --version;"
