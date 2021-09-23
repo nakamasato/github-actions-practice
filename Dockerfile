@@ -33,10 +33,15 @@ RUN apt update && apt install -y \
     python3-boto3 \
     python3-pandas
 
-# install awscli latest version
+# Install awscli latest version
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
     unzip awscliv2.zip && \
     ./aws/install
+
+# Install aws-rotate-iam-keys https://github.com/rhyeal/aws-rotate-iam-keys#other-linux
+RUN git clone https://github.com/rhyeal/aws-rotate-iam-keys.git && \
+    sudo cp aws-rotate-iam-keys/src/bin/aws-rotate-iam-keys /usr/bin/ && \
+    rm -rf aws-rotate-iam-keys
 
 # RUN cd /aws-ec2-ssh && ./install.sh; exit 0 && cron
 # COPY aws-ec2-ssh.conf /etc/aws-ec2-ssh.conf
