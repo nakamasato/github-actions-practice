@@ -177,6 +177,6 @@ Example Docker image:
     - Build the Docker image: 2m 47s
     - Post Run satackey/action-docker-layer-caching@v0.0.5 1m 38s
 - Second time:
-    - Run satackey/action-docker-layer-caching@v0.0.5: 2m 17s
-    - Build the Docker image: 1s
-    - Run satackey/action-docker-layer-caching@v0.0.5: 0s
+    - Run satackey/action-docker-layer-caching@v0.0.5: 2m 30s
+    - Build the Docker image: 3m10s
+    - Run satackey/action-docker-layer-caching@v0.0.5: 3m 58s

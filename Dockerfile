@@ -58,10 +58,6 @@ RUN pip install \
     cassandra-driver==3.24 \
     cqlsh==6.0.0
 
-# Install kubectl https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
-# RUN curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.17.11/2020-09-18/bin/linux/amd64/kubectl && \
-#     chmod +x ./kubectl && \
-#     cp ./kubectl /usr/bin/kubectl
 RUN curl -LO https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
     sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
