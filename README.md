@@ -109,6 +109,17 @@
     - Ruby: [ruby/setup-ruby](https://github.com/ruby/setup-ruby#caching-bundle-install-automatically)
     - npm: [actions/setup-node](https://github.com/actions/setup-node)
     - Gradle and Maven: [actions/setup-java](https://github.com/actions/setup-java)
+    - [Python - pip](https://github.com/actions/cache/blob/master/examples.md#python---pip)
+        <details>
+
+        - Case1: No cache:
+            - pip install: 14s
+        - Case2: With cache:
+            - action/cache: 3s
+            - pip install: 0s (skipped)
+            - action/cache: 0s (skipped)
+
+        </details>
     - [Docker Layer Cache](https://github.com/marketplace/actions/docker-layer-caching)
 
         <details>
