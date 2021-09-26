@@ -1,6 +1,9 @@
 name: pip-no-cache
 
-on: push
+on:
+  push:
+    paths:
+      - python-script/requirements.txt
 
 jobs:
   build:
