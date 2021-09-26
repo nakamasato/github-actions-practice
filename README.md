@@ -83,7 +83,8 @@ example:
 
 ### Scenarios
 
-- Whether commit message contains `[skip ci]`:
+- Whether commit message contains `[skip ci]`: (maybe resolved by [GitHub Actions: Skip pull request and push workflows with [skip ci]](https://github.blog/changelog/2021-02-08-github-actions-skip-pull-request-and-push-workflows-with-skip-ci/))
+
     ```
     if: contains(github.event.head_commit.message, '[skip ci]') == false
     ```
