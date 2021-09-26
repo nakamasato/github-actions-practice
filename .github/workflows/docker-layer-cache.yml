@@ -10,12 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-
-    # In this step, this action saves a list of existing images,
-    # the cache is created without them in the post run.
-    # It also restores the cache if it exists.
-    - uses: satackey/action-docker-layer-caching@v0.0.8
-
-    - name: Build the Docker image
-      run: docker build .
+      - uses: actions/checkout@v2
+      - uses: satackey/action-docker-layer-caching@v0.0.8
+      - name: build
+        run: docker build -t test-image:latest . -f Dockerfile
+      - name: check
+        run: docker run --rm test-image:latest /bin/bash -c "aws --version; aws-rotate-iam-keys --version; kubectl version --client --short; kubeseal --version; cqlsh --version;"
