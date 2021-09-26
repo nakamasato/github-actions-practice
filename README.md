@@ -167,16 +167,28 @@ Github Actions:
         run: mvn test
 ```
 
+## Caching
+
+https://docs.github.com/en/actions/advanced-guides/caching-dependencies-to-speed-up-workflows
+
+- General: [actions/cache](https://github.com/actions/cache)
+- Ruby: [ruby/setup-ruby](https://github.com/ruby/setup-ruby#caching-bundle-install-automatically)
+- npm: [actions/setup-node](https://github.com/actions/setup-node)
+- Gradle and Maven: [actions/setup-java](https://github.com/actions/setup-java)
 ### Docker Layer Cache
 
 https://github.com/marketplace/actions/docker-layer-caching
 
 Example Docker image:
-- First time:
+- Case1: No cache:
     - Run satackey/action-docker-layer-caching@v0.0.5: 1s
-    - Build the Docker image: 2m 47s
+    - Build Docker image: 2m 47s
     - Post Run satackey/action-docker-layer-caching@v0.0.5 1m 38s
-- Second time:
+- Case2: with cache but couldn't use layer cache:
     - Run satackey/action-docker-layer-caching@v0.0.5: 2m 30s
-    - Build the Docker image: 3m10s
+    - Build Docker image: 3m10s
     - Run satackey/action-docker-layer-caching@v0.0.5: 3m 58s
+- Case3: with cache and all the layers could use cache:
+    - Run satackey/action-docker-layer-caching@v0.0.5: 3m 48s
+    - Build Docker image: 1s
+    - Run satackey/action-docker-layer-caching@v0.0.5: 3m 40s
