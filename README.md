@@ -106,6 +106,7 @@
 - [Caching](https://docs.github.com/en/actions/advanced-guides/caching-dependencies-to-speed-up-workflows)
 
     - General: [actions/cache](https://github.com/actions/cache)
+        - Example: https://github.com/actions/cache/blob/master/examples.md
     - Ruby: [ruby/setup-ruby](https://github.com/ruby/setup-ruby#caching-bundle-install-automatically)
     - npm: [actions/setup-node](https://github.com/actions/setup-node)
     - Gradle and Maven: [actions/setup-java](https://github.com/actions/setup-java)
