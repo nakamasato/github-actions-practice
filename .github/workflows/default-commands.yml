@@ -1,0 +1,24 @@
+name: default-commands
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/default-commands.yml
+
+jobs:
+  zip:
+    runs-on: ubuntu-latest
+    steps:
+      - name: zip
+        run: |
+          touch test.txt
+          zip test.txt.zip test.txt
+
+      - name: jq
+        run: |
+          PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+          echo "pr: $PR_NUMBER"
+
+      - name: awscli
+        run: |
+          aws --version

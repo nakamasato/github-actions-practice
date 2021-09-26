@@ -8,13 +8,12 @@
 |**auto-assign**|pull_request| Set PR author to the assignee when a PR is created.|
 |**auto-merge**|pull_request| If change is under `automatic-merge`, any PR will be automatically merged.|
 |**auto-pr**|release| When a release is published from `master` branch, update a kubernetes yaml file in another repository `nakamasato/k8s-deploy-test` and create a pr in the repository.|
-|**awscli**|pull_request| Just to confirm `aws` cli is available by default.|
 |**branch-and-tag**|push| If change is pushed to `merge` branch or tagged as `v1.*`, the branch will be merged to `master` branch.|
 |[conditional-auto-approve](.github/workflows/conditional-auto-approve.yml)|pull_request|If PR's changed files and changes match `AUTO_APPROVE_ALLOWED_REGEX` and `AUTO_APPROVE_FILE_PATH_REGEX` respectively, the pr will be automatically merged. |
 |**context**|pull_request|Echo GitHub context `toJson(github)` for checking.|
+|**default-commands**|pull_request|Check default commands (e.g. `zip`, `aws`, `jq`)|
 |**docker-layer-cache**|pull_request|Use `satackey/action-docker-layer-caching`.|
 |**envvar**|pull_request|How to set env var and use it.|
-|**jq**|pull_request|Just to confirm `jq` is available by default.|
 |**labeler**|pull_request|Add `label` to a pr based on the title.|
 |**pip-cache**|push|Use `actions/cache` for caching `~/.cache/pip`|
 |**pip-no-cache**|push|For comparison with **pip-cache**|
@@ -25,9 +24,10 @@
 |**s3-local**|pull_request|Use `minio` for s3 mock in GitHub Actions.|
 |**schedule**|schedule|Echo "test" at 00:00 every Monday.|
 |**terrraform_fmt**|pull_request|Run `terraform fmt` for `**.tf`.|
-|**zip**|pull_request|Just to confirm `zip` command is available by default.|
 
 ## CheatSheet
+- Available commands by default ([default-commands.yml](.github/workflows/default-commands.yml))
+    - `zip`, `aws`, `jq`
 - [Events to Trigger workflow](https://docs.github.com/en/actions/reference/events-that-trigger-workflows)
     - `pull_request`
         activity type: `opened`, `synchronize`, or `reopened`.
