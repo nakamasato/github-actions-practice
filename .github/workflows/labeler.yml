@@ -1,4 +1,4 @@
-name: Label PRs
+name: labeler
 
 on:
   pull_request:
