@@ -1,4 +1,4 @@
-name: branch & tag
+name: branch-and-tag
 
 on:
   push:

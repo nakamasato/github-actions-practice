@@ -16,9 +16,11 @@ jobs:
 
       - name: jq
         run: |
-          PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
-          echo "pr: $PR_NUMBER"
+          echo '{"key": "value"}' | jq .
 
       - name: awscli
+        run: aws --version
+
+      - name: yq
         run: |
-          aws --version
+          echo 'key: value' | yq e '.key' -

@@ -1,4 +1,4 @@
-name: conditional-auto-merge
+name: conditional-auto-approve
 
 on:
   pull_request:
