@@ -1,7 +1,11 @@
 FROM ubuntu:latest
 
 ENV DEBIAN_FRONTEND=noninteractive
-# COPY aws-ec2-ssh /aws-ec2-ssh
+ARG KUBECTL_VERSION=v1.22.0
+ARG CALICOCTL_VERSION=v3.17.1
+ARG YQ_VERSION=v4.6.2
+ARG KUBESEAL_VERSION=v0.13.1
+ARG AWSCLI_VERSION=2.2.40
 
 # apt install
 RUN apt update && apt install -y \
@@ -33,8 +37,8 @@ RUN apt update && apt install -y \
     python3-boto3 \
     python3-pandas
 
-# Install awscli latest version https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-linux.html#cliv2-linux-install
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+# Install awscli https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-linux.html#cliv2-linux-install
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWSCLI_VERSION}.zip" -o "awscliv2.zip" && \
     unzip awscliv2.zip && \
     ./aws/install
 
@@ -43,37 +47,31 @@ RUN git clone https://github.com/rhyeal/aws-rotate-iam-keys.git && \
     sudo cp aws-rotate-iam-keys/src/bin/aws-rotate-iam-keys /usr/bin/ && \
     rm -rf aws-rotate-iam-keys
 
-# RUN cd /aws-ec2-ssh && ./install.sh; exit 0 && cron
-# COPY aws-ec2-ssh.conf /etc/aws-ec2-ssh.conf
-# RUN mkdir -p /run/sshd
-# COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-# ENV PS1="\[\033[1;32m\][\t][\u@\h \W]\$\[\033[0m\]"
-# COPY startup.sh /startup.sh
-# RUN chmod 744 /startup.sh
-
 # Install pip
 RUN curl "https://bootstrap.pypa.io/get-pip.py" | python3
 
 # Install pip libraries
 RUN pip install \
-    PyMySQL=="0.9.3" \
+    PyMySQL==0.9.3 \
     pre-commit \
     cryptography \
     cassandra-driver==3.24 \
     cqlsh==6.0.0
 
-# Install kubectl
-RUN curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.17.11/2020-09-18/bin/linux/amd64/kubectl && \
-    chmod +x ./kubectl && \
-    cp ./kubectl /usr/bin/kubectl
+# Install kubectl https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
+# RUN curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.17.11/2020-09-18/bin/linux/amd64/kubectl && \
+#     chmod +x ./kubectl && \
+#     cp ./kubectl /usr/bin/kubectl
+RUN curl -LO https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
+    sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
 # Install calicoctl
-RUN curl -O -L  https://github.com/projectcalico/calicoctl/releases/download/v3.17.1/calicoctl && \
+RUN curl -O -L  https://github.com/projectcalico/calicoctl/releases/download/${CALICOCTL_VERSION}/calicoctl && \
     chmod +x calicoctl && \
     cp ./calicoctl /usr/bin/calicoctl
 
 # Install kubeseal
-RUN wget https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.13.1/kubeseal-linux-amd64 -O kubeseal && \
+RUN wget https://github.com/bitnami-labs/sealed-secrets/releases/download/${KUBESEAL_VERSION}/kubeseal-linux-amd64 -O kubeseal && \
     sudo install -m 755 kubeseal /usr/local/bin/kubeseal
 
 # Install google cloud sdk
@@ -83,7 +81,5 @@ RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.c
     apt-get update -y && apt-get install google-cloud-sdk -y
 
 # Install yq
-RUN wget https://github.com/mikefarah/yq/releases/download/v4.6.2/yq_linux_amd64 -O /usr/bin/yq && \
+RUN wget https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64 -O /usr/bin/yq && \
     chmod +x /usr/bin/yq
-
-# CMD ["/startup.sh"]
