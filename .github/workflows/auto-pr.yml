@@ -1,4 +1,4 @@
-name: release
+name: auto-pr
 
 on:
   release:

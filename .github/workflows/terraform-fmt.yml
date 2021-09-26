@@ -1,4 +1,4 @@
-name: terraform fmt
+name: terraform-fmt
 
 on:
   pull_request:

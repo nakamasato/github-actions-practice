@@ -1,0 +1,26 @@
+name: default-commands
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/default-commands.yml
+
+jobs:
+  zip:
+    runs-on: ubuntu-latest
+    steps:
+      - name: zip
+        run: |
+          touch test.txt
+          zip test.txt.zip test.txt
+
+      - name: jq
+        run: |
+          echo '{"key": "value"}' | jq .
+
+      - name: awscli
+        run: aws --version
+
+      - name: yq
+        run: |
+          echo 'key: value' | yq e '.key' -

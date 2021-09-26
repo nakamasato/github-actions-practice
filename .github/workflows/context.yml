@@ -1,4 +1,4 @@
-name: github context
+name: context
 
 on:
   pull_request:
