@@ -181,14 +181,14 @@ https://github.com/marketplace/actions/docker-layer-caching
 
 Example Docker image:
 - Case1: No cache:
-    - Run satackey/action-docker-layer-caching@v0.0.5: 1s
-    - Build Docker image: 2m 47s
-    - Post Run satackey/action-docker-layer-caching@v0.0.5 1m 38s
+    - Build Docker image: 3m 13s
 - Case2: with cache but couldn't use layer cache:
-    - Run satackey/action-docker-layer-caching@v0.0.5: 2m 30s
+    - Run satackey/action-docker-layer-caching@v0.0.8: 2m 30s
     - Build Docker image: 3m10s
-    - Run satackey/action-docker-layer-caching@v0.0.5: 3m 58s
+    - Run satackey/action-docker-layer-caching@v0.0.8: 3m 58s
 - Case3: with cache and all the layers could use cache:
-    - Run satackey/action-docker-layer-caching@v0.0.5: 3m 48s
+    - Run satackey/action-docker-layer-caching@v0.0.8: 3m 48s
     - Build Docker image: 1s
-    - Run satackey/action-docker-layer-caching@v0.0.5: 3m 40s
+    - Run satackey/action-docker-layer-caching@v0.0.8: 3m 40s
+
+In some case, no cache might be rather faster due to the time to spend storing and restoring a cache.
