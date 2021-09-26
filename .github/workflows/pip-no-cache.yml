@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - python-script/requirements.txt
+      - .github/workflows/pip-no-cache.yml
 
 jobs:
   build:
@@ -13,10 +14,9 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Set up Python 3.8
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2
         with:
           python-version: 3.8
 
-      - name: Check cache hit
-        if: steps.pip-cache.outputs.cache-hit != 'true'
+      - name: pip install
         run: pip install -r python-script/requirements.txt
