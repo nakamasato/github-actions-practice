@@ -46,3 +46,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo ${{ needs.build-and-push-image.outputs.tags }}
+      # https://github.com/actions/checkout#checkout-multiple-repos-side-by-side
+      - name: Checkout nakamasato/kubernetes-basics # https://github.com/nakamasato/kubernetes-basics/tree/v2.0-rc/09-cicd
+        uses: actions/checkout@v2
+        with:
+          repository: nakamasato/kubernetes-basics
+          path: 09-cicd
+          ref: v2.0-rc
+      - run: ls .
