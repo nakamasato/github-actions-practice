@@ -3,7 +3,7 @@ name: docker-layer-cache
 on:
   pull_request:
     paths:
-      - Dockerfile
+      - docker-layer-cache/Dockerfile
 
 jobs:
   build:
@@ -13,6 +13,6 @@ jobs:
       - uses: actions/checkout@v2
       - uses: satackey/action-docker-layer-caching@v0.0.8
       - name: build
-        run: docker build -t test-image:latest . -f Dockerfile
+        run: docker build -t test-image:latest . -f docker-layer-cache/Dockerfile
       - name: check
         run: docker run --rm test-image:latest /bin/bash -c "aws --version; aws-rotate-iam-keys --version; kubectl version --client --short; kubeseal --version; cqlsh --version;"
