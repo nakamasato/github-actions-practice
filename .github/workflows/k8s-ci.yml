@@ -51,7 +51,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: nakamasato/kubernetes-basics
-          path: 09-cicd
           ref: v2.0-rc
       - run: |
           yq e '(.spec.template.spec.containers[]|select(.name == "fastapi-sample").image)|="ghcr.io/nakamasato/fastapi-sample:v2.0"' 09-cicd/sample-app-manifests/deployment.yaml
