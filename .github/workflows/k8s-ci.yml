@@ -59,6 +59,7 @@ jobs:
           CONTAINER_NAME: fastapi-sample
         run: |
           yq e -i '(.spec.template.spec.containers[]|select(.name == "${CONTAINER_NAME}").image)|="${IMAGE_NAME}:v2.0"' ${YAML_PATH}
+          cat ${YAML_PATH}
       - name: Create PR
         uses: peter-evans/create-pull-request@v3
         with:
