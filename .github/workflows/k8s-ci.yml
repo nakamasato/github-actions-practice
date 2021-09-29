@@ -70,4 +70,3 @@ jobs:
           body: |
             # Changes
             - Update `fastapi-sample` iamge
-
