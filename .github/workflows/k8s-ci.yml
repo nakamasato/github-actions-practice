@@ -11,7 +11,7 @@ jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
     outputs: # https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#jobsjob_idoutputs
-      tags: ${{ steps.build-and-push-image.outputs.tags }}
+      tags: ${{ steps.meta.outputs.tags }}
     permissions:
       contents: read
       packages: write
@@ -34,7 +34,6 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
       - name: Build and push Docker image
-        id: build-and-push-image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: k8s-ci
@@ -57,9 +56,9 @@ jobs:
         env:
           YAML_PATH: 09-cicd/sample-app-manifests/deployment.yaml
           CONTAINER_NAME: fastapi-sample
-          IMAGE_TAG: ${{ needs.build-and-push-image.outputs.tags }} # pull_request -> pr-{pull-request-num}
+          IMAGE_FULL_NAME: ${{ needs.build-and-push-image.outputs.tags }} # pull_request -> pr-{pull-request-num}
         run: |
-          yq e -i "(.spec.template.spec.containers[]|select(.name == \"${CONTAINER_NAME}\").image)|=\"${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}\"" ${YAML_PATH}
+          yq e -i "(.spec.template.spec.containers[]|select(.name == \"${CONTAINER_NAME}\").image)|=\"${IMAGE_FULL_NAME}\"" ${YAML_PATH}
           cat ${YAML_PATH}
       - name: Create PR
         uses: peter-evans/create-pull-request@v3
@@ -71,3 +70,4 @@ jobs:
           body: |
             # Changes
             - Update `fastapi-sample` iamge
+
