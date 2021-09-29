@@ -52,14 +52,20 @@ jobs:
         with:
           repository: nakamasato/kubernetes-basics
           ref: v2.0-rc
-      - run: |
-          yq e '(.spec.template.spec.containers[]|select(.name == "fastapi-sample").image)|="ghcr.io/nakamasato/fastapi-sample:v2.0"' 09-cicd/sample-app-manifests/deployment.yaml
+      - name: Update manifest file
+        env:
+          YAML_PATH: 09-cicd/sample-app-manifests/deployment.yaml
+          IMAGE_NAME: ghcr.io/nakamasato/fastapi-sample
+          CONTAINER_NAME: fastapi-sample
+        run: |
+          yq e -i '(.spec.template.spec.containers[]|select(.name == "${CONTAINER_NAME}").image)|="${IMAGE_NAME}:v2.0"' ${YAML_PATH}
       - name: Create PR
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.TEST_GITHUB_TOKEN }}
           title: "Update fastapi-sample"
           base: v2.0-rc
+          draft: true
           body: |
             # Changes
             - Update `fastapi-sample` iamge
