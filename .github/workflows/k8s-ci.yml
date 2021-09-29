@@ -55,10 +55,10 @@ jobs:
       - name: Update manifest file
         env:
           YAML_PATH: 09-cicd/sample-app-manifests/deployment.yaml
-          IMAGE_NAME: ghcr.io/nakamasato/fastapi-sample
           CONTAINER_NAME: fastapi-sample
+          IMAGE_TAG: ${{ needs.build-and-push-image.outputs.tags }} # pull_request -> pr-{pull-request-num}
         run: |
-          yq e -i "(.spec.template.spec.containers[]|select(.name == \"${CONTAINER_NAME}\").image)|=\"${IMAGE_NAME}:v2.0\"" ${YAML_PATH}
+          yq e -i "(.spec.template.spec.containers[]|select(.name == \"${CONTAINER_NAME}\").image)|=\"${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}\"" ${YAML_PATH}
           cat ${YAML_PATH}
       - name: Create PR
         uses: peter-evans/create-pull-request@v3
