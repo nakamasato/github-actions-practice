@@ -14,7 +14,7 @@ jobs:
       run: echo "RELEASE_VERSION=$(echo ${GITHUB_REF:10})" >> $GITHUB_ENV
     - uses: actions/checkout@v2
       with:
-        token: ${{ secrets.TEST_GITHUB_TOKEN }}
+        token: ${{ secrets.REPO_GITHUB_TOKEN }}
         repository: nakamasato/k8s-deploy-test
     - env:
         NAMESPACE: eai-staging
@@ -25,7 +25,7 @@ jobs:
       env:
         NAMESPACE: test
       with:
-        token: ${{ secrets.TEST_GITHUB_TOKEN }}
+        token: ${{ secrets.REPO_GITHUB_TOKEN }}
         title: "[${{ env.NAMESPACE }}] Internal release test [${{ env.RELEASE_VERSION }}]"
         body: |
           # Why
