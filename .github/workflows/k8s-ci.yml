@@ -11,7 +11,7 @@ jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
     outputs: # https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#jobsjob_idoutputs
-      tags: ${{ steps.meta.outputs.tags }}
+      tags: ${{ steps.build-and-push-image.outputs.tags }}
     permissions:
       contents: read
       packages: write
@@ -34,6 +34,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
       - name: Build and push Docker image
+        id: build-and-push-image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: k8s-ci
