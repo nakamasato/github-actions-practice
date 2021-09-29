@@ -65,7 +65,6 @@ jobs:
           token: ${{ secrets.REPO_GITHUB_TOKEN }}
           title: "Update fastapi-sample"
           base: v2.0-rc
-          author: github action
           draft: true
           body: |
             # Changes
