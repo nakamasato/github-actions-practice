@@ -16,9 +16,7 @@ jobs:
       with:
         token: ${{ secrets.REPO_GITHUB_TOKEN }}
         repository: nakamasato/k8s-deploy-test
-    - env:
-        NAMESPACE: eai-staging
-      run: |
+    - run: |
         sed -i "s#guestbook#GUESTBOOK#;" apps/guestbook/deployment.yaml
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v3
