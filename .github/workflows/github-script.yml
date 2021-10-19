@@ -1,6 +1,6 @@
 name: github-script
 
-on: push
+on: pull_request
 
 jobs:
   echo-input:
