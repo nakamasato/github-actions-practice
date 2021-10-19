@@ -6,7 +6,6 @@ module.exports = ({ github, context }) => {
         '<details><summary>Show Plan</summary>',
         '',
         `\`\`\`${process.env.PLAN}\`\`\``,
-        '',
         '</details>',
         '',
         `*Pusher: @${context.actor}, Action: \`${context.eventName}\`, Working Directory: \`${process.env.ENV_FOR_JOB}\`, Workflow: \`${context.workflow}\`*`
