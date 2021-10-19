@@ -43,7 +43,7 @@ jobs:
             console.log(context)
             process.env
             const { RESULT } = process.env
-            const output = `*Pusher: @${github.actor}, Action: \`${github.event_name}\`, Working Directory: \`${RESULT}\`, Workflow: \`${github.workflow}\`*`
+            const output = `*Pusher: @${context.actor}, Action: \`${context.eventName}\`, Working Directory: \`${RESULT}\`, Workflow: \`${context.workflow}\`*`
             github.rest.issues.createComment({
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
