@@ -39,7 +39,6 @@ jobs:
             console.log(context)
             process.env
             const { RESULT } = process.env
-            const output = `*Pusher: @${context.actor}, Action: \`${context.eventName}\`, Working Directory: \`${RESULT}\`, Workflow: \`${context.workflow}\`*`
 
             const output = `#### Terraform Format and Style 🖌\`${steps.fmt.outcome }\`
             #### Terraform Initialization ⚙️\`${ steps.init.outcome }\`
