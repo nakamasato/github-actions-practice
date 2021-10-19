@@ -36,16 +36,19 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/github-script@v5
+        env:
+          RESULT: "test result"
         with:
-          # script: |
-          #   const script = require('./.github/actions/script.js')
-          #   console.log(script({github, context}))
           script: |
             console.log(context)
-            const output = `*Pusher: @${github.actor}, Action: \`${github.event_name}\`, Working Directory: \`${env.tf_actions_working_dir}\`, Workflow: \`${github.workflow}\`*`
+            process.env
+            const { RESULT } = process.env
+            const output = `*Pusher: @${github.actor}, Action: \`${github.event_name}\`, Working Directory: \`${RESULT}\`, Workflow: \`${github.workflow}\`*`
             github.rest.issues.createComment({
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 body: output
             })
+          #   const script = require('./.github/actions/script.js')
+          #   console.log(script({github, context}))
