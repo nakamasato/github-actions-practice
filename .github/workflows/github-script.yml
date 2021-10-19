@@ -1,0 +1,14 @@
+name: github-script
+
+on: push
+
+jobs:
+  echo-input:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/github-script@v5
+        with:
+          script: |
+            const script = require('./.github/actions/script.js')
+            console.log(script({github, context}))
