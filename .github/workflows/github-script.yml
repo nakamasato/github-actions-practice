@@ -23,15 +23,11 @@ on: pull_request
 # </details>
 # *Pusher: @${ github.actor }, Action: \`${ github.event_name }\`, Working Directory: \`${ env.tf_actions_working_dir }\`, Workflow: \`${ github.workflow }\`*`;
 
-# github.issues.createComment({
-#   issue_number: context.issue.number,
-#   owner: context.repo.owner,
-#   repo: context.repo.repo,
-#   body: output
-# })
 
 jobs:
   echo-input:
+    env:
+      ENV_FOR_JOB: env for job
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -44,6 +40,18 @@ jobs:
             process.env
             const { RESULT } = process.env
             const output = `*Pusher: @${context.actor}, Action: \`${context.eventName}\`, Working Directory: \`${RESULT}\`, Workflow: \`${context.workflow}\`*`
+
+            const output = `#### Terraform Format and Style 🖌\`${steps.fmt.outcome }\`
+            #### Terraform Initialization ⚙️\`${ steps.init.outcome }\`
+            #### Terraform Validation 🤖${ steps.validate.outputs.stdout }
+            #### Terraform Plan 📖\`${ steps.plan.outcome }\`
+            <details><summary>Show Plan</summary>
+
+            \`\`\`${ process.env.RESULT }\`\`\`
+
+            </details>
+            *Pusher: @${context.actor}, Action: \`${context.eventName}\`, Working Directory: \`${ process.env.ENV_FOR_JOB }\`, Workflow: \`${context.workflow}\`*`;
+
             github.rest.issues.createComment({
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
