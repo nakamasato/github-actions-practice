@@ -33,20 +33,23 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/github-script@v5
         env:
-          RESULT: "test result"
+          PLAN: steps.plan.outcome
+          FMT: steps.fmt.outcome
+          INIT: steps.init.outcome
+          VALIDATION: steps.validate.outputs.stdout
         with:
           script: |
             console.log(context)
             process.env
             const { RESULT } = process.env
 
-            const output = `#### Terraform Format and Style 🖌\`${steps.fmt.outcome }\`
-            #### Terraform Initialization ⚙️\`${ steps.init.outcome }\`
-            #### Terraform Validation 🤖${ steps.validate.outputs.stdout }
-            #### Terraform Plan 📖\`${ steps.plan.outcome }\`
+            const output = `#### Terraform Format and Style 🖌\`${ process.env.FMT }\`
+            #### Terraform Initialization ⚙️\`${ process.env.INIT }\`
+            #### Terraform Validation 🤖${ process.env.VALIDATION }
+            #### Terraform Plan 📖\`${ process.env.PLAN }\`
             <details><summary>Show Plan</summary>
 
-            \`\`\`${ process.env.RESULT }\`\`\`
+            \`\`\`${ process.env.PLAN }\`\`\`
 
             </details>
             *Pusher: @${context.actor}, Action: \`${context.eventName}\`, Working Directory: \`${ process.env.ENV_FOR_JOB }\`, Workflow: \`${context.workflow}\`*`;
