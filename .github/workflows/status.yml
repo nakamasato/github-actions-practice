@@ -1,0 +1,22 @@
+name: status
+
+on: pull_request
+
+jobs:
+  test1:
+    runs-on: ubuntu-latest
+    steps:
+      - continue-on-error: true
+        run: exit 1
+      - if: failure()
+        run: echo failure
+  test2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: fail step
+        id: fail_step
+        run: exit 1
+
+      - name: run if fail_step failed
+        if: failure() && steps.fail_step.outcome == 'failure'
+        run: echo "${{ steps.fail_step.outcome }}"
