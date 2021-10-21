@@ -1,0 +1,21 @@
+name: github-script
+
+on: pull_request
+
+jobs:
+  echo-input:
+    env:
+      ENV_FOR_JOB: env for job
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/github-script@v5
+        env:
+          PLAN: steps.plan.outcome
+          FMT: steps.fmt.outcome
+          INIT: steps.init.outcome
+          VALIDATION: steps.validate.outputs.stdout
+        with:
+          script: |
+            const script = require('./.github/actions/script.js')
+            console.log(script({github, context}))
