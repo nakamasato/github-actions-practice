@@ -13,7 +13,7 @@ jobs:
         continue-on-error: true
         id: fc
         with:
-          issue-number: context.issue.number
+          issue-number: ${{ context.issue.number }}
           body-includes: Comment by github actions
 
       - uses: actions/github-script@v5
