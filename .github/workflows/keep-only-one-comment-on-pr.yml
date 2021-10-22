@@ -1,4 +1,4 @@
-name: keep-only-one-comment-on-pr.yml
+name: keep-only-one-comment-on-pr
 
 on: pull_request
 
