@@ -13,7 +13,7 @@ jobs:
         continue-on-error: true
         id: fc
         with:
-          issue-number: ${{ context.issue.number }}
+          issue-number: ${{ github.event.number }}
           body-includes: Comment by github actions
 
       - uses: actions/github-script@v5
@@ -35,5 +35,4 @@ jobs:
                 repo: context.repo.repo,
                 body: `Comment by github actions ${new Date()}`
               })
-
             }
