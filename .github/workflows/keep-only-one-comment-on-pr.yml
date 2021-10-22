@@ -1,0 +1,30 @@
+name: keep-only-one-comment-on-pr.yml
+
+on: pull_request
+
+jobs:
+  echo-input:
+    env:
+      ENV_FOR_JOB: env for job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Find Comment
+        uses: peter-evans/find-comment@v1
+        id: fc
+        with:
+          issue-number: context.issue.number
+          body-includes: Comment by github actions
+
+      - uses: actions/github-script@v5
+        env:
+          COMMENT_ID: ${{ steps.fc.outputs.comment-id }}
+        with:
+          script: |
+            if (process.env.COMMENT_ID == "") {
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: 'Comment by github actions'
+              })
+            }
