@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Find Comment
         uses: peter-evans/find-comment@v1
-        continue-on-error: true
+        # continue-on-error: true
         id: fc
         with:
           issue-number: ${{ github.event.number }}
@@ -33,6 +33,6 @@ jobs:
                 comment_id: process.env.COMMENT_ID,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                body: `Comment by github actions ${new Date()}`
+                body: `Comment by github actions update`
               })
             }
