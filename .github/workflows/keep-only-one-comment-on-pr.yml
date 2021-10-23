@@ -33,12 +33,6 @@ jobs:
                 comment_id: process.env.COMMENT_ID,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                body: `Comment by github actions (updated) comment id: ${process.env.COMMENT_ID}`
-              })
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: `found comment id: ${process.env.COMMENT_ID}`
+                body: `Comment by github actions (updated at ${new Date()}) comment id: ${process.env.COMMENT_ID}`
               })
             }
