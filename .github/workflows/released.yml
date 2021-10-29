@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy:
-#     if: github.event.release.target_commitish == 'master'
+    #     if: github.event.release.target_commitish == 'master'
     runs-on: ubuntu-latest
     steps:
       - name: check branch for release
