@@ -6,11 +6,11 @@ on:
 
 jobs:
   deploy:
-    #     if: github.event.release.target_commitish == 'master'
+    if: github.event.release.target_commitish == 'master'
     runs-on: ubuntu-latest
     steps:
       - name: check branch for release
-        if: ${{ github.event_name == 'release' && github.event.release.target_commitish != 'master'}}
+        if: ${{ github.event_name == 'release' && github.event.release.target_commitish != 'master'}} # redundant but for testing
         run: |
           echo "we need to use master branch for release."
           exit 1
