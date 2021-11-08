@@ -24,3 +24,6 @@ jobs:
       - name: yq
         run: |
           echo 'key: value' | yq e '.key' -
+
+      - name: cal
+        run: cal $(date +"%m %Y") | awk 'NF {DAYS = $NF}; END {print DAYS}'
