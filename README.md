@@ -15,7 +15,7 @@
 |**default-commands**|pull_request|Check default commands (e.g. `zip`, `aws`, `jq`, `yq`)|
 |**docker-layer-cache**|pull_request|Use `satackey/action-docker-layer-caching`.|
 |**envvar**|pull_request|How to set env var and use it.|
-|**find-comment**|pull_request|Create a comment if not exist. Otherwise, update the existing comment.|
+|**keep-only-one-comment-on-pr**|pull_request|Create a comment if not exist. Otherwise, update the existing comment.|
 |**k8s-ci**|pull_request|Build docker image, push it to Github Packages, and update manifest file.|
 |**labeler**|pull_request|Add `label` to a pr based on the title.|
 |**pip-cache**|push|Use `actions/cache` for caching `~/.cache/pip`|
