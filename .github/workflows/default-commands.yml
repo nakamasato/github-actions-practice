@@ -27,3 +27,6 @@ jobs:
 
       - name: cal
         run: cal $(date +"%m %Y") | awk 'NF {DAYS = $NF}; END {print DAYS}'
+        
+      - name: bc
+        run: printf "%.0f" $(echo "scale=2;3/2" | bc)
