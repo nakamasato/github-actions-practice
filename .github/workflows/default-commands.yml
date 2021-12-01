@@ -6,7 +6,7 @@ on:
       - .github/workflows/default-commands.yml
 
 jobs:
-  zip:
+  job:
     runs-on: ubuntu-latest
     steps:
       - name: zip
@@ -27,3 +27,6 @@ jobs:
 
       - name: cal
         run: cal $(date +"%m %Y") | awk 'NF {DAYS = $NF}; END {print DAYS}'
+
+      - name: bc
+        run: printf "%.2f" $(echo "scale=2;3/2" | bc)
