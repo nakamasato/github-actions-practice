@@ -3,35 +3,33 @@ name: keep-only-one-comment-on-pr
 on: pull_request
 
 jobs:
-  echo-input:
-    env:
-      ENV_FOR_JOB: env for job
+  build:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@master
       - name: Find Comment
         uses: peter-evans/find-comment@v1
         id: fc
         with:
           issue-number: ${{ github.event.number }}
-          body-includes: Comment by github actions
+          body-includes: 'test'
+
+      - name: Delete comment
+        if: ${{ steps.fc.outputs.comment-id != 0 }}
+        uses: jungwinter/comment@v1
+        with:
+          type: delete
+          comment_id: ${{ steps.fc.outputs.comment-id }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/github-script@v5
         env:
           COMMENT_ID: ${{ steps.fc.outputs.comment-id }}
         with:
           script: |
-            if (process.env.COMMENT_ID == "") {
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: 'Comment by github actions'
-              })
-            } else {
-              github.rest.issues.updateComment({
-                comment_id: process.env.COMMENT_ID,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: `Comment by github actions (updated at ${new Date()}) comment id: ${process.env.COMMENT_ID}`
-              })
-            }
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `test`
+            })
