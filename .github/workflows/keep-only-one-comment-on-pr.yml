@@ -1,7 +1,7 @@
 name: keep-only-one-comment-on-pr
 
 on: pull_request
-
+# comment to add a commit
 jobs:
   build:
     runs-on: ubuntu-latest
