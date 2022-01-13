@@ -1,6 +1,9 @@
 name: keep-only-one-comment-on-pr
 
 on: pull_request
+
+env:
+  COMMENT_BODY_IDENTIFIER: test
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -11,7 +14,7 @@ jobs:
         id: fc
         with:
           issue-number: ${{ github.event.number }}
-          body-includes: 'test'
+          body-includes: ${{ env.COMMENT_BODY_IDENTIFIER }}
 
       - name: Delete comment
         if: ${{ steps.fc.outputs.comment-id != 0 }}
@@ -28,5 +31,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `test (updated at ${new Date()})`
+              body: `${process.env.COMMENT_BODY_IDENTIFIER} (updated at ${new Date()})`
             })
