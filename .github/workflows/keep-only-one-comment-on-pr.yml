@@ -1,7 +1,6 @@
 name: keep-only-one-comment-on-pr
 
 on: pull_request
-# comment to add a commit
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -31,5 +30,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `test`
+              body: `test (updated at ${new Date()})`
             })
