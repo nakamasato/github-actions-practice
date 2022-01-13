@@ -22,8 +22,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/github-script@v5
-        env:
-          COMMENT_ID: ${{ steps.fc.outputs.comment-id }}
         with:
           script: |
             github.rest.issues.createComment({
