@@ -142,6 +142,49 @@
         </details>
 
         In some case, no cache might be rather faster due to the time to spend storing and restoring a cache.
+- Failure
+
+    <details>
+
+    ```yaml
+    name: status
+
+    on: pull_request
+
+    jobs:
+      test1: # succeed
+        runs-on: ubuntu-latest
+        steps:
+          - continue-on-error: true
+            run: exit 1
+
+          - if: failure()
+            run: echo failure
+
+      test2: # fail
+        runs-on: ubuntu-latest
+        steps:
+          - name: fail step
+            id: fail_step
+            run: exit 1
+
+          - name: run if fail_step failed
+            if: failure() && steps.fail_step.outcome == 'failure'
+            run: echo "${{ steps.fail_step.outcome }}"
+
+      test3: # fail
+        runs-on: ubuntu-latest
+        steps:
+          - name: fail step
+            id: fail_step
+            run: exit 1
+
+          - name: check failure function
+            if: failure()
+            run: echo "${{ steps.fail_step.outcome }}"
+    ```
+
+    </details>
 
 - Example
     - Test mvn with MySQL
