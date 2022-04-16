@@ -6,8 +6,10 @@ jobs:
   test1: # succeed
     runs-on: ubuntu-latest
     steps:
-      - continue-on-error: true
+      - id: fail_step
+        continue-on-error: true
         run: exit 1
 
-      - if: failure()
-        run: echo failure
+      - run: echo succeeded or failed
+      
+      - if: failure() && steps.fail_step.outcome == 'failure'
