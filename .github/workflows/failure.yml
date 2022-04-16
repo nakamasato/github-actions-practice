@@ -29,7 +29,7 @@ jobs:
       - name: make it fail when the first step failed
         if: steps.fail_step.outcome == 'failure'
         run: exit 1
-  
+
   fail-with-post-process-for-failure:
     if: github.event.pull_request.draft == true
     runs-on: ubuntu-latest
