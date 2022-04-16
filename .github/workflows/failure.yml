@@ -3,14 +3,26 @@ name: failure
 on: pull_request
 
 jobs:
-  test1: # succeed
+  fail:
     runs-on: ubuntu-latest
     steps:
       - id: fail_step
         continue-on-error: true
         run: exit 1
 
-      - run: echo ${{ steps.fail_step.outcome }}
-      
-      - if: failure() && steps.fail_step.outcome == 'failure'
+      - run: echo ${{ steps.fail_step.outcome }} # failure
+
+      - if: steps.fail_step.outcome == 'failure'
+        run: exit 1
+
+  succeed:
+    runs-on: ubuntu-latest
+    steps:
+      - id: suceed_step
+        continue-on-error: true
+        run: echo succeed
+
+      - run: echo ${{ steps.suceed_step.outcome }}
+
+      - if: steps.fail_step.outcome == 'failure'
         run: exit 1
