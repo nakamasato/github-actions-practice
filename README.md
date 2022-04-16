@@ -152,36 +152,78 @@
     on: pull_request
 
     jobs:
-      test1: # succeed
+      just-fail:
+        if: github.event.pull_request.draft == true
         runs-on: ubuntu-latest
         steps:
-          - continue-on-error: true
+          - id: fail_step
+            run: exit 1
+
+          - run: echo ${{ steps.fail_step.outcome }} # not called
+
+      fail-with-post-process:
+        if: github.event.pull_request.draft == true
+        runs-on: ubuntu-latest
+        steps:
+          - id: fail_step
+            continue-on-error: true
+            run: exit 1
+
+          - name: post process regardless of sucess or failure
+            run: echo ${{ steps.fail_step.outcome }} # failure
+
+          - name: make it fail when the first step failed
+            if: steps.fail_step.outcome == 'failure'
+            run: exit 1
+
+      succeed-with-post-process:
+        if: github.event.pull_request.draft == true
+        runs-on: ubuntu-latest
+        steps:
+          - id: succeed_step
+            continue-on-error: true
+            run: echo succeed
+
+          - name: post process regardless of sucess or failure
+            run: echo ${{ steps.fail_step.outcome }} # success
+
+          - name: make it fail when the first step failed
+            if: steps.fail_step.outcome == 'failure'
+            run: exit 1
+
+      fail-with-post-process-for-failure:
+        if: github.event.pull_request.draft == true
+        runs-on: ubuntu-latest
+        steps:
+          - id: fail_step
             run: exit 1
 
           - if: failure()
-            run: echo failure
+            name: post process only called when the first step fails
+            run: echo ${{ steps.fail_step.outcome }} # failure
 
-      test2: # fail
+      succeed-with-post-process-for-failure:
+        if: github.event.pull_request.draft == true
         runs-on: ubuntu-latest
         steps:
-          - name: fail step
-            id: fail_step
-            run: exit 1
+          - id: succeed_step
+            run: echo succeed
 
-          - name: run if fail_step failed
-            if: failure() && steps.fail_step.outcome == 'failure'
-            run: echo "${{ steps.fail_step.outcome }}"
+          - if: failure()
+            name: post process only called when the first step fails
+            run: echo ${{ steps.fail_step.outcome }}
 
-      test3: # fail
+      succeed:
         runs-on: ubuntu-latest
         steps:
-          - name: fail step
-            id: fail_step
-            run: exit 1
+          - id: suceed_step
+            continue-on-error: true
+            run: echo succeed
 
-          - name: check failure function
-            if: failure()
-            run: echo "${{ steps.fail_step.outcome }}"
+          - run: echo ${{ steps.suceed_step.outcome }} # success
+
+          - if: steps.fail_step.outcome == 'failure'
+            run: exit 1
     ```
 
     </details>
