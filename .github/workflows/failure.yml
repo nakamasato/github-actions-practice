@@ -1,0 +1,13 @@
+name: failure
+
+on: pull_request
+
+jobs:
+  test1: # succeed
+    runs-on: ubuntu-latest
+    steps:
+      - continue-on-error: true
+        run: exit 1
+
+      - if: failure()
+        run: echo failure
