@@ -38,7 +38,7 @@ jobs:
           tag_name: ${{ env.release_tag }}
           release_name: Release ${{ env.release_tag }}
           body: "${{github.event.pull_request.body}}"
-          draft: true
+          draft: false
           prerelease: false
       - uses: actions/github-script@v5
         env:
@@ -50,7 +50,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `[draft release ${process.env.release_id}](${process.env.release_url}) has been created. Please publish it when it's ready! (${new Date()})`
+              body: `[draft release ${process.env.release_id}](${process.env.release_url}) has been created. (${new Date()})`
             })
 
   pull_request:
