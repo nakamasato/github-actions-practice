@@ -6,7 +6,7 @@ on:
       - opened # default
       - synchronize # default
       - reopened # default
-      # - closed
+      - closed
     branches:
       - master
 
@@ -18,9 +18,17 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-      - name: pull-request merged
-        run: |
-          echo "release_tag=v$(date '+%Y%m%d_%H%M%S')" >> $GITHUB_ENV
+      - name: prepare release tag
+        run: echo "release_tag=v$(date '+%Y%m%d_%H%M%S')" >> $GITHUB_ENV
+      - uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `PR has been merged. we're processing it! (${new Date()})`
+            })
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
