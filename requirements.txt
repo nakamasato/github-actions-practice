@@ -20,7 +20,7 @@ enum34==1.1.10
 future==0.16.0
 idna==2.6
 jmespath==0.9.3
-kombu==3.0.37
+kombu==5.2.4
 Markdown==2.6.11
 mecab-python3==0.996.5
 mysqlclient==1.3.14
