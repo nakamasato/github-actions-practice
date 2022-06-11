@@ -32,7 +32,7 @@ python-dateutil==2.7.3
 pytz==2016.10
 redis==2.10.5
 regex==2018.7.11
-requests==2.20.0
+requests==2.28.0
 s3transfer==0.1.13
 sb-django-redis-sentinel==1.0.3
 six==1.11.0
