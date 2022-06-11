@@ -14,14 +14,14 @@ jobs:
       NAMESPACE: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set env ${{ env.NAMESPACE }}
         id: first-job
         run: |
           echo "TEST=TEST_VALUE" >> $GITHUB_ENV
           echo ::set-output name=TEST::TEST_VALUE
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Get env
         run: |
           echo ${{ env.TEST }}
@@ -30,7 +30,7 @@ jobs:
   second:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Get env
         run: |
           echo ${{ env.TEST }}
