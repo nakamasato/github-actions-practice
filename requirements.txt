@@ -35,6 +35,6 @@ regex==2018.7.11
 requests==2.20.0
 s3transfer==0.1.13
 sb-django-redis-sentinel==1.0.3
-six==1.11.0
+six==1.16.0
 urllib3==1.26.5
 uwsgi==2.0.18
