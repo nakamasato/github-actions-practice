@@ -1,14 +1,15 @@
 # github-actions-practice
 
 ## Github Actions Table
+
+### 1. pull_request-based trigger
+
 |GitHub Actions|Trigger|Description|
 |---|---|---|
 |**artifact**| pull_request | Upload `github-sha.txt` to artifact. Wanted to download if exists but not worked -> commented out.|
 |**auto-approve**|pull_request| If change is under `automatic-approval`, any PR will be automatically approved.|
 |**auto-assign**|pull_request| Set PR author to the assignee when a PR is created.|
 |**auto-merge**|pull_request| If change is under `automatic-merge`, any PR will be automatically merged.|
-|**auto-pr**|release| When a release is published from `master` branch, update a kubernetes yaml file in another repository `nakamasato/k8s-deploy-test` and create a pr in the repository.|
-|**branch-and-tag**|push| If change is pushed to `merge` branch or tagged as `v1.*`, the branch will be merged to `master` branch.|
 |[conditional-auto-approve](.github/workflows/conditional-auto-approve.yml)|pull_request|If PR's changed files and changes match `AUTO_APPROVE_ALLOWED_REGEX` and `AUTO_APPROVE_FILE_PATH_REGEX` respectively, the pr will be automatically merged. |
 |**check-actions-name**|pull_request|Check actions file name and the name in yaml file are same.|
 |**context**|pull_request|Echo GitHub context `toJson(github)` for checking.|
@@ -18,15 +19,32 @@
 |**keep-only-one-comment-on-pr**|pull_request|Create a comment if not exist. Otherwise, update the existing comment.|
 |**k8s-ci**|pull_request|Build docker image, push it to Github Packages, and update manifest file.|
 |**labeler**|pull_request|Add `label` to a pr based on the title.|
+|**pre-commit**|pull_request|Run `pre-commit`.|
+|[pull-request](.github/workflows/pull-request.yml)|pull_request|If a PR is merged, create a release. If a PR is not merged, echo "Pull Request".|
+|[s3-local](.github/workflows/s3-local.yml)|pull_request|Use `minio` for s3 mock in GitHub Actions.|
+|[terrraform-fmt](.github/workflows/terraform-fmt.yml)|pull_request|Run `terraform fmt` for `**.tf`.|
+
+### 2. release-based trigger
+
+|GitHub Actions|Trigger|Description|
+|---|---|---|
+|**auto-pr**|release| When a release is published from `master` branch, update a kubernetes yaml file in another repository `nakamasato/k8s-deploy-test` and create a pr in the repository.|
+|**prereleased**|release|When release is prereleased from master branch, echo "prereleased".|
+|[released](.github/workflows/released.yml)|release|If a release is published from master branch, push a commit to `master` branch.|
+
+### 3. push-based trigger
+
+|GitHub Actions|Trigger|Description|
+|---|---|---|
+|**branch-and-tag**|push| If change is pushed to `merge` branch or tagged as `v1.*`, the branch will be merged to `master` branch.|
 |**pip-cache**|push|Use `actions/cache` for caching `~/.cache/pip`|
 |**pip-no-cache**|push|For comparison with **pip-cache**|
-|**pre-commit**|pull_request|Run `pre-commit`.|
-|**prereleased**|release|When release is prereleased from master branch, echo "prereleased".|
-|[pull-request](.github/workflows/pull-request.yml)|pull_request|If a PR is merged, create a release. If a PR is not merged, echo "Pull Request".|
-|[released](.github/workflows/released.yml)|release|If a release is published from master branch, push a commit to `master` branch.|
-|[s3-local](.github/workflows/s3-local.yml)|pull_request|Use `minio` for s3 mock in GitHub Actions.|
+
+### 4. schedule trigger
+
+|GitHub Actions|Trigger|Description|
+|---|---|---|
 |[schedule](.github/workflows/schedule.yml)|schedule|Echo "test" at 00:00 every Monday.|
-|[terrraform-fmt](.github/workflows/terraform-fmt.yml)|pull_request|Run `terraform fmt` for `**.tf`.|
 
 ## CheatSheet
 - Available commands by default ([default-commands.yml](.github/workflows/default-commands.yml))
