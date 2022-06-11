@@ -12,7 +12,7 @@ jobs:
     steps:
     - name: Set env
       run: echo "RELEASE_VERSION=$(echo ${GITHUB_REF:10})" >> $GITHUB_ENV
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         token: ${{ secrets.REPO_GITHUB_TOKEN }}
         repository: nakamasato/k8s-deploy-test
