@@ -24,7 +24,7 @@ jobs:
           comment_id: ${{ steps.fc.outputs.comment-id }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions/github-script@v5
+      - uses: actions/github-script@v6
         with:
           script: |
             github.rest.issues.createComment({
