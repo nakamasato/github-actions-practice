@@ -18,7 +18,7 @@ docutils==0.14
 drf-nested-routers==0.90.0
 enum34==1.1.10
 future==0.16.0
-idna==2.6
+idna==3.3
 jmespath==0.9.3
 kombu==3.0.37
 Markdown==2.6.11
