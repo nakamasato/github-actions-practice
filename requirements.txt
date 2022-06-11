@@ -19,7 +19,7 @@ drf-nested-routers==0.90.0
 enum34==1.1.6
 future==0.16.0
 idna==2.6
-jmespath==0.9.3
+jmespath==0.10.0
 kombu==3.0.37
 Markdown==2.6.11
 mecab-python3==0.996.1
