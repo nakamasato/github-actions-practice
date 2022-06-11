@@ -22,11 +22,11 @@
 |**pip-no-cache**|push|For comparison with **pip-cache**|
 |**pre-commit**|pull_request|Run `pre-commit`.|
 |**prereleased**|release|When release is prereleased from master branch, echo "prereleased".|
-|**pull-request**|pull_request|If a PR is merged, create a release. If a PR is not merged, echo "Pull Request".|
-|**released**|release|If a release is published from master branch, push a commit to `master` branch.|
-|**s3-local**|pull_request|Use `minio` for s3 mock in GitHub Actions.|
-|**schedule**|schedule|Echo "test" at 00:00 every Monday.|
-|**terrraform-fmt**|pull_request|Run `terraform fmt` for `**.tf`.|
+|[pull-request](.github/workflows/pull-request.yml)|pull_request|If a PR is merged, create a release. If a PR is not merged, echo "Pull Request".|
+|[released](.github/workflows/released.yml)|release|If a release is published from master branch, push a commit to `master` branch.|
+|[s3-local](.github/workflows/s3-local.yml)|pull_request|Use `minio` for s3 mock in GitHub Actions.|
+|[schedule](.github/workflows/schedule.yml)|schedule|Echo "test" at 00:00 every Monday.|
+|[terrraform-fmt](.github/workflows/terraform-fmt.yml)|pull_request|Run `terraform fmt` for `**.tf`.|
 
 ## CheatSheet
 - Available commands by default ([default-commands.yml](.github/workflows/default-commands.yml))

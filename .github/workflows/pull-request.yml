@@ -38,8 +38,20 @@ jobs:
           tag_name: ${{ env.release_tag }}
           release_name: Release ${{ env.release_tag }}
           body: "${{github.event.pull_request.body}}"
-          draft: false
+          draft: true
           prerelease: false
+      - uses: actions/github-script@v5
+        env:
+          release_url: "${{ steps.set-result.create_release.html_url }}"
+          release_id: "${{ steps.set-result.create_release.id }}"
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `[draft release ${process.env.release_id}](${process.env.release_url}) has been created. Please publish it when it's ready! (${new Date()})`
+            })
 
   pull_request:
     if: github.event.pull_request.merged != true
