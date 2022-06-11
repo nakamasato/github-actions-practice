@@ -41,16 +41,13 @@ jobs:
           draft: false
           prerelease: false
       - uses: actions/github-script@v5
-        env:
-          release_url: "${{ steps.set-result.create_release.html_url }}"
-          release_id: "${{ steps.set-result.create_release.id }}"
         with:
           script: |
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `[draft release ${process.env.release_id}](${process.env.release_url}) has been created. (${new Date()})`
+              body: `[draft release ${{ steps.create_release.outputs.id }}](${{ steps.create_release.outputs.html_url }}) has been created. (${new Date()})`
             })
 
   pull_request:
