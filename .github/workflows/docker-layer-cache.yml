@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: satackey/action-docker-layer-caching@v0.0.8
+      - uses: satackey/action-docker-layer-caching@v0.0.11
       - name: build
         run: docker build -t test-image:latest . -f docker-layer-cache/Dockerfile
       - name: check
