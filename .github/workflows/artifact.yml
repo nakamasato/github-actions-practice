@@ -24,7 +24,7 @@ jobs:
       - shell: bash
         run: echo ${{ github.sha }} > github-sha.txt
       - name: Upload github-sha
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: github-sha
           path: github-sha.txt
