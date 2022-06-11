@@ -37,4 +37,4 @@ s3transfer==0.1.13
 sb-django-redis-sentinel==1.0.3
 six==1.11.0
 urllib3==1.26.5
-uwsgi==2.0.18
+uwsgi==2.0.20
