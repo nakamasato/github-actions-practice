@@ -4,7 +4,7 @@ boto3==1.9.13
 botocore==1.12.13
 Cerberus==1.1
 certifi==2018.1.18
-chardet==3.0.4
+chardet==4.0.0
 ConcurrentLogHandler==0.9.1
 coverage==4.5.4
 Django==2.2.28
