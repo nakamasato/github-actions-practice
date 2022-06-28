@@ -52,7 +52,7 @@ jobs:
           echo "::set-output name=count::$(gh pr list -S head:${{ steps.commit.outputs.branch_name }} -B $base_branch | wc -l)"
           echo "::set-output name=pr_title::$pr_title"
           echo "::set-output name=base_branch::$base_branch"
-      # リリース用PRを作成
+
       - name: Create release pr
         if: ${{  steps.check.outputs.outdated == 'true' && steps.check_pr.outputs.count == 0 }}
         run: |
