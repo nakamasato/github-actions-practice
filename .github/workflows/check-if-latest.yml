@@ -1,0 +1,30 @@
+name: check-if-latest
+on:
+  pull_request:
+
+jobs:
+  check-diff:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.changed-files.outputs.any_changed }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: 'main'
+          fetch-depth: 2
+      - name: make change intentionally
+        run: |
+          sed -i 's/opened/closed/g' .github/workflows/artifact.yml
+      - name: Verify changed files
+        uses: tj-actions/changed-files@v22.2
+        id: changed-files
+        with:
+          files: |
+            .github/workflows/*.yml
+
+  action:
+    runs-on: ubuntu-latest
+    if: github.event.action != 'closed' && needs.check-diff.outputs.changed == 'true'
+    needs: check-diff
+    steps:
+      - run: echo 'true'
