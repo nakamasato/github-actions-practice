@@ -5,8 +5,8 @@ on:
 jobs:
   check-diff:
     runs-on: ubuntu-latest
-    outputs:
-      changed: ${{ steps.changed-files.outputs.any_changed }}
+    # outputs:
+    #   changed: ${{ steps.changed-files.outputs.any_changed }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -15,17 +15,26 @@ jobs:
       - name: make change intentionally
         run: |
           sed -i 's/opened/closed/g' .github/workflows/artifact.yml
-      - name: Verify changed files
-        uses: tj-actions/changed-files@v22.2
-        id: changed-files
-        with:
-          base_sha: master
-          files: |
-            .github/workflows/*.yml
+      # - name: Verify changed files
+      #   uses: tj-actions/changed-files@v22.2
+      #   id: changed-files
+      #   with:
+      #     base_sha: master
+      #     files: |
+      #       .github/workflows/*.yml
+      - run: |
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git config user.name github-actions
+            git config user.email github-actions@github.com
+            git checkout -b new-branch
+            git add .
+            git commit -m 'update file'
+            git push origin HEAD
+          fi
 
-  action:
-    runs-on: ubuntu-latest
-    if: github.event.action != 'closed' && needs.check-diff.outputs.changed == 'true'
-    needs: check-diff
-    steps:
-      - run: echo 'true'
+  # action:
+  #   runs-on: ubuntu-latest
+  #   if: github.event.action != 'closed' && needs.check-diff.outputs.changed == 'true'
+  #   needs: check-diff
+  #   steps:
+  #     - run: echo 'true'
