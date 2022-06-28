@@ -1,6 +1,6 @@
 # github-actions-practice
 
-Last Updated: 2021-01-01
+- Last Updated: 
 
 ## Github Actions Table
 
