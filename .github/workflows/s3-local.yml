@@ -3,6 +3,9 @@ name: s3-local
 on:
   pull_request:
 
+env:
+  AWS_ACCESS_KEY_ID: "ABCDEFGHIJKLMN"
+  AWS_SECRET_ACCESS_KEY: "0123456789"
 jobs:
   s3:
     runs-on: ubuntu-latest
@@ -10,24 +13,27 @@ jobs:
       - name: run minio
         run: |
           docker run -d -p 9000:9000 --name minio \
-                     -e "MINIO_ACCESS_KEY=ABCDEFGHIJKLMN" \
-                     -e "MINIO_SECRET_KEY=0123456789" \
+                     -e "MINIO_ACCESS_KEY=${{ env.AWS_ACCESS_KEY_ID }}" \
+                     -e "MINIO_SECRET_KEY=${{ env.AWS_SECRET_ACCESS_KEY }}" \
                      -v /tmp/data:/data \
                      -v /tmp/config:/root/.minio \
                      minio/minio server /data
 
       - name: check s3 command
-        env:
-          AWS_ACCESS_KEY_ID: "ABCDEFGHIJKLMN"
-          AWS_SECRET_ACCESS_KEY: "0123456789"
         run: |
           echo "hello" > ~/test.txt
           cat ~/test.txt
-
+      - run: |
           aws --endpoint-url http://127.0.0.1:9000/ s3 mb s3://test-bucket # make bucket
+      - run: |
           aws --endpoint-url http://127.0.0.1:9000/ s3 ls
+      - run: |
           aws --endpoint-url http://127.0.0.1:9000/ s3 cp ~/test.txt s3://test-bucket # cp
+      - run: |
           aws --endpoint-url http://127.0.0.1:9000/ s3 ls s3://test-bucket # ls
+      - run: |
           aws --endpoint-url http://127.0.0.1:9000/ s3 cp s3://test-bucket/test.txt - # check content
+      - run: |
           aws --endpoint-url http://127.0.0.1:9000/ s3 rm s3://test-bucket/test.txt # rm object
+      - run: |
           aws --endpoint-url http://127.0.0.1:9000/ s3 rb s3://test-bucket # remove bucket
