@@ -1,40 +1,28 @@
-name: check-if-latest
+name: Create a pull request for release.
+
 on:
-  pull_request:
+  push:
 
 jobs:
-  check-diff:
+  create-release-pr:
     runs-on: ubuntu-latest
-    # outputs:
-    #   changed: ${{ steps.changed-files.outputs.any_changed }}
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: 'master'
-          fetch-depth: 2
-      - name: make change intentionally
-        run: |
-          sed -i 's/opened/closed/g' .github/workflows/artifact.yml
-      # - name: Verify changed files
-      #   uses: tj-actions/changed-files@v22.2
-      #   id: changed-files
-      #   with:
-      #     base_sha: master
-      #     files: |
-      #       .github/workflows/*.yml
-      - run: |
-          if [[ -n "$(git status --porcelain)" ]]; then
-            git config user.name github-actions
-            git config user.email github-actions@github.com
-            git checkout -b new-branch
-            git add .
-            git commit -m 'update file'
-            git push -u origin HEAD
-          fi
 
-  # action:
-  #   runs-on: ubuntu-latest
-  #   if: github.event.action != 'closed' && needs.check-diff.outputs.changed == 'true'
-  #   needs: check-diff
-  #   steps:
-  #     - run: echo 'true'
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Check if pr exists
+        id: check_pr
+        run: |
+          pr_title="test"
+          base_branch="master"
+          echo "::set-output name=count::$(gh pr list -S ${pr_title}' in:title' -B $base_branch | wc -l)"
+          echo "::set-output name=pr_title::$pr_title"
+          echo "::set-output name=base_branch::$base_branch"
+      # リリース用PRを作成
+      - name: Create release pr
+        if: ${{ steps.check_pr.outputs.count == 0 }}
+        run: |
+          gh pr create -B ${{ steps.check_pr.outputs.base_branch }} -t ${{ steps.check_pr.outputs.pr_title }} -b ""
