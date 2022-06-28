@@ -23,17 +23,16 @@ jobs:
         run: |
           echo "hello" > ~/test.txt
           cat ~/test.txt
-      - run: |
-          aws --endpoint-url http://127.0.0.1:9000/ s3 mb s3://test-bucket # make bucket
+
+      - uses: nick-fields/retry@v2
+        with:
+          timeout_seconds: 15
+          max_attempts: 3
+          command: aws --endpoint-url http://127.0.0.1:9000/ s3 mb s3://test-bucket # make bucket
       - run: |
           aws --endpoint-url http://127.0.0.1:9000/ s3 ls
-      - run: |
           aws --endpoint-url http://127.0.0.1:9000/ s3 cp ~/test.txt s3://test-bucket # cp
-      - run: |
           aws --endpoint-url http://127.0.0.1:9000/ s3 ls s3://test-bucket # ls
-      - run: |
           aws --endpoint-url http://127.0.0.1:9000/ s3 cp s3://test-bucket/test.txt - # check content
-      - run: |
           aws --endpoint-url http://127.0.0.1:9000/ s3 rm s3://test-bucket/test.txt # rm object
-      - run: |
           aws --endpoint-url http://127.0.0.1:9000/ s3 rb s3://test-bucket # remove bucket
