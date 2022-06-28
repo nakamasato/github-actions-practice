@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: 'main'
+          ref: 'master'
           fetch-depth: 2
       - name: make change intentionally
         run: |
