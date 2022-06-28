@@ -1,5 +1,7 @@
 # github-actions-practice
 
+Last Updated: 2021-01-01
+
 ## Github Actions Table
 
 ### 1. pull_request-based trigger
