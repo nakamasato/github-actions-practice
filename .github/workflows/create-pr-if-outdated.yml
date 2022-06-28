@@ -1,0 +1,49 @@
+name: create-pr-if-outdated
+
+on:
+  push:
+    branches:
+      - nakamasato-patch-1
+
+jobs:
+  create-pr-if-outdated:
+    runs-on: ubuntu-latest
+
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: check date in readme
+        id: check
+        run: |
+          last_updated_date=$(grep -i 'last updated' README.md | sed 's/.*Last Updated: \(.*\)/\1/')
+          git_last_updated_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} +%Y-%m-%d)
+          if [ "$last_updated_date" = "$git_last_updated_date" ];then
+            outdated=false
+          else
+            outdated=true
+          fi
+          echo "::set-output name=outdated::$outdated"
+          echo "::set-output name=updated_date::$git_last_updated_date"
+
+      - name: update date in readme
+        if:  ${{ steps.check.outputs.outdated == 'true' }}
+        run: |
+          sed -i "s/.*Last Updated: \(.*\)/.*Last Updated: ${{ steps.check.outputs.git_last_updated_date }}/" README.md
+
+      - name: Check if pr exists
+        id: check_pr
+        if:  ${{ steps.check.outputs.outdated == 'true' }}
+        run: |
+          pr_title="Update last updated date in README"
+          base_branch="nakamasato-patch-1"
+          echo "::set-output name=count::$(gh pr list -S ${pr_title}' in:title' -B $base_branch | wc -l)"
+          echo "::set-output name=pr_title::$pr_title"
+          echo "::set-output name=base_branch::$base_branch"
+      # リリース用PRを作成
+      - name: Create release pr
+        if: ${{  steps.check.outputs.outdated == 'true' && steps.check_pr.outputs.count == 0 }}
+        run: |
+          gh pr create -B "${{ steps.check_pr.outputs.base_branch }}" -t "${{ steps.check_pr.outputs.pr_title }}" -b ""
