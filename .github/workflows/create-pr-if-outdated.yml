@@ -20,6 +20,7 @@ jobs:
         run: |
           last_updated_date=$(grep -i 'last updated' README.md | sed 's/.*Last Updated: \(.*\)/\1/')
           git_last_updated_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} +%Y-%m-%d)
+          echo "git_last_updated_date: $git_last_updated_date"
           if [ "$last_updated_date" = "$git_last_updated_date" ];then
             outdated=false
           else
