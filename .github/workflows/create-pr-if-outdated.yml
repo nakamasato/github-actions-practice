@@ -39,7 +39,7 @@ jobs:
         run: |
           pr_title="Update last updated date in README"
           base_branch="nakamasato-patch-1"
-          echo "::set-output name=count::$(gh pr list -S ${pr_title}' in:title' -B $base_branch | wc -l)"
+          echo "::set-output name=count::$(gh pr list -S "${pr_title}" in:title -B $base_branch | wc -l)"
           echo "::set-output name=pr_title::$pr_title"
           echo "::set-output name=base_branch::$base_branch"
       # リリース用PRを作成
