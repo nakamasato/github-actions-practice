@@ -47,6 +47,7 @@
 |GitHub Actions|Trigger|Description|
 |---|---|---|
 |[schedule](.github/workflows/schedule.yml)|schedule|Echo "test" at 00:00 every Monday.|
+|[create-pr-if-outdated](.github/workflows/create-pr-if-outdated.yml)|schedule|create a pr when last update in readme is outdated|
 
 ## CheatSheet
 - Available commands by default ([default-commands.yml](.github/workflows/default-commands.yml))
