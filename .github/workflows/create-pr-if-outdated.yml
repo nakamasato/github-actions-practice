@@ -39,7 +39,7 @@ jobs:
           git checkout -b $branch_name
           git add .
           git commit -m 'update date'
-          git push -u origin HEAD
+          git push -u origin HEAD -f
           echo "::set-output name=branch_name::$branch_name"
 
       - name: Check if pr exists
