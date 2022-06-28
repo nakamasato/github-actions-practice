@@ -23,7 +23,7 @@
 |**labeler**|pull_request|Add `label` to a pr based on the title.|
 |**pre-commit**|pull_request|Run `pre-commit`.|
 |[pull-request](.github/workflows/pull-request.yml)|pull_request|If a PR is merged, create a release. If a PR is not merged, echo "Pull Request".|
-|[s3-local](.github/workflows/s3-local.yml)|pull_request|Use `minio` for s3 mock in GitHub Actions.|
+|[s3-local](.github/workflows/s3-local.yml)|pull_request|Use `minio` for s3 mock in GitHub Actions. This workflow is broken.|
 |[terrraform-fmt](.github/workflows/terraform-fmt.yml)|pull_request|Run `terraform fmt` for `**.tf`.|
 
 ### 2. release-based trigger
