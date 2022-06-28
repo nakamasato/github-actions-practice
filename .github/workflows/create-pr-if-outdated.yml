@@ -2,7 +2,7 @@ name: create-pr-if-outdated
 
 on:
   schedule:
-    - cron:  '*/10 * * * *'
+    - cron:  '0 0 * * MON'
 #   push:
 #     branches:
 #       - master
