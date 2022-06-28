@@ -33,7 +33,7 @@ jobs:
         if:  ${{ steps.check.outputs.outdated == 'true' }}
         run: |
           sed -i "s/.*Last Updated: \(.*\)/- Last Updated: ${{ steps.check.outputs.updated_date }}/" README.md
-          branch_name=branch-test-$(date '+%s')
+          branch_name=update-date-in-readme
           git config user.name github-actions
           git config user.email github-actions@github.com
           git checkout -b $branch_name
