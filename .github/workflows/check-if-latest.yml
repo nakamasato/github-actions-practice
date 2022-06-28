@@ -25,4 +25,4 @@ jobs:
       - name: Create release pr
         if: ${{ steps.check_pr.outputs.count == 0 }}
         run: |
-          gh pr create -B ${{ steps.check_pr.outputs.base_branch }} -t ${{ steps.check_pr.outputs.pr_title }} -b ""
+          gh pr create -B "${{ steps.check_pr.outputs.base_branch }}" -t "${{ steps.check_pr.outputs.pr_title }}" -b ""
