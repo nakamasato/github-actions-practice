@@ -60,6 +60,6 @@ jobs:
           echo "::set-output name=pr_list::$(curl -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/nakamasato/github-actions-practice/pulls?head=nakamasato:${{ env.BRANCH_NAME }}&base=${{ env.BASE_BRANCH_NAME }})"
 
       - name: Create pr
-        if: ${{ steps.check.outputs.outdated == 'true' && fromJson(steps.check_pr.outputs.pr_list) }}
+        if: ${{ steps.check.outputs.outdated == 'true' && steps.check_pr.outputs.count == 0 }}
         run: |
           gh pr create -B "${{ env.BASE_BRANCH_NAME }}" -t "Update last updated date in README" -b ""
