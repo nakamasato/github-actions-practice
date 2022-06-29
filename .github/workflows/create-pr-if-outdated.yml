@@ -49,7 +49,7 @@ jobs:
           git commit -m 'update date'
           git push -u origin HEAD -f
 
-      - name: Check if pr exists
+      - name: check if pr exists
         id: check_pr
         if:  ${{ steps.check.outputs.outdated == 'true' }}
         run: |
@@ -58,7 +58,7 @@ jobs:
           count=$(echo $pulls | jq '. | length')
           echo "::set-output name=count::$count"
 
-      - name: Create pr
+      - name: create pr
         if: ${{ steps.check.outputs.outdated == 'true' && steps.check_pr.outputs.count == 0 }}
         run: |
           # gh pr create -B "${{ env.BASE_BRANCH_NAME }}" -t "Update last updated date in README" -b ""
@@ -66,5 +66,5 @@ jobs:
             -X POST \
             -H "Accept: application/vnd.github.v3+json" \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            https://api.github.com/repos/kouzoh/beyond/pulls \
+            https://api.github.com/repos/nakamasato/github-actions-practice/pulls \
             -d "{\"title\":\"Update last updated date in README\",\"body\":\"automatically created by github actions\",\"head\":\"nakamasato:${{ env.BRANCH_NAME }}\",\"base\":\"${{ env.BASE_BRANCH_NAME }}\",\"draft\": true}"
