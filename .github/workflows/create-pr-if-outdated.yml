@@ -57,7 +57,7 @@ jobs:
           # count=$(curl -s -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/nakamasato/github-actions-practice/pulls?head=nakamasato:${{ env.BRANCH_NAME }}&base=${{ env.BASE_BRANCH_NAME }} | jq '. | length')
           # echo "::set-output name=count::$count"
           pulls=$(curl -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/nakamasato/github-actions-practice/pulls?head=nakamasato:${{ env.BRANCH_NAME }}&base=${{ env.BASE_BRANCH_NAME }})
-          pull_number=$(echo $pulls | jq '.[0].number')
+          pull_number=$(echo $pulls | jq '. | length')
           echo $pull_number
           # echo "::set-output name=pr_count::$(cat result.json | jq length)"
 
