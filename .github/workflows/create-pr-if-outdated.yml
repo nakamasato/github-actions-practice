@@ -57,13 +57,12 @@ jobs:
           # count=$(curl -s -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/nakamasato/github-actions-practice/pulls?head=nakamasato:${{ env.BRANCH_NAME }}&base=${{ env.BASE_BRANCH_NAME }} | jq '. | length')
           # echo "::set-output name=count::$count"
           pulls=$(curl -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/nakamasato/github-actions-practice/pulls?head=nakamasato:${{ env.BRANCH_NAME }}&base=${{ env.BASE_BRANCH_NAME }})
-          pull_number=$(echo $pulls | jq '. | length')
-          echo $pull_number
-          # echo "::set-output name=pr_count::$(cat result.json | jq length)"
+          count=$(echo $pulls | jq '. | length')
+          echo "::set-output name=count::$count"
 
-      # - name: Create pr
-      #   if: ${{ steps.check.outputs.outdated == 'true' && steps.check_pr.outputs.pr_count == 0 }}
-      #   run: |
-      #     echo ${{ steps.check_pr.outputs.pr_count }}
-      #     echo ${{ steps.check_pr.outputs.count }}
-      #     # gh pr create -B "${{ env.BASE_BRANCH_NAME }}" -t "Update last updated date in README" -b ""
+      - name: Create pr
+        if: ${{ steps.check.outputs.outdated == 'true' && steps.check_pr.outputs.pr_count == 0 }}
+        run: |
+          echo ${{ steps.check_pr.outputs.pr_count }}
+          echo ${{ steps.check_pr.outputs.count }}
+          # gh pr create -B "${{ env.BASE_BRANCH_NAME }}" -t "Update last updated date in README" -b ""
