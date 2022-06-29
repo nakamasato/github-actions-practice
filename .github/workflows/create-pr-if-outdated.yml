@@ -54,7 +54,7 @@ jobs:
         if:  ${{ steps.check.outputs.outdated == 'true' }}
         run: |
           # echo "::set-output name=count::$(gh pr list -S head:${{ env.BRANCH_NAME }} -B ${{ env.BASE_BRANCH_NAME }} | wc -l)"
-          count=$(curl -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/nakamasato/github-actions-practice/pulls?head=nakamasato:${{ env.BRANCH_NAME }}&base=${{ env.BASE_BRANCH_NAME }} | jq)
+          count=$(curl -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/nakamasato/github-actions-practice/pulls?head=nakamasato:${{ env.BRANCH_NAME }}&base=${{ env.BASE_BRANCH_NAME }} | jq 'length')
           echo "count: $count"
           echo "::set-output name=count::$count"
 
