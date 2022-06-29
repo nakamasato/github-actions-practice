@@ -1,6 +1,6 @@
 # github-actions-practice
 
-Last Updated: 2021-01-01
+- Last Updated: 2022-06-28
 
 ## Github Actions Table
 
@@ -23,7 +23,7 @@ Last Updated: 2021-01-01
 |**labeler**|pull_request|Add `label` to a pr based on the title.|
 |**pre-commit**|pull_request|Run `pre-commit`.|
 |[pull-request](.github/workflows/pull-request.yml)|pull_request|If a PR is merged, create a release. If a PR is not merged, echo "Pull Request".|
-|[s3-local](.github/workflows/s3-local.yml)|pull_request|Use `minio` for s3 mock in GitHub Actions.|
+|[s3-local](.github/workflows/s3-local.yml)|pull_request|Use `minio` for s3 mock in GitHub Actions. This workflow is broken.|
 |[terrraform-fmt](.github/workflows/terraform-fmt.yml)|pull_request|Run `terraform fmt` for `**.tf`.|
 
 ### 2. release-based trigger
@@ -47,6 +47,7 @@ Last Updated: 2021-01-01
 |GitHub Actions|Trigger|Description|
 |---|---|---|
 |[schedule](.github/workflows/schedule.yml)|schedule|Echo "test" at 00:00 every Monday.|
+|[create-pr-if-outdated](.github/workflows/create-pr-if-outdated.yml)|schedule|create a pr when last update in readme is outdated|
 
 ## CheatSheet
 - Available commands by default ([default-commands.yml](.github/workflows/default-commands.yml))

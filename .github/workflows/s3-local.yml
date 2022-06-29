@@ -2,6 +2,8 @@ name: s3-local
 
 on:
   pull_request:
+    branches:
+      - nonexist # this workflow is broken
 
 jobs:
   s3:
