@@ -61,8 +61,6 @@ jobs:
           echo "::set-output name=count::$count"
 
       - name: Create pr
-        if: ${{ steps.check.outputs.outdated == 'true' && steps.check_pr.outputs.pr_count == 0 }}
+        if: ${{ steps.check.outputs.outdated == 'true' && steps.check_pr.outputs.count == 0 }}
         run: |
-          echo ${{ steps.check_pr.outputs.pr_count }}
-          echo ${{ steps.check_pr.outputs.count }}
-          # gh pr create -B "${{ env.BASE_BRANCH_NAME }}" -t "Update last updated date in README" -b ""
+          gh pr create -B "${{ env.BASE_BRANCH_NAME }}" -t "Update last updated date in README" -b ""
