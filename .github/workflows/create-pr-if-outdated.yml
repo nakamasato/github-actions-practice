@@ -9,7 +9,7 @@ on:
       - nakamasato-patch-1
 env:
   BRANCH_NAME: update-date-in-readme
-  BASE_BRANCHNAME: nakamasato-patch-1
+  BASE_BRANCH_NAME: nakamasato-patch-1
 
 jobs:
   create-pr-if-outdated:
