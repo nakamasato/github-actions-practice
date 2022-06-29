@@ -49,16 +49,15 @@ jobs:
           git commit -m 'update date'
           git push -u origin HEAD -f
 
-      # - name: Check if pr exists
-      #   id: check_pr
-      #   if:  ${{ steps.check.outputs.outdated == 'true' }}
-      #   run: |
-      #     echo "::set-output name=count::$(gh pr list -S head:${{ env.BRANCH_NAME }} -B ${{ env.BASE_BRANCH_NAME }} | wc -l)"
-      #     count=$(curl -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/nakamasato/github-actions-practice/pulls?head=nakamasato:${{ env.BRANCH_NAME }}&base=${{ env.BASE_BRANCH_NAME }} | jq length)
-      #     echo "count: $count"
+      - name: Check if pr exists
+        id: check_pr
+        if:  ${{ steps.check.outputs.outdated == 'true' }}
+        run: |
+          echo "::set-output name=count::$(gh pr list -S head:${{ env.BRANCH_NAME }} -B ${{ env.BASE_BRANCH_NAME }} | wc -l)"
+          count=$(curl -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/nakamasato/github-actions-practice/pulls?head=nakamasato:${{ env.BRANCH_NAME }}&base=${{ env.BASE_BRANCH_NAME }} | jq)
+          echo "count: $count"
 
       - name: Create pr
-        # if: ${{ steps.check.outputs.outdated == 'true' && steps.check_pr.outputs.count == 0 }}
-        if: steps.check.outputs.outdated == 'true'
+        if: ${{ steps.check.outputs.outdated == 'true' && steps.check_pr.outputs.count == 0 }}
         run: |
           gh pr create -B "${{ env.BASE_BRANCH_NAME }}" -t "Update last updated date in README" -b ""
