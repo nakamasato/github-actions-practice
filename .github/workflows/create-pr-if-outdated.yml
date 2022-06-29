@@ -3,19 +3,19 @@ name: create-pr-if-outdated
 on:
   schedule:
     - cron:  '0 0 * * MON'
-#   push:
-#     branches:
-#       - master
+
+env:
+  BRANCH_NAME: update-date-in-readme
+  BASE_BRANCH_NAME: master
 
 jobs:
   create-pr-if-outdated:
     runs-on: ubuntu-latest
 
-    env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ env.BASE_BRANCH_NAME }}
 
       - name: check date in readme
         id: check
@@ -36,26 +36,20 @@ jobs:
         id: commit
         run: |
           sed -i "s/.*Last Updated: \(.*\)/- Last Updated: ${{ steps.check.outputs.updated_date }}/" README.md
-          branch_name=update-date-in-readme
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git checkout -b $branch_name
+          git checkout -b ${{ env.BRANCH_NAME }}
           git add .
           git commit -m 'update date'
           git push -u origin HEAD -f
-          echo "::set-output name=branch_name::$branch_name"
 
-      - name: Check if pr exists
+      - name: check if pr exists
         id: check_pr
         if:  ${{ steps.check.outputs.outdated == 'true' }}
         run: |
-          pr_title="Update last updated date in README"
-          base_branch="master"
-          echo "::set-output name=count::$(gh pr list -S head:${{ steps.commit.outputs.branch_name }} -B $base_branch | wc -l)"
-          echo "::set-output name=pr_title::$pr_title"
-          echo "::set-output name=base_branch::$base_branch"
+          echo "::set-output name=count::$(gh pr list -S head:${{ env.BRANCH_NAME }} -B ${{ env.BASE_BRANCH_NAME }} | wc -l)"
 
-      - name: Create release pr
-        if: ${{  steps.check.outputs.outdated == 'true' && steps.check_pr.outputs.count == 0 }}
+      - name: create pr
+        if: ${{ steps.check.outputs.outdated == 'true' && steps.check_pr.outputs.count == 0 }}
         run: |
-          gh pr create -B "${{ steps.check_pr.outputs.base_branch }}" -t "${{ steps.check_pr.outputs.pr_title }}" -b ""
+          gh pr create -B "${{ env.BASE_BRANCH_NAME }}" -t "Update last updated date in README" -b ""
