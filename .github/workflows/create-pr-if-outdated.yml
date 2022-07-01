@@ -2,14 +2,11 @@ name: create-pr-if-outdated
 
 on:
   schedule:
-    - cron:  '0 0 * * MON'
-  push:
-    branches:
-    - nakamasato-patch-1
+    - cron:  '0 0 * * *'
 
 env:
   BRANCH_NAME: update-date-in-readme
-  BASE_BRANCH_NAME: nakamasato-patch-1
+  BASE_BRANCH_NAME: main
 
 jobs:
   create-pr-if-outdated:
