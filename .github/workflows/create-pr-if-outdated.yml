@@ -3,11 +3,14 @@ name: create-pr-if-outdated
 on:
   schedule:
     - cron:  '0 0 * * MON'
+  push:
+    branches:
+    - nakamasato-patch-1
 
 env:
   BRANCH_NAME: update-date-in-readme
-  BASE_BRANCH_NAME: master
-  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # used by gh
+  BASE_BRANCH_NAME: nakamasato-patch-1
+  # GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # used by gh
 
 jobs:
   create-pr-if-outdated:
