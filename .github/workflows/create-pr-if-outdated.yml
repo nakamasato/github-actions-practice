@@ -19,7 +19,6 @@ jobs:
 
       - name: update date in readme
         run: |
-          last_updated_date=$(grep -i 'last updated' README.md | sed 's/.*Last Updated: \(.*\)/\1/')
           git_last_updated_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} +%Y-%m-%d)
           echo "git_last_updated_date: $git_last_updated_date"
           sed -i "s/.*Last Updated: \(.*\)/- Last Updated: $git_last_updated_date/" README.md
