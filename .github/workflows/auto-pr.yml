@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    if: github.event.release.target_commitish == 'master'
+    if: github.event.release.target_commitish == 'main'
     name: Build and Push Docker Image
     runs-on: ubuntu-latest
     steps:

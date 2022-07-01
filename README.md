@@ -30,15 +30,15 @@
 
 |GitHub Actions|Trigger|Description|
 |---|---|---|
-|**auto-pr**|release| When a release is published from `master` branch, update a kubernetes yaml file in another repository `nakamasato/k8s-deploy-test` and create a pr in the repository.|
-|**prereleased**|release|When release is prereleased from master branch, echo "prereleased".|
-|[released](.github/workflows/released.yml)|release|If a release is published from master branch, push a commit to `master` branch.|
+|**auto-pr**|release| When a release is published from `main` branch, update a kubernetes yaml file in another repository `nakamasato/k8s-deploy-test` and create a pr in the repository.|
+|**prereleased**|release|When release is prereleased from main branch, echo "prereleased".|
+|[released](.github/workflows/released.yml)|release|If a release is published from main branch, push a commit to `main` branch.|
 
 ### 3. push-based trigger
 
 |GitHub Actions|Trigger|Description|
 |---|---|---|
-|**branch-and-tag**|push| If change is pushed to `merge` branch or tagged as `v1.*`, the branch will be merged to `master` branch.|
+|**branch-and-tag**|push| If change is pushed to `merge` branch or tagged as `v1.*`, the branch will be merged to `main` branch.|
 |**pip-cache**|push|Use `actions/cache` for caching `~/.cache/pip`|
 |**pip-no-cache**|push|For comparison with **pip-cache**|
 
@@ -70,7 +70,7 @@
         - Whether the PR is `draft`: `github.event.pull_request.draft`
         - Whether the label is in the whitelist: `if: ${{ github.event.action == 'labeled' && contains(toJson('["test", "build"]'), github.event.label.name) }}`
     - `release`
-        - Whether release is from `master` branch: `if: github.event.release.target_commitish == 'master'`
+        - Whether release is from `main` branch: `if: github.event.release.target_commitish == 'main'`
     - `push`
     ...
 
