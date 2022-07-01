@@ -10,7 +10,6 @@ on:
 env:
   BRANCH_NAME: update-date-in-readme
   BASE_BRANCH_NAME: nakamasato-patch-1
-  # GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # used by gh
 
 jobs:
   create-pr-if-outdated:
@@ -21,25 +20,25 @@ jobs:
         with:
           ref: ${{ env.BASE_BRANCH_NAME }}
 
-      - name: check date in readme
-        id: check
+      - name: update date in readme
         run: |
           last_updated_date=$(grep -i 'last updated' README.md | sed 's/.*Last Updated: \(.*\)/\1/')
           git_last_updated_date=$(git log -1 --format="%at" | xargs -I{} date -d @{} +%Y-%m-%d)
           echo "git_last_updated_date: $git_last_updated_date"
-          if [ "$last_updated_date" = "$git_last_updated_date" ];then
-            outdated=false
-          else
-            outdated=true
-          fi
-          echo "::set-output name=outdated::$outdated"
-          echo "::set-output name=updated_date::$git_last_updated_date"
+          sed -i "s/.*Last Updated: \(.*\)/- Last Updated: $git_last_updated_date/" README.md
 
-      - name: update date in readme and commit
-        if:  ${{ steps.check.outputs.outdated == 'true' }}
-        id: commit
+      - name: check if need to commit
+        id: need_commit
         run: |
-          sed -i "s/.*Last Updated: \(.*\)/- Last Updated: ${{ steps.check.outputs.updated_date }}/" README.md
+          if [[ -n "$(git status --porcelain)" ]]; then
+            echo "::set-output name=need_commit::true
+          else
+            echo "::set-output name=need_commit::false
+          fi
+      
+      - name: commit and push
+        if: steps.need_commit.outputs.need_commit == 'true'
+        run:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git checkout -b ${{ env.BRANCH_NAME }}
@@ -49,11 +48,15 @@ jobs:
 
       - name: check if pr exists
         id: check_pr
-        if:  ${{ steps.check.outputs.outdated == 'true' }}
+        if: steps.need_commit.outputs.need_commit == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # used by gh
         run: |
           echo "::set-output name=count::$(gh pr list -S head:${{ env.BRANCH_NAME }} -B ${{ env.BASE_BRANCH_NAME }} | wc -l)"
 
       - name: create pr
-        if: ${{ steps.check.outputs.outdated == 'true' && steps.check_pr.outputs.count == 0 }}
+        if: ${{ steps.need_commit.outputs.need_commit == 'true' && steps.check_pr.outputs.count == 0 }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # used by gh
         run: |
           gh pr create -B "${{ env.BASE_BRANCH_NAME }}" -t "Update last updated date in README" -b ""
