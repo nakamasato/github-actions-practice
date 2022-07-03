@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: Merge to main branch
-        uses: devmasx/merge-branch@v1.1.0
+        uses: devmasx/merge-branch@v1.4.0
         with:
           type: now
           target_branch: 'main'
