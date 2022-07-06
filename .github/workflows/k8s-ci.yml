@@ -1,6 +1,6 @@
 name: k8s-ci
 on:
-  pull_request:
+  release:
 
 env:
   REGISTRY: ghcr.io
@@ -59,7 +59,7 @@ jobs:
       - name: Create PR
         uses: peter-evans/create-pull-request@v4
         with:
-          token: ${{ secrets.REPO_GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }} # need to use PAT if you create a pr to another repo
           title: "[k8s-ci] update nginx image"
           base: main
           draft: true
