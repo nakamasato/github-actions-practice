@@ -48,8 +48,6 @@ jobs:
       - run: echo ${{ needs.build-and-push-image.outputs.tags }}
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          ref: update-manifest-file
       - name: Update manifest file
         env:
           YAML_PATH: k8s-ci/deployment.yaml
@@ -63,7 +61,6 @@ jobs:
         with:
           token: ${{ secrets.REPO_GITHUB_TOKEN }}
           title: "[k8s-ci] update nginx image"
-          base: update-manifest-file
           draft: true
           body: |
             # Changes
