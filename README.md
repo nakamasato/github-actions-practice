@@ -19,7 +19,6 @@
 |**docker-layer-cache**|pull_request|Use `satackey/action-docker-layer-caching`.|
 |**envvar**|pull_request|How to set env var and use it.|
 |**keep-only-one-comment-on-pr**|pull_request|Create a comment if not exist. Otherwise, update the existing comment.|
-|**k8s-ci**|pull_request|Build docker image, push it to Github Packages, and update manifest file.|
 |**labeler**|pull_request|Add `label` to a pr based on the title.|
 |**pre-commit**|pull_request|Run `pre-commit`.|
 |[pull-request](.github/workflows/pull-request.yml)|pull_request|If a PR is merged, create a release. If a PR is not merged, echo "Pull Request".|
@@ -33,6 +32,7 @@
 |**auto-pr**|release| When a release is published from `main` branch, update a kubernetes yaml file in another repository `nakamasato/k8s-deploy-test` and create a pr in the repository.|
 |**prereleased**|release|When release is prereleased from main branch, echo "prereleased".|
 |[released](.github/workflows/released.yml)|release|If a release is published from main branch, push a commit to `main` branch.|
+|**k8s-ci**|release|Build docker image, push it to Github Packages, and update manifest file.|
 
 ### 3. push-based trigger
 
