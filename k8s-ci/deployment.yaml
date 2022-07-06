@@ -15,5 +15,5 @@ spec:
         app: nginx
     spec:
       containers:
-        - image: nginx
+        - image: ghcr.io/nakamasato/github-actions-practice:pr-224
           name: nginx
