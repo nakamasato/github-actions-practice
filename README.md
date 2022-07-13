@@ -24,6 +24,7 @@
 |[pull-request](.github/workflows/pull-request.yml)|pull_request|If a PR is merged, create a release. If a PR is not merged, echo "Pull Request".|
 |[s3-local](.github/workflows/s3-local.yml)|pull_request|Use `minio` for s3 mock in GitHub Actions. This workflow is broken.|
 |[terrraform-fmt](.github/workflows/terraform-fmt.yml)|pull_request|Run `terraform fmt` for `**.tf`.|
+|[matrix-from-previous-job-output](.github/workflows/matrix-from-previous-job-output.yml)|pull_request|matrix execution from the output of the previous step.|
 
 ### 2. release-based trigger
 
