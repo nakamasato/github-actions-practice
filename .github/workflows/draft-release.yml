@@ -1,11 +1,8 @@
-name: pull-request
+name: draft-release
 
 on:
   pull_request:
     types:
-      - opened # default
-      - synchronize # default
-      - reopened # default
       - closed
     branches:
       - main
@@ -51,12 +48,3 @@ jobs:
               repo: context.repo.repo,
               body: `[draft release ${{ steps.create_release.outputs.id }}](${{ steps.create_release.outputs.html_url }}) has been created. Please publish it when it's ready (${new Date()})`
             })
-
-  pull_request:
-    if: github.event.pull_request.merged != true
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: pull-request open
-        run: |
-          echo "Pull Request"
