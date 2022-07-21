@@ -17,11 +17,11 @@
 |**context**|pull_request|Echo GitHub context `toJson(github)` for checking.|
 |**default-commands**|pull_request|Check default commands (e.g. `zip`, `aws`, `jq`, `yq`)|
 |**docker-layer-cache**|pull_request|Use `satackey/action-docker-layer-caching`.|
+|[draft-release](.github/workflows/draft-release.yml)|pull_request|If a PR is merged, create a draft release and leave a comment on the PR.|
 |**envvar**|pull_request|How to set env var and use it.|
 |**keep-only-one-comment-on-pr**|pull_request|Create a comment if not exist. Otherwise, update the existing comment.|
 |**labeler**|pull_request|Add `label` to a pr based on the title.|
 |**pre-commit**|pull_request|Run `pre-commit`.|
-|[pull-request](.github/workflows/pull-request.yml)|pull_request|If a PR is merged, create a release. If a PR is not merged, echo "Pull Request".|
 |[s3-local](.github/workflows/s3-local.yml)|pull_request|Use `minio` for s3 mock in GitHub Actions. This workflow is broken.|
 |[terrraform-fmt](.github/workflows/terraform-fmt.yml)|pull_request|Run `terraform fmt` for `**.tf`.|
 |[matrix-from-previous-job-output](.github/workflows/matrix-from-previous-job-output.yml)|pull_request|matrix execution from the output of the previous step.|
