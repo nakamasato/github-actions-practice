@@ -29,3 +29,6 @@ jobs:
         run: |
           echo '::warning:: This is a warning message.'
           echo '::notice:: This is a notice message.'
+      - name: job summary
+        run: |
+          echo "### Hello world! :rocket:" >> $GITHUB_STEP_SUMMARY
