@@ -4,7 +4,7 @@
 
 ## Github Actions Table
 
-### 1. pull_request-based trigger
+### 1. pull_request
 
 |GitHub Actions|Trigger|Description|
 |---|---|---|
@@ -26,7 +26,7 @@
 |[terrraform-fmt](.github/workflows/terraform-fmt.yml)|pull_request|Run `terraform fmt` for `**.tf`.|
 |[matrix-from-previous-job-output](.github/workflows/matrix-from-previous-job-output.yml)|pull_request|matrix execution from the output of the previous step.|
 
-### 2. release-based trigger
+### 2. release
 
 |GitHub Actions|Trigger|Description|
 |---|---|---|
@@ -35,7 +35,7 @@
 |[released](.github/workflows/released.yml)|release|If a release is published from main branch, push a commit to `main` branch.|
 |**k8s-ci**|release|Build docker image, push it to Github Packages, and update manifest file.|
 
-### 3. push-based trigger
+### 3. push
 
 |GitHub Actions|Trigger|Description|
 |---|---|---|
@@ -43,12 +43,24 @@
 |**pip-cache**|push|Use `actions/cache` for caching `~/.cache/pip`|
 |**pip-no-cache**|push|For comparison with **pip-cache**|
 
-### 4. schedule trigger
+### 4. schedule
 
 |GitHub Actions|Trigger|Description|
 |---|---|---|
 |[schedule](.github/workflows/schedule.yml)|schedule|Echo "test" at 00:00 every Monday.|
 |[create-pr-if-outdated](.github/workflows/create-pr-if-outdated.yml)|schedule|create a pr when last update in readme is outdated|
+
+### 5. workflow_dispatch
+
+|GitHub Actions|Trigger|Description|
+|---|---|---|
+|[workflow-dispatch](.github/workflows/workflow-dispatch.yml)|workflow_dispatch|You can run this workflow from [here](https://github.com/nakamasato/github-actions-practice/actions/workflows/workflow-dispatch.yaml)|
+
+### 6. workflow_call
+
+|GitHub Actions|Trigger|Description|
+|---|---|---|
+|[print-workflow-dispatch-inputs](.github/workflows/print-workflow-dispatch-inputs.yaml)|workflow_call|You can reuse this workflow to print inputs of workflow_dispatch (inputs: environment & logLevel)|
 
 ## CheatSheet
 - Available commands by default ([default-commands.yml](.github/workflows/default-commands.yml))
