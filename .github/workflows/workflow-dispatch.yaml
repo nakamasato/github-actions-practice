@@ -1,0 +1,22 @@
+name: workflow-dispatch
+
+on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning' 
+        type: choice
+        options:
+        - info
+        - warning
+        - debug 
+      environment:
+        description: 'Environment (either development or production)'
+        type: environment
+        required: true
+        default: development
+        options:
+        - production
+        - development
