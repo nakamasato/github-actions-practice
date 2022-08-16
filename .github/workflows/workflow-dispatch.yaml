@@ -31,6 +31,7 @@ jobs:
         run: |
           echo "### Hello world! :rocket:" >> $GITHUB_STEP_SUMMARY
   run:
+    needs: [print-inputs]
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     steps:
