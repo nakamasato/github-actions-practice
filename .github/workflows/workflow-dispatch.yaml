@@ -1,7 +1,6 @@
 name: workflow-dispatch
 
 on:
-  pull_request: # to be removed
   workflow_dispatch:
     inputs:
       logLevel:
@@ -22,13 +21,18 @@ on:
         - production
         - development
 jobs:
-  workflow:
+  print-inputs:
     runs-on: ubuntu-latest
     steps:
       - name: write message
         run: |
-          echo '::warning:: This is a warning message.'
-          echo '::notice:: This is a notice message.'
+          echo "::notice:: environment: ${{ inputs.environment }}, logLevel: ${{ inputs.logLevel }}"
       - name: job summary
         run: |
           echo "### Hello world! :rocket:" >> $GITHUB_STEP_SUMMARY
+  run:
+    needs: [print-inputs]
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - run: echo running
