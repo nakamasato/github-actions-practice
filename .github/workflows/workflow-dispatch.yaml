@@ -31,7 +31,7 @@ jobs:
         run: |
           echo "### inputs" >> $GITHUB_STEP_SUMMARY
           echo "- environment: ${{ inputs.environment }}" >> $GITHUB_STEP_SUMMARY
-          echo "- logLevel" >> $GITHUB_STEP_SUMMARY
+          echo "- logLevel: ${{ inputs.inputs }}" >> $GITHUB_STEP_SUMMARY
   run:
     needs: [print-inputs]
     runs-on: ubuntu-latest
