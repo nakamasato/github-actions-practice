@@ -29,7 +29,9 @@ jobs:
           echo "::notice:: environment: ${{ inputs.environment }}, logLevel: ${{ inputs.logLevel }}"
       - name: job summary
         run: |
-          echo "### Hello world! :rocket:" >> $GITHUB_STEP_SUMMARY
+          echo "### inputs" >> $GITHUB_STEP_SUMMARY
+          echo "- environment: ${{ inputs.environment }}" >> $GITHUB_STEP_SUMMARY
+          echo "- logLevel" >> $GITHUB_STEP_SUMMARY
   run:
     needs: [print-inputs]
     runs-on: ubuntu-latest
