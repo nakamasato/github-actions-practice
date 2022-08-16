@@ -22,7 +22,7 @@ on:
         - production
         - development
 jobs:
-  workflow:
+  print-inputs:
     runs-on: ubuntu-latest
     steps:
       - name: write message
@@ -31,3 +31,8 @@ jobs:
       - name: job summary
         run: |
           echo "### Hello world! :rocket:" >> $GITHUB_STEP_SUMMARY
+  run:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - run: echo running
