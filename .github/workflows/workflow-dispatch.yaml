@@ -25,7 +25,7 @@ jobs:
   workflow:
     runs-on: ubuntu-latest
     steps:
-      - name: Disable workflow commands
+      - name: notice message
         run: |
           echo '::warning:: This is a warning message.'
           echo '::notice:: This is a notice message.'
