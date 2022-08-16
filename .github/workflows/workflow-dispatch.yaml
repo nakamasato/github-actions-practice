@@ -1,0 +1,34 @@
+name: workflow-dispatch
+
+on:
+  pull_request: # to be removed
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+        type: choice
+        options:
+        - info
+        - warning
+        - debug
+      environment:
+        description: 'Environment (either development or production)'
+        type: environment
+        required: true
+        default: development
+        options:
+        - production
+        - development
+jobs:
+  workflow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: write message
+        run: |
+          echo '::warning:: This is a warning message.'
+          echo '::notice:: This is a notice message.'
+      - name: job summary
+        run: |
+          echo "### Hello world! :rocket:" >> $GITHUB_STEP_SUMMARY
