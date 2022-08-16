@@ -1,0 +1,25 @@
+name: print-workflow-dispatch-inputs
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: false
+        type: string
+      logLevel:
+        required: false
+        type: string
+      # if you have more inputs
+
+jobs:
+  print-inputs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: write message
+        run: |
+          echo "::notice:: inputs ${{ inputs }}"
+      - name: job summary
+        run: |
+          echo "### inputs" >> $GITHUB_STEP_SUMMARY
+          echo "- environment: ${{ inputs.environment }}" >> $GITHUB_STEP_SUMMARY
+          echo "- logLevel: ${{ inputs.logLevel }}" >> $GITHUB_STEP_SUMMARY
