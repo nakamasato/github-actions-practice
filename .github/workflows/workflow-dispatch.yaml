@@ -27,8 +27,7 @@ jobs:
     steps:
       - name: write message
         run: |
-          echo '::warning:: This is a warning message.'
-          echo '::notice:: This is a notice message.'
+          echo "::notice:: environment: ${{ inputs.environment }}, logLevel: $${{ inputs.logLevel }} "
       - name: job summary
         run: |
           echo "### Hello world! :rocket:" >> $GITHUB_STEP_SUMMARY
