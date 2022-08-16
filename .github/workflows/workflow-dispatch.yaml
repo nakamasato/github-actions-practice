@@ -1,7 +1,6 @@
 name: workflow-dispatch
 
 on:
-  pull_request: # to be removed
   workflow_dispatch:
     inputs:
       logLevel:
