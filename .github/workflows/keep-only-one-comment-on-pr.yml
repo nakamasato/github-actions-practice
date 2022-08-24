@@ -33,5 +33,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `${process.env.COMMENT_BODY_IDENTIFIER} Add 'release' label if you want to release when pr is merged. (${new Date()}) [keep-only-one-comment-on-pr.yml](${process.env.GITHUB_REPO}.github/workflows/keep-only-one-comment-on-pr.yml)`
+              body: `${process.env.COMMENT_BODY_IDENTIFIER} Add 'release' label if you want to release when pr is merged. (${new Date()}) [keep-only-one-comment-on-pr.yml](${{ github.server_url }}/${process.env.GITHUB_REPO}/.github/workflows/keep-only-one-comment-on-pr.yml)`
             })
