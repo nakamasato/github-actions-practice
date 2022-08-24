@@ -64,7 +64,7 @@
 
 ## CheatSheet
 - Available commands by default ([default-commands.yml](.github/workflows/default-commands.yml))
-    - `zip`, `aws`, `jq`, `yq`
+    - `zip`, `aws`, `jq`, `yq`, [gh](https://docs.github.com/en/actions/using-workflows/using-github-cli-in-workflows)
 - [Events to Trigger workflow](https://docs.github.com/en/actions/reference/events-that-trigger-workflows)
     - `pull_request`
         activity type: `opened`, `synchronize`, or `reopened`.
