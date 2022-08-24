@@ -82,6 +82,7 @@
         - Get base branch: `${{ github.base_ref }}`
         - Whether the PR is `draft`: `github.event.pull_request.draft`
         - Whether the label is in the whitelist: `if: ${{ github.event.action == 'labeled' && contains(toJson('["test", "build"]'), github.event.label.name) }}`
+        - Whether pull_request has 'test' label: `if: ${{ contains( github.event.pull_request.labels.*.name, 'test') }}`
     - `release`
         - Whether release is from `main` branch: `if: github.event.release.target_commitish == 'main'`
     - `push`
