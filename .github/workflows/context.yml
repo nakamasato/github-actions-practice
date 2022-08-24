@@ -17,7 +17,7 @@ jobs:
       - name: echo toJson(github)
         run: echo "${{ toJson(github) }}"
       - name: github.event.label
-        run: echo ${{ github.event.label }}
+        run: echo ${{ github.pull_request.label }}
 
   label:
     runs-on: ubuntu-latest
