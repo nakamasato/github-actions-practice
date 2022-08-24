@@ -18,7 +18,8 @@ jobs:
         run: echo "${{ toJson(github) }}"
       - name: github.event.action
         run: echo ${{ github.event.action }}
-
+      - name: github.labels
+        run: echo ${{ toJson(github.labels) }}
   label:
     runs-on: ubuntu-latest
     env:
