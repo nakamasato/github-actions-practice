@@ -25,13 +25,11 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/github-script@v6
-        env:
-          GITHUB_REPO: ${{ github.repository }}
         with:
           script: |
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `${process.env.COMMENT_BODY_IDENTIFIER} Add 'release' label if you want to release when pr is merged. (${new Date()}) [keep-only-one-comment-on-pr.yml](/.github/workflows/keep-only-one-comment-on-pr.yml)`
+              body: `${process.env.COMMENT_BODY_IDENTIFIER} Add 'release' label if you want to release when pr is merged. (${new Date()}) [keep-only-one-comment-on-pr.yml](/${{ github.server_url }}/${{ github.repository }}/blob/main/.github/workflows/keep-only-one-comment-on-pr.yml)`
             })
