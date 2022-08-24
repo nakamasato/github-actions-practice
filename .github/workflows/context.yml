@@ -14,10 +14,11 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
+      - name: echo toJson(github)
+        run: echo "${{ toJson(github) }}"
+      - name: github.event.label
+        run: echo ${{ github.event.labels.name }}
+
   label:
     runs-on: ubuntu-latest
     env:
