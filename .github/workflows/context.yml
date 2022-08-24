@@ -20,8 +20,6 @@ jobs:
         run: |
           echo "- github.event.action : ${{ github.event.action }}"
           echo "- github.event.action : ${{ github.event.action }}" >> $GITHUB_STEP_SUMMARY
-      - name: github.labels
-        run: echo ${{ toJson(github.labels) }}
 
   label:
     runs-on: ubuntu-latest
