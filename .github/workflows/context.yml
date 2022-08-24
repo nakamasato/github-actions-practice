@@ -34,6 +34,6 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
 
-      - if: ${{ !contains(toJson('["test"]'), github.event.label.name) }}
+      - if: ${{ !contains(toJson('["test"]'), github.event.labels.name) }}
         name: check if a pr has the target label
         run: echo "this pr has 'test' label"
