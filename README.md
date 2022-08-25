@@ -65,6 +65,22 @@
 ## CheatSheet
 - Available commands by default ([default-commands.yml](.github/workflows/default-commands.yml))
     - `zip`, `aws`, `jq`, `yq`
+    - [gh](https://docs.github.com/en/actions/using-workflows/using-github-cli-in-workflows)
+
+        <details><summary>example</summary>
+
+        ```yaml
+        - uses: actions/checkout@v3 # to get the context
+
+        - name: gh
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            PR_NUMBER: ${{ github.event.pull_request.number }}
+          run: gh pr comment $PR_NUMBER --body "Hi from GitHub CLI"
+        ```
+
+        </details>
+
 - [Events to Trigger workflow](https://docs.github.com/en/actions/reference/events-that-trigger-workflows)
     - `pull_request`
         activity type: `opened`, `synchronize`, or `reopened`.
@@ -140,7 +156,6 @@
         ```
 
         </details>
-
 
 - [Caching](https://docs.github.com/en/actions/advanced-guides/caching-dependencies-to-speed-up-workflows)
 
