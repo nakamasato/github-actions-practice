@@ -76,5 +76,20 @@ jobs:
         run: |
           git config --global user.email "github-actions@github.com"
           git config --global user.name "GitHub Actions"
+
           ./.publish-release.sh
-          latest_version=$(gh release list -L 1 | cut -f1)
+
+          release_tag=$(gh release view --json tagName | jq -r .tagName)
+          release_url=$(gh release view --json url | jq -r .url)
+          echo "::set-output name=release_tag::$release_tag"
+          echo "::set-output name=release_url::$release_url"
+
+      - uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `New release [${{ steps.release.outputs.release_tag }}](${{ steps.release.outputs.release_url }}) has been published! (${new Date()})`
+            })
