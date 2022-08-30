@@ -71,6 +71,8 @@ jobs:
 
       - name: release
         id: release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           ./.publish-release.sh
           latest_version=$(gh release list -L 1 | cut -f1)
