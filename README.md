@@ -17,7 +17,7 @@
 |**context**|pull_request|Echo GitHub context `toJson(github)` for checking.|
 |**default-commands**|pull_request|Check default commands (e.g. `zip`, `aws`, `jq`, `yq`)|
 |**docker-layer-cache**|pull_request|Use `satackey/action-docker-layer-caching`.|
-|[draft-release](.github/workflows/draft-release.yml)|pull_request|If a PR is merged, create a draft release and leave a comment on the PR.|
+|[auto-release-when-pr-is-merged](.github/workflows/auto-release-when-pr-is-merged.yml)|pull_request|If a PR is merged, create a draft release (publish a release if there's `release` label) and leave a comment on the PR. |
 |**envvar**|pull_request|How to set env var and use it.|
 |**keep-only-one-comment-on-pr**|pull_request|Create a comment if not exist. Otherwise, update the existing comment.|
 |**labeler**|pull_request|Add `label` to a pr based on the title.|
@@ -78,6 +78,9 @@
             PR_NUMBER: ${{ github.event.pull_request.number }}
           run: gh pr comment $PR_NUMBER --body "Hi from GitHub CLI"
         ```
+
+        - [default-commands.yml](.github/workflows/default-commands.yml)
+        - [create-pr-if-outdated.yml](.github/workflows/create-pr-if-outdated.yml)
 
         </details>
 

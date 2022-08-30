@@ -1,4 +1,4 @@
-name: draft-release
+name: auto-release-when-pr-is-merged
 
 on:
   pull_request:
@@ -8,8 +8,8 @@ on:
       - main
 
 jobs:
-  release:
-    if: ${{ github.event.pull_request.merged == true && contains( github.event.pull_request.labels.*.name, 'release') }}
+  draft-release:
+    if: ${{ github.event.pull_request.merged == true && ! contains( github.event.pull_request.labels.*.name, 'release') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -26,9 +26,10 @@ jobs:
               repo: context.repo.repo,
               body: `PR has been merged. we're processing it! (${new Date()})`
             })
+
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
+        uses: actions/create-release@v1 # not maintained
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -39,6 +40,7 @@ jobs:
             Triggered PR: [${{ github.event.number }}:${{ github.event.pull_request.title }}](${{ github.event.pull_request.html_url }})
           draft: true
           prerelease: false
+
       - uses: actions/github-script@v6
         with:
           script: |
@@ -46,5 +48,29 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `[draft release ${{ steps.create_release.outputs.id }}](${{ steps.create_release.outputs.html_url }}) has been created. Please publish it when it's ready (${new Date()})`
+              body: `[release ${{ steps.release.outputs.latest_version }}](${{ steps.release.outputs.html_url }}) has been created. (${new Date()})`
             })
+
+  release:
+    if: ${{ github.event.pull_request.merged == true && contains( github.event.pull_request.labels.*.name, 'release') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `PR has been merged. we're publishing a new release! (${new Date()})`
+            })
+
+      - name: release
+        id: release
+        run: |
+          ./.publish-release.sh
+          latest_version=$(gh release list -L 1 | cut -f1)
