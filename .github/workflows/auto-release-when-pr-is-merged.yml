@@ -74,5 +74,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
           ./.publish-release.sh
           latest_version=$(gh release list -L 1 | cut -f1)
