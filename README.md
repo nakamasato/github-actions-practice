@@ -33,6 +33,7 @@
 |**auto-pr**|release| When a release is published from `main` branch, update a kubernetes yaml file in another repository `nakamasato/k8s-deploy-test` and create a pr in the repository.|
 |**prereleased**|release|When release is prereleased from main branch, echo "prereleased".|
 |[released](.github/workflows/released.yml)|release|If a release is published from main branch, push a commit to `main` branch.|
+|[release-with-environment](.github/workflows/release-with-environment.yml)|release|If a release is published from main branch, the workflow needs to be reviewed.|
 |**k8s-ci**|release|Build docker image, push it to Github Packages, and update manifest file.|
 
 ### 3. push
