@@ -23,5 +23,3 @@ jobs:
           echo "### inputs" >> $GITHUB_STEP_SUMMARY
           echo "- environment: ${{ inputs.environment }}" >> $GITHUB_STEP_SUMMARY
           echo "- logLevel: ${{ inputs.logLevel }}" >> $GITHUB_STEP_SUMMARY
-          echo "### condition" >> $GITHUB_STEP_SUMMARY
-          echo "- branch: ${{ github.head_ref }}" >> $GITHUB_STEP_SUMMARY
