@@ -9,6 +9,7 @@ on:
       - labeled
       - unlabeled
       - closed
+  workflow_dispatch:
 
 jobs:
   check:
