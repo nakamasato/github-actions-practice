@@ -21,14 +21,23 @@ on:
         - production
         - development
 jobs:
-  print-inputs:
+  print-inputs-from-remote-workflow:
     uses: nakamasato/github-actions-practice/.github/workflows/print-workflow-dispatch-inputs.yaml@main
     with:
       environment: ${{ inputs.environment }}
       logLevel: ${{ inputs.logLevel }}
   run:
-    needs: [print-inputs]
+    needs: [print-inputs-from-remote-workflow]
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     steps:
       - run: echo running
+
+  print-inputs:
+    needs: [print-inputs-from-remote-workflow]
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - run: |
+          echo "### condition" >> $GITHUB_STEP_SUMMARY
+          echo "- branch: ${{ github.head_ref }}" >> $GITHUB_STEP_SUMMARY
