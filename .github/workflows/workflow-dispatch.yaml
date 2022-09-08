@@ -40,4 +40,4 @@ jobs:
     steps:
       - run: |
           echo "### condition" >> $GITHUB_STEP_SUMMARY
-          echo "- branch: ${{ github.head_ref }}" >> $GITHUB_STEP_SUMMARY
+          echo "- branch: ${{ github.event.ref }}" >> $GITHUB_STEP_SUMMARY
