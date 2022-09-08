@@ -1,0 +1,12 @@
+name: release
+
+on:
+  release:
+    types: [released]
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - run: echo releasing
