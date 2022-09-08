@@ -14,7 +14,7 @@ if [[ "$current_branch" != "$MAIN_BRANCH" ]];then
 fi
 
 # Check latest version format
-latest_version=$(gh release list -L 1 | cut -f1)
+latest_version=$(gh release list --exclude-drafts -L 1 | cut -f1)
 if [[ ! "$latest_version" =~ $VERSION_REGEX ]];then
     echo "The latest version is not valid format '$latest_version'. '$VERSION_REGEX'"
     exit 1
