@@ -28,7 +28,7 @@ jobs:
             })
 
       - name: Create Release
-        id: create_release
+        id: release
         uses: actions/create-release@v1 # not maintained
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -36,7 +36,7 @@ jobs:
           tag_name: ${{ env.release_tag }}
           release_name: ${{ env.release_tag }}
           body: |
-            This release is automatically created by [GitHub Actions draft-release.yml](https://github.com/nakamasato/github-actions-practice/blob/master/.github/workflows/draft-release.yml).
+            This release is automatically created by [GitHub Actions auto-release-when-pr-is-merged.yml](https://github.com/nakamasato/github-actions-practice/blob/master/.github/workflows/auto-release-when-pr-is-merged.yml).
             Triggered PR: [${{ github.event.number }}:${{ github.event.pull_request.title }}](${{ github.event.pull_request.html_url }})
           draft: true
           prerelease: false
@@ -48,7 +48,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `[release ${{ steps.release.outputs.latest_version }}](${{ steps.release.outputs.html_url }}) has been created. (${new Date()})`
+              body: `Draft release ([${{ steps.release.outputs.latest_version }}](${{ steps.release.outputs.html_url }})) has been created. (${new Date()})`
             })
 
   release:
