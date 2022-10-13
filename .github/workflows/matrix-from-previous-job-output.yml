@@ -8,14 +8,14 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.generate-matrix1.outputs.matrix }} || ${{ steps.generate-matrix2.outputs.matrix }}
+      matrix: ${{ steps.pull-request.outputs.matrix }} || ${{ steps.push.outputs.matrix }}
     steps:
-      - id: generate-matrix1
+      - id: pull-request
         if: github.event_name == 'pull_request'
-        run: echo "::set-output name=matrix::[\"item1\", \"item2\"]"
-      - id: generate-matrix2
+        run: echo "::set-output name=matrix::[\"pull_request1\", \"pull_request2\"]"
+      - id: push
         if: github.event_name == 'push'
-        run: echo "::set-output name=matrix::[\"item3\", \"item4\"]"
+        run: echo "::set-output name=matrix::[\"push1\", \"push2\"]"
   execute:
     strategy:
       matrix:
