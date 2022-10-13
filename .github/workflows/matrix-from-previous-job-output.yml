@@ -12,9 +12,9 @@ jobs:
       - id: set-matrix
         if: github.event_name == 'pull_request'
         run: 
-          if [ ${{ github.event_name }} = "pull_request" ]; then
+          if [[ "${{ github.event_name }}" = "pull_request" ]]; then
             echo "::set-output name=matrix::[\"pull_request1\", \"pull_request2\"]"
-          elif [ ${{ github.event_name }} = "push" ]; then
+          elif [[ "${{ github.event_name }}" = "push" ]]; then
             echo "::set-output name=matrix::[\"push1\", \"push2\"]"
           fi
   execute:
