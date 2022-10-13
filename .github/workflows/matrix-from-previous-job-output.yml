@@ -10,8 +10,7 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - id: set-matrix
-        if: github.event_name == 'pull_request'
-        run: 
+        run: |
           if [[ "${{ github.event_name }}" = "pull_request" ]]; then
             echo "::set-output name=matrix::[\"pull_request1\", \"pull_request2\"]"
           elif [[ "${{ github.event_name }}" = "push" ]]; then
