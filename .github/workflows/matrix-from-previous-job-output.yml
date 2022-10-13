@@ -1,15 +1,21 @@
 name: matrix-from-previous-job-output
 on:
   pull_request:
-
+  push:
+    paths:
+      - .github/workflows/matrix-from-previous-job.yml
 jobs:
   setup:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.generate-matrix.outputs.matrix }}
+      matrix: ${{ steps.generate-matrix1.outputs.matrix }} || ${{ steps.generate-matrix2.outputs.matrix }}
     steps:
-      - id: generate-matrix
+      - id: generate-matrix1
+        if: github.event_name == 'pull_request'
         run: echo "::set-output name=matrix::[\"item1\", \"item2\"]"
+      - id: generate-matrix2
+        if: github.event_name == 'push'
+        run: echo "::set-output name=matrix::[\"item3\", \"item4\"]"
   execute:
     strategy:
       matrix:
