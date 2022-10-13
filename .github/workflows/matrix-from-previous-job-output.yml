@@ -7,14 +7,16 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.pull-request.outputs.matrix }} || ${{ steps.push.outputs.matrix }}
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
-      - id: pull-request
+      - id: set-matrix
         if: github.event_name == 'pull_request'
-        run: echo "::set-output name=matrix::[\"pull_request1\", \"pull_request2\"]"
-      - id: push
-        if: github.event_name == 'push'
-        run: echo "::set-output name=matrix::[\"push1\", \"push2\"]"
+        run: 
+          if [ ${{ github.event_name }} = "pull_request" ]; then
+            echo "::set-output name=matrix::[\"pull_request1\", \"pull_request2\"]"
+          elif [ ${{ github.event_name }} = "push" ]; then
+            echo "::set-output name=matrix::[\"push1\", \"push2\"]"
+          fi
   execute:
     strategy:
       matrix:
