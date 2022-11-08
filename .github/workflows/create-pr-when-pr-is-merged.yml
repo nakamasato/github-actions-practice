@@ -68,6 +68,6 @@ jobs:
             # What
             Update readme
             # Why
-            To check GitHub Actions
+            To check GitHub Actions (triggered by #${{ github.event.pull_request.number }})
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
