@@ -1,7 +1,7 @@
 # github-actions-practice
 
 - Last Updated: 2022-11-04
-- Last Merged PR: #98
+- Last Merged PR: #299
 
 ## Github Actions Table
 
