@@ -72,10 +72,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: get author of the original pull request
-        run: |
-          
-
       - name: get pull request number
         id: get_pr_number
         run: |
