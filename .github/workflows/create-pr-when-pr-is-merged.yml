@@ -61,7 +61,7 @@ jobs:
           title: | # https://github.com/octokit/request-action#inputs
             |-
             create pr for random update
-          head: ${{ github.owner }}:${{ env.BRANCH_NAME }}
+          head: nakamasato:${{ env.BRANCH_NAME }}
           base: ${{ env.BASE_BRANCH_NAME }}
           body: | # https://github.com/octokit/request-action#inputs
             |
