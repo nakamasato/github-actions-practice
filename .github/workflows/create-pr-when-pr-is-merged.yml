@@ -1,0 +1,73 @@
+name: create-pr-when-pr-is-merged
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+
+env:
+  BRANCH_NAME: random-update-in-readme
+  BASE_BRANCH_NAME: main
+
+jobs:
+  create-pr-if-outdated:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ env.BASE_BRANCH_NAME }}
+
+      - name: update date in readme
+        run: |
+          echo "github PR number: ${{ github.number }}"
+          sed -i "s/.*Last Merged PR: \(.*\)/- Last Merged PR: #${{ github.number }}/" README.md
+
+      - name: check if need to commit
+        id: need_commit
+        run: |
+          if [[ -n "$(git status --porcelain)" ]]; then
+            echo "::set-output name=need_commit::true
+          else
+            echo "::set-output name=need_commit::false
+          fi
+
+      - name: commit and push
+        if: steps.need_commit.outputs.need_commit == 'true'
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git checkout -b ${{ env.BRANCH_NAME }}
+          git add .
+          git commit -m 'update date'
+          git push -u origin HEAD -f
+
+      - name: check if pr exists
+        id: check_pr
+        if: steps.need_commit.outputs.need_commit == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # used by gh
+        run: |
+          echo "::set-output name=count::$(gh pr list -S head:${{ env.BRANCH_NAME }} -B ${{ env.BASE_BRANCH_NAME }} | wc -l)"
+
+      - name: create pr
+        if: ${{ steps.need_commit.outputs.need_commit == 'true' && steps.check_pr.outputs.count == 0 }}
+        uses: octokit/request-action@v2.x
+        id: create_pr
+        with:
+          route: POST /repos/${{ github.repository }}/pulls
+          title: | # https://github.com/octokit/request-action#inputs
+            |-
+            create pr for random update
+          head: ${{ github.owner }}:${{ env.BRANCH_NAME }}
+          base: ${{ env.BASE_BRANCH_NAME }}
+          body: | # https://github.com/octokit/request-action#inputs
+            |
+            # What
+            Update readme
+            # Why
+            To check GitHub Actions
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
