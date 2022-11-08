@@ -29,9 +29,9 @@ jobs:
         id: need_commit
         run: |
           if [[ -n "$(git status --porcelain)" ]]; then
-            echo "::set-output name=need_commit::true
+            echo "need_commit=true" >> "$GITHUB_OUTPUT"
           else
-            echo "::set-output name=need_commit::false
+            echo "need_commit=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: commit and push
@@ -50,7 +50,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # used by gh
         run: |
-          echo "::set-output name=count::$(gh pr list -S head:${{ env.BRANCH_NAME }} -B ${{ env.BASE_BRANCH_NAME }} | wc -l)"
+          echo "count=$(gh pr list -S head:${{ env.BRANCH_NAME }} -B ${{ env.BASE_BRANCH_NAME }} | wc -l)" >> "$GITHUB_OUTPUT"
 
       - name: create pr
         if: ${{ steps.need_commit.outputs.need_commit == 'true' && steps.check_pr.outputs.count == 0 }}
@@ -72,15 +72,22 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: get pull request number
+      - name: get author of the original pull request
         run: |
-          echo ${{ fromJson(steps.create_pr.outputs.data).number }}
+          
+
+      - name: get pull request number
+        id: get_pr_number
+        run: |
+          if [[ ${{ steps.check_pr.outputs.count }} = 0 ]]; then
+            echo "pr_number=${{ fromJson(steps.create_pr.outputs.data).number }}" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: request reviwer
-        if: ${{ steps.need_commit.outputs.need_commit == 'true' && steps.check_pr.outputs.count == 0 }}
+        if: steps.get_pr_number.outputs.pr_number != ""
         uses: octokit/request-action@v2.x
         with:
-          route: POST /repos/${{ github.repository }}/pulls/${{ fromJson(steps.create_pr.outputs.data).number }}/requested_reviewers
-          reviewers: "[\"nakamasato\"]"
+          route: POST /repos/${{ github.repository }}/pulls/${{ steps.get_pr_number.outputs.pr_number }}/requested_reviewers
+          reviewers: "[\"${{ github.actor }}\"]" # the person who merges the pr
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
