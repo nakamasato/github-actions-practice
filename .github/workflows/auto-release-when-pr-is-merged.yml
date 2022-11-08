@@ -37,7 +37,7 @@ jobs:
           release_name: ${{ env.release_tag }}
           body: |
             This release is automatically created by [GitHub Actions auto-release-when-pr-is-merged.yml](https://github.com/nakamasato/github-actions-practice/blob/master/.github/workflows/auto-release-when-pr-is-merged.yml).
-            Triggered PR: [${{ github.event.number }}:${{ github.event.pull_request.title }}](${{ github.event.pull_request.html_url }})
+            Triggered PR: [${{ github.event.number }}:${{ github.event.pull_request.title }}](${{ github.event.pull_request.html_url }}) created by ${{ github.actor }}
           draft: true
           prerelease: false
 
