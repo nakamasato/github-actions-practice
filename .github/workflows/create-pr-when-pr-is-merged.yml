@@ -80,7 +80,7 @@ jobs:
           fi
 
       - name: request reviwer
-        if: steps.get_pr_number.outputs.pr_number != ""
+        if: ${{ steps.get_pr_number.outputs.pr_number != "" }}
         uses: octokit/request-action@v2.x
         with:
           route: POST /repos/${{ github.repository }}/pulls/${{ steps.get_pr_number.outputs.pr_number }}/requested_reviewers
