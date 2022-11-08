@@ -22,8 +22,8 @@ jobs:
 
       - name: update date in readme
         run: |
-          echo "github PR number: ${{ github.number }}"
-          sed -i "s/.*Last Merged PR: \(.*\)/- Last Merged PR: #${{ github.number }}/" README.md
+          echo "github PR number: ${{ github.event.pull_request.number }}"
+          sed -i "s/.*Last Merged PR: \(.*\)/- Last Merged PR: #${{ github.event.pull_request.number }}/" README.md
 
       - name: check if need to commit
         id: need_commit
