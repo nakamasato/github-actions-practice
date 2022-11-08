@@ -75,6 +75,7 @@ jobs:
       - name: get pull request number
         run: |
           echo ${{ fromJson(steps.create_pr.outputs.data) }}
+          echo ${{ steps.create_pr.outputs.data }}
 
 #       - name: request reviwer
 #         if: ${{ steps.need_commit.outputs.need_commit == 'true' && steps.check_pr.outputs.count == 0 }}
