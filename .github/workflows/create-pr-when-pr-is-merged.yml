@@ -25,6 +25,17 @@ jobs:
           echo "github PR number: ${{ github.event.pull_request.number }}"
           sed -i "s/.*Last Merged PR: \(.*\)/- Last Merged PR: #${{ github.event.pull_request.number }}/" README.md
 
+      - name: leave a comment to the original PR
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `GitHub Actions has been triggered: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}`
+            })
+
       - name: check if need to commit
         id: need_commit
         run: |
@@ -87,3 +98,15 @@ jobs:
           reviewers: "[\"${{ github.actor }}\"]" # the person who merges the pr
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: leave a comment to the original PR
+        if: steps.get_pr_number.outputs.pr_number != ''
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## Pull Request\nPlease merge the PR #${{ steps.get_pr_number.outputs.pr_number }}`
+            })
