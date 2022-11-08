@@ -71,3 +71,26 @@ jobs:
             To check GitHub Actions (triggered by #${{ github.event.pull_request.number }})
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: get pull request number
+        run: |
+          echo ${{ fromJson(steps.create_pr.outputs.data).id }}
+
+#       - name: request reviwer
+#         if: ${{ steps.need_commit.outputs.need_commit == 'true' && steps.check_pr.outputs.count == 0 }}
+#         uses: octokit/request-action@v2.x
+#         with:
+#           route: POST /repos/${{ github.repository }}/pulls/${{ steps.create_pr. }}/requested_reviewers
+#           title: | # https://github.com/octokit/request-action#inputs
+#             |-
+#             create pr for random update
+#           head: nakamasato:${{ env.BRANCH_NAME }}
+#           base: ${{ env.BASE_BRANCH_NAME }}
+#           body: | # https://github.com/octokit/request-action#inputs
+#             |
+#             # What
+#             Update readme
+#             # Why
+#             To check GitHub Actions (triggered by #${{ github.event.pull_request.number }})
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
