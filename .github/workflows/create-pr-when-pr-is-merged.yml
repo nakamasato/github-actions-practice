@@ -88,7 +88,7 @@ jobs:
             To check GitHub Actions (triggered by #${{ github.event.pull_request.number }})
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: get pull request number from new pull request
         if: ${{ steps.need_commit.outputs.need_commit == 'true' && steps.check_pr.outputs.count == 0 }}
         id: get_pr_number_from_new_pr
