@@ -65,7 +65,8 @@ jobs:
           pulls=$(curl -s -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/nakamasato/github-actions-practice/pulls?head=nakamasato:${{ env.BRANCH_NAME }}&base=${{ env.BASE_BRANCH_NAME }}")
           echo "$pulls | jq length"
           count=$(echo "$pulls" | jq length)
-          echo "count: $count"
+          pr_number=$(echo "$pulls" | jq '.[].number')
+          echo "pr_number=$pr_number" >> "$GITHUB_OUTPUT"
           echo "count=$count" >> "$GITHUB_OUTPUT"
 
       - name: create pr
@@ -96,6 +97,8 @@ jobs:
           echo "$PR"
           if [[ "${{ env.PR }}" != "" ]]; then
             echo "pr_number=${{ env.PR.number }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "pr_number=${{ steps.check_pr.outputs.pr_number }}" >> "$GITHUB_OUTPUT"
           fi
 
       - name: request reviwer
