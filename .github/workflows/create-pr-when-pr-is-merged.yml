@@ -90,6 +90,7 @@ jobs:
       - name: get pull request number
         id: get_pr_number
         run: |
+          echo "${{ steps.check_pr.outputs.count }}"
           if [[ ${{ steps.check_pr.outputs.count }} = 0 ]]; then
             echo "pr_number=${{ fromJson(steps.create_pr.outputs.data).number }}" >> "$GITHUB_OUTPUT"
           fi
