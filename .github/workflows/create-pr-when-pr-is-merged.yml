@@ -89,16 +89,19 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: get pull request number from new pull request
+        if: ${{ steps.need_commit.outputs.need_commit == 'true' && steps.check_pr.outputs.count == 0 }}
+        id: get_pr_number_from_new_pr
+        run:
+          echo "pr_number=${{ fromJson(steps.create_pr.outputs.data).number }}" >> "$GITHUB_OUTPUT"
+
       - name: get pull request number
         id: get_pr_number
-        env:
-          PR: ${{ fromJson(steps.create_pr.outputs.data) }}
         run: |
-          echo "$PR"
-          if [[ "${{ env.PR }}" != "" ]]; then
-            echo "pr_number=${{ env.PR.number }}" >> "$GITHUB_OUTPUT"
+          if [[ ${{ steps.check_pr.outputs.pr_number }} != "" ]];then
+            echo "pr_number=${{ steps.check_pr.outputs.pr_number }}" >> "$GITHUB_OUTPUT" # from existing pr
           else
-            echo "pr_number=${{ steps.check_pr.outputs.pr_number }}" >> "$GITHUB_OUTPUT"
+            echo "pr_number=${{ steps.get_pr_number_from_new_pr.outputs.pr_number }}" >> "$GITHUB_OUTPUT" # from new pr
           fi
 
       - name: request reviwer
