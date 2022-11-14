@@ -92,7 +92,7 @@ jobs:
       - name: get pull request number
         id: get_pr_number
         env:
-          PR: fromJson(steps.create_pr.outputs.data)
+          PR: ${{ fromJson(steps.create_pr.outputs.data) }}
         run: |
           echo "$PR"
           if [[ "${{ env.PR }}" != "" ]]; then
