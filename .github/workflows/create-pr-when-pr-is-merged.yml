@@ -90,10 +90,12 @@ jobs:
 
       - name: get pull request number
         id: get_pr_number
+        env:
+          PR: fromJson(steps.create_pr.outputs.data)
         run: |
-          echo "${{ steps.check_pr.outputs.count }}"
-          if [[ "${{ steps.create_pr.outputs.data }}" != "" ]]; then
-            echo "pr_number=${{ fromJson(steps.create_pr.outputs.data).number }}" >> "$GITHUB_OUTPUT"
+          echo "$PR"
+          if [[ "${{ env.PR }}" != "" ]]; then
+            echo "pr_number=${{ env.PR.number }}" >> "$GITHUB_OUTPUT"
           fi
 
       - name: request reviwer
