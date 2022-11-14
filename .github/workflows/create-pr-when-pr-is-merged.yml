@@ -62,9 +62,10 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # used by gh
         run: |
           # echo "count=$(gh pr list -S head:${{ env.BRANCH_NAME }} -B ${{ env.BASE_BRANCH_NAME }} | wc -l)" >> "$GITHUB_OUTPUT"
-          pulls=$(curl -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/nakamasato/github-actions-practice/pulls?head=nakamasato:${{ env.BRANCH_NAME }}&base=${{ env.BASE_BRANCH_NAME }}")
-          echo "$pulls"
-          count=$(echo "$pulls" | jq '. | length')
+          pulls=$(curl -s -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/nakamasato/github-actions-practice/pulls?head=nakamasato:${{ env.BRANCH_NAME }}&base=${{ env.BASE_BRANCH_NAME }}")
+          echo "$pulls | jq length"
+          count=$(echo "$pulls" | jq length)
+          echo "count: $count"
           echo "count=$count" >> "$GITHUB_OUTPUT"
 
       - name: create pr
