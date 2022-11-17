@@ -14,6 +14,8 @@ jobs:
           debug: true
           script: |
             contentToAdd = "new"
+            
+            console.log(contentToAdd);
 
             pull = await github.rest.issues.get({
               issue_number: context.issue.number,
