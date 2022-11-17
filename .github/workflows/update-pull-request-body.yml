@@ -20,7 +20,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
             });
-            
+
             console.log(pull.body);
 
             github.rest.issues.update({
