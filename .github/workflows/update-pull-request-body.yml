@@ -23,8 +23,7 @@ jobs:
               repo: context.repo.repo,
             });
 
-            console.log(pull);
-            console.log(pull.body);
+            console.log(pull.data.body);
 
             github.rest.issues.update({
               issue_number: context.issue.number,
