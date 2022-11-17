@@ -15,7 +15,7 @@ jobs:
           script: |
             contentToAdd = "new"
 
-            pull = octokit.rest.issues.get({
+            pull = github.rest.issues.get({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
