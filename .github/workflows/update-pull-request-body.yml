@@ -1,0 +1,21 @@
+name: update-pull-request-body
+on:
+  pull_request:
+
+jobs:
+  job:
+    runs-on: [self-hosted, development]
+    steps:
+      - uses: actions/checkout@v3
+      - name: update pull request body
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          debug: true
+          script: |
+            github.rest.issues.update({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "test"
+            });
