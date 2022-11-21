@@ -31,5 +31,5 @@ jobs:
               issue_number: process.env.pr_number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `${pull.data.body}\n- ${context.issue.number}`
+              body: `${pull.data.body}\n- #${context.issue.number}`
             });
