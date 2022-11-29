@@ -88,7 +88,7 @@
 
 - [Events to Trigger workflow](https://docs.github.com/en/actions/reference/events-that-trigger-workflows)
     - `pull_request`
-        activity type: `opened`, `synchronize`, or `reopened`.
+        - default types: `opened`, `synchronize`, or `reopened`.
         - specify types:
             ```yaml
             on:
