@@ -75,7 +75,9 @@ jobs:
         id: create_pr
         with:
           route: POST /repos/${{ github.repository }}/pulls
-          title: "chore: create pr for random update"
+          title: |
+            |-
+              chore: create pr for random update
           head: nakamasato:${{ env.BRANCH_NAME }}
           base: ${{ env.BASE_BRANCH_NAME }}
           body: | # https://github.com/octokit/request-action#inputs
