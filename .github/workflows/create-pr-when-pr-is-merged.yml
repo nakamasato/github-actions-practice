@@ -75,7 +75,7 @@ jobs:
         id: create_pr
         with:
           route: POST /repos/${{ github.repository }}/pulls
-          title: |
+          title: | # https://github.com/octokit/request-action/issues/118#issuecomment-913823682
             |-
               chore: create pr for random update
           head: nakamasato:${{ env.BRANCH_NAME }}
