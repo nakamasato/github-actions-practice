@@ -9,4 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     steps:
+      - name: Dump GitHub context
+        if: ${{ env.SKIP != 'TRUE' }}
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: |
+          echo "$GITHUB_CONTEXT"
+
       - run: echo releasing
