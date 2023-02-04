@@ -2,6 +2,9 @@ name: keep-only-one-comment-on-pr
 
 on: pull_request
 
+permissions:
+  pull-requests: write # to enable dependabot to write comment
+
 env:
   COMMENT_BODY_IDENTIFIER: test
 jobs:
