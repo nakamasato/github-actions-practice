@@ -2,6 +2,9 @@ name: update-pull-request-body
 on:
   pull_request:
 
+permissions:
+  pull-requests: write
+
 jobs:
   job:
     runs-on: ubuntu-latest
