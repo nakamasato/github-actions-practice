@@ -123,7 +123,7 @@
     - Skip draft PR: `if: github.event.pull_request.draft == false`
 - [Outputs](https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#jobsjob_idoutputs)
 
-    - Set output: `echo "::set-output name=<your var name>::<value>"`
+    - Set output: `echo "<your var name>=<value>" >> "$GITHUB_OUTPUT"`
     - Use output: `${{ steps.<step_id>.outputs.<your var name> }}`
     - Skip next job based on the result of a dependent job
 
@@ -137,7 +137,7 @@
             steps:
               - name: Set is_skip
                 id: is_skip
-                run: echo "::set-output name=is_skip::${{ contains(github.event.head_commit.message, '[skip ci]') }}"
+                run: echo "is_skip=${{ contains(github.event.head_commit.message, '[skip ci]') }}" >> "$GITHUB_OUTPUT"
               - run: echo "[skip ci] ${{ steps.is_skip.outputs.is_skip }}"
 
           test:
