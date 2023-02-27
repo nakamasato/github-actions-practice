@@ -26,7 +26,7 @@ jobs:
           echo 'key: value' | yq e '.key' -
 
       - name: date
-        run: date '+%Y %b'
+        run: date --date='-7 days ago' '+%Y-%m-%d'
 
       - name: cal
         run: cal $(date +"%m %Y") | awk 'NF {DAYS = $NF}; END {print DAYS}'
