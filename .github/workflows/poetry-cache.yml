@@ -48,5 +48,5 @@ jobs:
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install
 
-      - name: run
+      - name: Run
         run: poetry run python main.py
