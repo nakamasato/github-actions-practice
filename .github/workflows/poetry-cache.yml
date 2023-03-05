@@ -49,4 +49,4 @@ jobs:
         run: poetry install
 
       - name: run
-        run: python main.py
+        run: poetry run python main.py
