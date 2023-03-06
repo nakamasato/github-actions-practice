@@ -2,4 +2,4 @@ awscli==1.27.84
 pytest-cov==3.0.0
 flake8==5.0.4
 flake8-docstrings==1.7.0
-pytest-env==0.6.2
+pytest-env==0.8.1
