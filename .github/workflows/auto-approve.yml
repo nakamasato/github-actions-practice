@@ -21,7 +21,7 @@ jobs:
           echo "pr: $PR_NUMBER"
           echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
       - name: Approve Pull Request
-        uses: juliangruber/approve-pull-request-action@v1
+        uses: juliangruber/approve-pull-request-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           number: ${{ env.PR_NUMBER }}
