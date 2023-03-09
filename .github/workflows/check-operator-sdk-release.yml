@@ -1,0 +1,35 @@
+name: check-operator-sdk-release
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/check-operator-sdk-release.yml
+  schedule:
+    - cron: '0 9 * * *' # 18:00 JST
+env:
+  VERSION: v1.26.0
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: check
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          latest_version=$(curl --silent "https://api.github.com/repos/operator-framework/operator-sdk/releases" | jq -r '.[].tag_name' | head -n 1)
+          current_minor_version=${VERSION}
+          latest_minor_version=$(echo ${latest_version} | sed 's/.*\(v[0-9]\+.[0-9]\+\).*/\1/')
+          if [ "$current_minor_version" = "$latest_minor_version" ]; then
+            echo "latest (current: $current_minor_version, latest: $latest_version)"
+          else
+            echo 'new release exists'
+            title="Upgrade operator-sdk to $latest_version"
+            issue_cnt=$(gh issue list --search "$title" --json 'id' | jq length)
+            if [ $issue_cnt -gt 0 ];then
+              echo "issue already exists"
+            else
+              gh issue create --title "$title" --body "operator-sdk $latest_version has been released." --assignee nakamasato
+            fi
+          fi
