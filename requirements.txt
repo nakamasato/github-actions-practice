@@ -1,4 +1,4 @@
 boto3==1.26.95
-botocore==1.29.94
+botocore==1.29.95
 Django==4.1.7
 djangorestframework==3.14.0
