@@ -27,6 +27,6 @@ jobs:
         title: "[${{ env.NAMESPACE }}] Internal release test [${{ env.RELEASE_VERSION }}]"
         body: |
           # Why
-          - To perform internal release for test [${{ env.RELEASE_VERSION }}](https://github.com/nakamasato/github-actions-practice/releases/tag/${{ env.RELEASE_VERSION }})
+          - To perform internal release for test [${{ env.RELEASE_VERSION }}](${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ env.RELEASE_VERSION }})
           # What
           - Change image tag of test for ${{ env.NAMESPACE }}
