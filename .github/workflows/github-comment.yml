@@ -1,0 +1,25 @@
+name: github-comment
+
+on: pull_request
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up github-comment
+        id: github-comment
+        env:
+          GHCMT_VERSION: 4.1.0
+        run: |
+          cmdDir="${{ runner.tool_cache }}/github-comment/${GHCMT_VERSION}"
+          if [[ ! -x "${cmdDir}/github-comment" ]]; then
+            mkdir -p "${cmdDir}"
+            cd "${{ runner.temp }}"
+            curl -fLO "https://github.com/suzuki-shunsuke/github-comment/releases/download/v${GHCMT_VERSION}/github-comment_${GHCMT_VERSION}_linux_amd64.tar.gz"
+            tar -C "${cmdDir}" -xzf "github-comment_${GHCMT_VERSION}_linux_amd64.tar.gz"
+          fi
+          echo "${cmdDir}" >> "$GITHUB_PATH"
+      - name: Check github-comment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: github-comment exec  "hello"
