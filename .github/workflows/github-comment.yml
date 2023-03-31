@@ -22,4 +22,4 @@ jobs:
       - name: Check github-comment
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: github-comment exec  "hello"
+        run: github-comment post -- echo "hello"
