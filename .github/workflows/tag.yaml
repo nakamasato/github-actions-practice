@@ -1,0 +1,13 @@
+name: tag
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: create a file
+        run: echo "$(date)"
