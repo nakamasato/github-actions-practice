@@ -2,7 +2,8 @@ name: tag
 
 on:
   push:
-    tags:
+    branches:
+      - main
 
 jobs:
   tag:
