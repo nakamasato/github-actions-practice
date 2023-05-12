@@ -22,3 +22,26 @@ jobs:
           script: |
             const script = require('./.github/actions/script.js')
             console.log(script({github, context}))
+  output:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set output
+        id: step_one
+        run: |
+          {
+            echo 'RESPONSE<<EOF';
+            echo '```';
+            echo 'test';
+            echo '```';
+            echo 'EOF';
+          } >> $GITHUB_OUTPUT
+      - name: script
+        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## test\n${{steps.step_one.outputs.RESPONSE}}`
+            })
