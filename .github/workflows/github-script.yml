@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - github-script/**
+      - .github/workflows/github-script.yml
 
 jobs:
   echo-input:
