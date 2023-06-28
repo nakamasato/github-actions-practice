@@ -169,6 +169,10 @@
         - Example: https://github.com/actions/cache/blob/master/examples.md
     - Ruby: [ruby/setup-ruby](https://github.com/ruby/setup-ruby#caching-bundle-install-automatically)
     - npm: [actions/setup-node](https://github.com/actions/setup-node)
+    - Go: [actions/setup-go](https://github.com/actions/setup-go) enabled by default since v4
+        - [github actionsのsetup-goのキャッシュは無効にした方がいいかもしれない](https://zenn.dev/goryudyuma/articles/f387dba8838ff7)
+        - cache key is `setup-go-${platform}-go-${versionSpec}-${fileHash}` https://github.com/actions/setup-go@v4.0.0/src/cache-restore.ts#L32
+        - `hash-dependency-path` `go.mod` by default (https://github.com/actions/setup-go#caching-dependency-files-and-build-outputs)
     - Gradle and Maven: [actions/setup-java](https://github.com/actions/setup-java)
     - [Python - pip](https://github.com/actions/cache/blob/master/examples.md#python---pip)
         <details>
