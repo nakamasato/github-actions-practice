@@ -2,6 +2,8 @@ name: python-semantic-release
 
 on:
   push:
+    branches:
+      - main
 
 jobs:
   release:
