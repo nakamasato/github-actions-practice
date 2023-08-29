@@ -27,6 +27,7 @@ jobs:
           echo "prod: ${{ steps.changed-files-yaml.outputs.prod_any_changed }}" >> $GITHUB_STEP_SUMMARY
 
   execute:
+    if: ${{ matrix.changed == 'true' }}
     strategy:
       matrix:
         env: ["dev", "prod"]
