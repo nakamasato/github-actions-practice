@@ -3,42 +3,40 @@ on:
   pull_request:
 
 jobs:
-  # setup:
-  #   runs-on: ubuntu-latest
-  #   outputs:
-  #     matrix: ${{ steps.outputs.matrix }}
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #       with:
-  #         fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
+  setup:
+    outputs:
+      DEV_CHANGED: ${{ steps.changed-files-yaml.outputs.dev_any_changed }}
+      PROD_CHANGED: ${{ steps.changed-files-yaml.outputs.prod_any_changed }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
 
-  #     - name: get all changes
-  #       id: changed-files-yaml
-  #       uses: tj-actions/changed-files@v38
-  #       with:
-  #         files_yaml: |
-  #           dev:
-  #             - 'static/dev/**'
-  #           prod:
-  #             - 'static/prod/**'
-
-  #     - name: make matrix
-  #       id: matrix
-  #       run: |
-  #         echo "matrix=[{\"env\": \"dev\", \"changed\": \"${{ steps.changed-files-yaml.outputs.test_any_changed }}\" }, {}]' >> $GITHUB_OUTPUT
+      - name: get all changes for static/dev and static/prod
+        id: changed-files-yaml
+        uses: tj-actions/changed-files@v38
+        with:
+          files_yaml: |
+            dev:
+              - 'static/dev/**'
+            prod:
+              - 'static/prod/**'
+      - run: |
+          echo "dev: ${{ steps.changed-files-yaml.outputs.dev_any_changed }}" >> $GITHUB_STEP_SUMMARY
+          echo "prod: ${{ steps.changed-files-yaml.outputs.prod_any_changed }}" >> $GITHUB_STEP_SUMMARY
 
   execute:
     strategy:
       matrix:
-        # matrix: ${{ fromJson(needs.setup.outputs.matrix) }}
         env: ["dev", "prod"]
         include:
           - env: "dev"
-            changed: true
+            changed: ${{ needs.check-changed-files.outputs.DEV_CHANGED }}
           - env: "prod"
-            changed: false
+            changed: ${{ needs.check-changed-files.outputs.PROD_CHANGED }}
     runs-on: ubuntu-latest
-    # needs: [setup]
+    needs: [setup]
     steps:
       - run: |
           echo "env: ${{ matrix.env }}, changed: ${{ matrix.changed }}"
