@@ -1,0 +1,40 @@
+name: matrix-from-previous-job-output-2
+on:
+  pull_request:
+
+jobs:
+  setup:
+    outputs:
+      DEV_CHANGED: ${{ steps.changed-files-yaml.outputs.dev_any_changed }}
+      PROD_CHANGED: ${{ steps.changed-files-yaml.outputs.prod_any_changed }}
+      CHANGED_ENVS: ${{ steps.matrix.outputs.CHANGED_ENVS }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
+
+      - name: get all changes for static/dev and static/prod
+        id: changed-files-yaml
+        uses: tj-actions/changed-files@v38
+        with:
+          files_yaml: |
+            dev:
+              - 'static/dev/**'
+            prod:
+              - 'static/prod/**'
+      - id: matrix
+        run: |
+          echo "dev: ${{ steps.changed-files-yaml.outputs.dev_any_changed }}" >> $GITHUB_STEP_SUMMARY
+          echo "prod: ${{ steps.changed-files-yaml.outputs.prod_any_changed }}" >> $GITHUB_STEP_SUMMARY
+          echo "CHANGED_ENVS=$(echo "[{\"env\": \"dev\", \"changed\": ${{ steps.changed-files-yaml.outputs.dev_any_changed }}}, {\"env\":\"prod\", \"changed\": ${{ steps.changed-files-yaml.outputs.prod_any_changed }} }]" | jq -c 'map(select( .changed ).env)')" >> $GITHUB_OUTPUT
+
+  execute:
+    strategy:
+      matrix:
+        env: ${{ fromJson(needs.setup.outputs.CHANGED_ENVS) }}
+    runs-on: ubuntu-latest
+    needs: [setup]
+    steps:
+      - run: |
+          echo "matrix: ${{ matrix.env }}"
