@@ -1,0 +1,23 @@
+# 1. execute for dev and prod when merged to main
+# 2. execute for dev only when pull_request
+name: matrix-by-condition
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+# env: ❌ env cannot be used in matrix
+#   ENVS: ${{ github.event_name == 'pull_request' && '["dev"]' || '["dev", "prod"]' }}
+
+jobs:
+  execute:
+    strategy:
+      matrix:
+        # env: ${{ fromJson(env.ENVS) }} # ❌ env cannot be used in matrix
+        # env: ${{ fromJson('["dev"]') || fromJson('["dev", "prod"]') }} # ⭕
+        env: ${{ github.event_name == 'push' && fromJson('["dev", "prod"]') || fromJson('["dev"]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "matrix: ${{ matrix.env }}"
