@@ -1,6 +1,6 @@
 # 1. execute for dev and prod when merged to main
 # 2. execute for dev only when pull_request
-name: matrix-from-previous-job-output-3
+name: matrix-by-condition
 on:
   pull_request:
   push:
