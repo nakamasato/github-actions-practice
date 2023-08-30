@@ -22,7 +22,6 @@
 |[envvar](.github/workflows/envvar.yml)|pull_request|How to set env var and use it.|
 |[keep-only-one-comment-on-pr](.github/workflows/keep-only-one-comment-on-pr.yml)|pull_request|Create a comment if not exist. Otherwise, update the existing comment.|
 |**labeler**|pull_request|Add `label` to a pr based on the title.|
-|[matrix-from-previous-job-output](.github/workflows/matrix-from-previous-job-output.yml)|pull_request|matrix execution from the output of the previous step.|
 |[poetry-cache](.github/workflows/poetry-cache.yml)|pull_request|cache poetry and python dependencies managed by poetry.|
 |[pre-commit](.github/workflows/pre-commit.yml)|pull_request|Run `pre-commit`.|
 |[s3-local](.github/workflows/s3-local.yml)|pull_request|Use `minio` for s3 mock in GitHub Actions. **This workflow is broken.**|
@@ -64,6 +63,18 @@
 |GitHub Actions|Trigger|Description|
 |---|---|---|
 |[print-workflow-dispatch-inputs](.github/workflows/print-workflow-dispatch-inputs.yaml)|workflow_call|You can reuse this workflow to print inputs of workflow_dispatch (inputs: environment & logLevel)|
+
+### 6. [Matrix](https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs)
+
+1. `env` cannot be used for matrix.
+1. The `matrix` value cannot be used in `if` for its job.
+1. `fromJson` is often used to generate `matrix` (ref: https://docs.github.com/en/actions/learn-github-actions/expressions)
+
+|GitHub Actions|Trigger|Description|
+|---|---|---|
+|[matrix-from-previous-job-output](.github/workflows/matrix-from-previous-job-output.yml)|pull_request|matrix execution from the output of the previous step. `fromJson`|
+|[matrix-from-previous-job-output-2](.github/workflows/matrix-from-previous-job-output-2.yml)|pull_request, push|matrix execution from the output of the previous step. `fromJson`|
+|[matrix-by-condition](.github/workflows/matrix-by-conditions.yml)|pull_request, push|run for dev and prod when merged to main. run only for dev for pull_request.|
 
 ## CheatSheet
 - Available commands by default ([default-commands.yml](.github/workflows/default-commands.yml))
