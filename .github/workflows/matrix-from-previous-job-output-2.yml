@@ -36,6 +36,7 @@ jobs:
         env: ${{ fromJson(needs.setup.outputs.CHANGED_ENVS) }}
     runs-on: ubuntu-latest
     needs: [setup]
+    # if: ${{ matrix.env == 'dev' }} ❌ matrix value can be used only in steps
     steps:
       - run: |
           echo "matrix: ${{ matrix.env }}"
