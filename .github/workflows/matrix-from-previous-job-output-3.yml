@@ -20,7 +20,7 @@ on:
 #           fi
 
 env:
-  ENVS: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && '["dev", "prod"]' || '["dev"]' }}
+  ENVS: ${{ github.ref == 'refs/heads/main' && '["dev", "prod"]' || '["dev"]' }}
 
 jobs:
   execute:
