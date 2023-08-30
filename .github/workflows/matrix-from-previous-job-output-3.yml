@@ -27,7 +27,8 @@ jobs:
     strategy:
       matrix:
         # env: ${{ fromJson(env.ENVS) }} # ❌ env cannot be used in matrix
-        env: ${{ fromJson('["dev"]') ||  fromJson('["dev", "prod"]') }} # ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && fromJson(["dev", "prod"]) || fromJson(["dev"]) }}
+        # env: ${{ fromJson('["dev"]') || fromJson('["dev", "prod"]') }} # ⭕
+        env: ${{ github.event_name == 'push' && fromJson('["dev"]') || fromJson('["dev", "prod"]') }}
     runs-on: ubuntu-latest
     steps:
       - run: |
