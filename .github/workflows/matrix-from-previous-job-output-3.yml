@@ -20,7 +20,7 @@ on:
 #           fi
 
 env:
-  ENVS: ${{ github.ref == 'refs/heads/main' && '["dev", "prod"]' || '["dev"]' }}
+  ENVS: ${{ github.event_name == 'pull_request' && '["dev"]' || '["dev", "prod"]' }}
 
 jobs:
   execute:
