@@ -1,23 +1,11 @@
+# 1. execute for dev and prod when merged to main
+# 2. execute for dev only when pull_request
 name: matrix-from-previous-job-output-3
 on:
   pull_request:
   push:
     paths:
       - main
-
-# jobs:
-#   setup:
-#     runs-on: ubuntu-latest
-#     outputs:
-#       env: ${{ steps.set-matrix.outputs.env }}
-#     steps:
-#       - id: set-matrix
-#         run: |
-#           if [[ "${{ github.event_name }}" = "pull_request" ]]; then
-#             echo "env=[\"dev\"]" >> $GITHUB_OUTPUT
-#           elif [[ "${{ github.event_name }}" = "push" ]]; then
-#             echo "env=[\"dev\", \"prod\"]" >> $GITHUB_OUTPUT
-#           fi
 
 # env: ❌ env cannot be used in matrix
 #   ENVS: ${{ github.event_name == 'pull_request' && '["dev"]' || '["dev", "prod"]' }}
