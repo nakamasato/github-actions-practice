@@ -19,14 +19,15 @@ on:
 #             echo "env=[\"dev\", \"prod\"]" >> $GITHUB_OUTPUT
 #           fi
 
-env:
-  ENVS: ${{ github.event_name == 'pull_request' && '["dev"]' || '["dev", "prod"]' }}
+# env: ❌ env cannot be used in matrix
+#   ENVS: ${{ github.event_name == 'pull_request' && '["dev"]' || '["dev", "prod"]' }}
 
 jobs:
   execute:
     strategy:
       matrix:
-        env: ${{ fromJson(env.ENVS) }}
+        # env: ${{ fromJson(env.ENVS) }} # ❌ env cannot be used in matrix
+        env: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && ["dev", "prod"] || ["dev"] }}
     runs-on: ubuntu-latest
     steps:
       - run: |
