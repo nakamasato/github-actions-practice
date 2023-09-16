@@ -28,7 +28,7 @@ jobs:
           --health-retries 5
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3.6.0
+      - uses: actions/checkout@v4.0.0
         with:
           fetch-depth: 0 # Mandatory unless "latest" is set below.
       - uses: ariga/atlas-action@v0
