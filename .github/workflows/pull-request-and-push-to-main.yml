@@ -43,8 +43,7 @@ jobs:
         id: set-conf-prod
         run: |
           echo "ENV=prod" >> $GITHUB_OUTPUT
-  
+
       - name: Process
         run: |
-          echo "${{ steps.set-conf-dev.outputs.ENV }}"
-          echo "${{ steps.set-conf-prod.outputs.ENV }}"
+          echo "${{ steps.set-conf-dev.outputs.ENV || steps.set-conf-prod.outputs.ENV }}"
