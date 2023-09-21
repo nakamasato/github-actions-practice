@@ -44,7 +44,7 @@ jobs:
   execute-simple:
     strategy:
       matrix:
-        matrix: ${{ fromJson(needs.setup.outputs.matrix) }}
+        matrix: ${{ fromJson(needs.setup-simple.outputs.matrix) }}
     runs-on: ubuntu-latest
     needs: [setup-simple]
     steps:
