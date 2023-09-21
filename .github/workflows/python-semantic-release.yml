@@ -3,7 +3,7 @@ name: python-semantic-release
 on:
   push:
     branches:
-      - main
+      - mainXXX # TODO: fix the incompatibility with branch protection.
 
 jobs:
   release:
