@@ -25,7 +25,7 @@
 |[labeler](.github/workflows/labeler.yml)|pull_request|Add `label` to a pr based on the title.|
 |[poetry-cache](.github/workflows/poetry-cache.yml)|pull_request|cache poetry and python dependencies managed by poetry.|
 |[pre-commit](.github/workflows/pre-commit.yml)|pull_request|Run `pre-commit`.|
-|[s3-local](.github/workflows/s3-local.yml)|pull_request|Use `minio` for s3 mock in GitHub Actions. **This workflow is broken.**|
+|[s3-local](.github/workflows/s3-local.yml)|pull_request|Use `minio` for s3 mock in GitHub Actions. **This workflow is broken❌.**|
 |[terrraform-fmt](.github/workflows/terraform-fmt.yml)|pull_request|Run `terraform fmt` for `**.tf`.|
 
 ### 2. release
