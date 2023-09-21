@@ -75,3 +75,6 @@ jobs:
         run: echo succeed
 
       - run: echo ${{ steps.suceed_step.outcome }} # success
+
+      - if: steps.suceed_step.outcome == 'failure'
+        run: exit 1
