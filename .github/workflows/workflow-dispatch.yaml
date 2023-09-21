@@ -17,9 +17,6 @@ on:
         type: environment
         required: true
         default: development
-        options:
-        - production
-        - development
 jobs:
   print-inputs-from-remote-workflow:
     uses: nakamasato/github-actions-practice/.github/workflows/print-workflow-dispatch-inputs.yaml@main
@@ -39,5 +36,5 @@ jobs:
     environment: ${{ inputs.environment }}
     steps:
       - run: |
-          echo "### condition" >> $GITHUB_STEP_SUMMARY
-          echo "- branch: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "### condition" >> "$GITHUB_STEP_SUMMARY"
+          echo "- branch: ${{ github.ref_name }}" >> "$GITHUB_STEP_SUMMARY"

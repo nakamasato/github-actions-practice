@@ -17,9 +17,11 @@ jobs:
     steps:
       - name: write message
         run: |
-          echo "::notice:: inputs ${{ inputs }}"
+          echo "::notice:: inputs ${{ inputs.environment }} ${{ inputs.logLevel }}"
       - name: job summary
         run: |
-          echo "### inputs" >> $GITHUB_STEP_SUMMARY
-          echo "- environment: ${{ inputs.environment }}" >> $GITHUB_STEP_SUMMARY
-          echo "- logLevel: ${{ inputs.logLevel }}" >> $GITHUB_STEP_SUMMARY
+          {
+            echo "### inputs"
+            echo "- environment: ${{ inputs.environment }}"
+            echo "- logLevel: ${{ inputs.logLevel }}"
+          } >> "$GITHUB_STEP_SUMMARY"

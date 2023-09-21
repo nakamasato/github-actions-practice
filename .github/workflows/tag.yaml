@@ -12,4 +12,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: create a file
-        run: echo "$(date)"
+        run: date

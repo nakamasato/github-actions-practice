@@ -38,13 +38,6 @@ jobs:
         continue-on-error: true
         run: echo succeed
 
-      - name: post process regardless of sucess or failure
-        run: echo ${{ steps.fail_step.outcome }} # success
-
-      - name: make it fail when the first step failed
-        if: steps.fail_step.outcome == 'failure'
-        run: exit 1
-
   fail-with-post-process-for-failure:
     if: github.event.pull_request.draft == true
     runs-on: ubuntu-latest
@@ -63,10 +56,6 @@ jobs:
       - id: succeed_step
         run: echo succeed
 
-      - if: failure()
-        name: post process only called when the first step fails
-        run: echo ${{ steps.fail_step.outcome }}
-
   succeed:
     runs-on: ubuntu-latest
     steps:
@@ -75,6 +64,3 @@ jobs:
         run: echo succeed
 
       - run: echo ${{ steps.suceed_step.outcome }} # success
-
-      - if: steps.fail_step.outcome == 'failure'
-        run: exit 1

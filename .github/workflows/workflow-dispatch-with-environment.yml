@@ -19,11 +19,11 @@ jobs:
     steps:
       - name: job summary
         run: |
-          echo "### inputs" >> $GITHUB_STEP_SUMMARY
-          echo "- logLevel: ${{ inputs.logLevel }}" >> $GITHUB_STEP_SUMMARY
+          echo "### inputs" >> "$GITHUB_STEP_SUMMARY"
+          echo "- logLevel: ${{ inputs.logLevel }}" >> "$GITHUB_STEP_SUMMARY"
   run:
     needs: [print-inputs]
     runs-on: ubuntu-latest
     environment: production
     steps:
-      - run: echo ${{ inputs.logLevel }}
+      - run: echo "${{ inputs.logLevel }}"

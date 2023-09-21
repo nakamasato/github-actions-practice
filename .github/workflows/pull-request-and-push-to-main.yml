@@ -18,9 +18,9 @@ jobs:
         id: set-conf
         run: |
           if [[ "${{ github.event_name }}" = "pull_request" ]]; then
-            echo "ENV=dev" >> $GITHUB_OUTPUT
+            echo "ENV=dev" >> "$GITHUB_OUTPUT"
           else
-            echo "ENV=prod" >> $GITHUB_OUTPUT
+            echo "ENV=prod" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Process
@@ -36,13 +36,13 @@ jobs:
         if: github.event_name == 'pull_request'
         id: set-conf-dev
         run: |
-          echo "ENV=dev" >> $GITHUB_OUTPUT
+          echo "ENV=dev" >> "$GITHUB_OUTPUT"
 
       - name: Set upload config
         if: github.event_name == 'push'
         id: set-conf-prod
         run: |
-          echo "ENV=prod" >> $GITHUB_OUTPUT
+          echo "ENV=prod" >> "$GITHUB_OUTPUT"
 
       - name: Process
         run: |
