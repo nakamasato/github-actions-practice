@@ -37,13 +37,13 @@ jobs:
           URL: ${{ github.event.pull_request.comments_url }}
         working-directory: .github/actions
         run: |
-          echo "{\"body\": \"$(cat $PR_COMMENT_CONTENT_TMP_FILE)\"}"
+          echo "{\"body\": \"$(cat "$PR_COMMENT_CONTENT_TMP_FILE")\"}"
           status_code=$(curl -o /dev/null -w '%{http_code}\n' -s -X POST \
               -H "Authorization: token ${GITHUB_TOKEN}" \
-              -d "{\"body\": \"$(cat $PR_COMMENT_CONTENT_TMP_FILE)\"}" \
-              ${URL})
-          echo $status_code
-          if [[ $status_code != 201 ]];then
+              -d "{\"body\": \"$(cat "$PR_COMMENT_CONTENT_TMP_FILE")\"}" \
+              "${URL}")
+          echo "$status_code"
+          if [[ "$status_code" != 201 ]];then
               echo "failed to post with comment:"
               exit 1
           fi
@@ -53,7 +53,7 @@ jobs:
         run: |
           PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
           echo "pr: $PR_NUMBER"
-          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
+          echo "PR_NUMBER=$PR_NUMBER" >> "$GITHUB_ENV"
 
       - name: Approve Pull Request
         if: ${{ steps.check-change-and-create-comment.outputs.AUTO_APPROVE == '1' }}

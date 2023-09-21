@@ -12,9 +12,9 @@ jobs:
       - id: set-matrix
         run: |
           if [[ "${{ github.event_name }}" = "pull_request" ]]; then
-            echo "matrix=[\"pull_request1\", \"pull_request2\"]" >> $GITHUB_OUTPUT
+            echo "matrix=[\"pull_request1\", \"pull_request2\"]" >> "$GITHUB_OUTPUT"
           elif [[ "${{ github.event_name }}" = "push" ]]; then
-            echo "matrix=[\"push1\", \"push2\"]" >> $GITHUB_OUTPUT
+            echo "matrix=[\"push1\", \"push2\"]" >> "$GITHUB_OUTPUT"
           fi
   execute:
     strategy:

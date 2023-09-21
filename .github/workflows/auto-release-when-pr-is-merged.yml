@@ -16,7 +16,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - name: prepare release tag
-        run: echo "release_tag=v$(date '+%Y%m%d_%H%M%S')" >> $GITHUB_ENV
+        run: echo "release_tag=v$(date '+%Y%m%d_%H%M%S')" >> "$GITHUB_ENV"
       - uses: actions/github-script@v6
         with:
           script: |
@@ -81,7 +81,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          sh $PUBLISH_RELEASE_SCRIPT
+          sh "$PUBLISH_RELEASE_SCRIPT"
 
           release_tag=$(gh release view --json tagName | jq -r .tagName)
           release_url=$(gh release view --json url | jq -r .url)

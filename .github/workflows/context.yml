@@ -22,7 +22,7 @@ jobs:
       - name: github.event.action
         run: |
           echo "- github.event.action : ${{ github.event.action }}"
-          echo "- github.event.action : ${{ github.event.action }}" >> $GITHUB_STEP_SUMMARY
+          echo "- github.event.action : ${{ github.event.action }}" >> "$GITHUB_STEP_SUMMARY"
 
   label:
     runs-on: ubuntu-latest
@@ -33,9 +33,9 @@ jobs:
         id: skip
         name: ignore unrelavant labels
         run: |
-          echo "SKIP=TRUE" >> $GITHUB_ENV
-          echo "- github.event.action : ${{ github.event.action }}" >> $GITHUB_STEP_SUMMARY
-          echo "- github.event.label.name : ${{ github.event.label.name }}" >> $GITHUB_STEP_SUMMARY
+          echo "SKIP=TRUE" >> "$GITHUB_ENV"
+          echo "- github.event.action : ${{ github.event.action }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- github.event.label.name : ${{ github.event.label.name }}" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Dump GitHub context
         if: ${{ env.SKIP != 'TRUE' }}
@@ -43,9 +43,9 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: |
           echo "$GITHUB_CONTEXT"
-          echo "- github.event.action : ${{ github.event.action }}" >> $GITHUB_STEP_SUMMARY
+          echo "- github.event.action : ${{ github.event.action }}" >> "$GITHUB_STEP_SUMMARY"
 
       - if: ${{ contains( github.event.pull_request.labels.*.name, 'test') }}
         name: check if a pr has test label
         run: |
-          echo "- github.event.pull_request.labels has 'test'" >> $GITHUB_STEP_SUMMARY
+          echo "- github.event.pull_request.labels has 'test'" >> "$GITHUB_STEP_SUMMARY"

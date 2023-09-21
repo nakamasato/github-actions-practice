@@ -25,9 +25,9 @@ jobs:
               - 'static/prod/**'
       - id: matrix
         run: |
-          echo "dev: ${{ steps.changed-files-yaml.outputs.dev_any_changed }}" >> $GITHUB_STEP_SUMMARY
-          echo "prod: ${{ steps.changed-files-yaml.outputs.prod_any_changed }}" >> $GITHUB_STEP_SUMMARY
-          echo "CHANGED_ENVS=$(echo "[{\"env\": \"dev\", \"changed\": ${{ steps.changed-files-yaml.outputs.dev_any_changed }}}, {\"env\":\"prod\", \"changed\": ${{ steps.changed-files-yaml.outputs.prod_any_changed }} }]" | jq -c 'map(select( .changed ).env)')" >> $GITHUB_OUTPUT
+          echo "dev: ${{ steps.changed-files-yaml.outputs.dev_any_changed }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "prod: ${{ steps.changed-files-yaml.outputs.prod_any_changed }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "CHANGED_ENVS=$(echo "[{\"env\": \"dev\", \"changed\": ${{ steps.changed-files-yaml.outputs.dev_any_changed }}}, {\"env\":\"prod\", \"changed\": ${{ steps.changed-files-yaml.outputs.prod_any_changed }} }]" | jq -c 'map(select( .changed ).env)')" >> "$GITHUB_OUTPUT"
 
   execute:
     if: needs.setup.outputs.CHANGED_ENVS != '[]'
