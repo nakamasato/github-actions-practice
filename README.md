@@ -9,10 +9,11 @@
 
 |GitHub Actions|Trigger|Description|
 |---|---|---|
-|**artifact**| pull_request | Upload `github-sha.txt` to artifact. Wanted to download if exists but not worked -> commented out.|
-|**auto-approve**|pull_request| If change is under `automatic-approval`, any PR will be automatically approved.|
-|**auto-assign**|pull_request| Set PR author to the assignee when a PR is created.|
-|**auto-merge**|pull_request| If change is under `automatic-merge`, any PR will be automatically merged.|
+|[actionlint](.github/workflows/actionlint.yml)| pull_request | [actionlint](https://github.com/rhysd/actionlint) lint for GitHub Actions workflows|
+|[artifact](.github/workflows/artifact.yml)| pull_request | Upload `github-sha.txt` to artifact. Wanted to download if exists but not worked -> commented out.|
+|[auto-approve](.github/workflows/auto-approve.yml)|pull_request| If change is under `automatic-approval`, any PR will be automatically approved.|
+|[auto-assign](.github/workflows/auto-assign.yml)|pull_request| Set PR author to the assignee when a PR is created.|
+|[auto-merge](.github/workflows/auto-merge.yml)|pull_request| If change is under `automatic-merge`, any PR will be automatically merged.|
 |[auto-release-when-pr-is-merged](.github/workflows/auto-release-when-pr-is-merged.yml)|pull_request|If a PR is merged, create a draft release (publish a release if there's `release` label) and leave a comment on the PR. |
 |[conditional-auto-approve](.github/workflows/conditional-auto-approve.yml)|pull_request|If PR's changed files and changes match `AUTO_APPROVE_ALLOWED_REGEX` and `AUTO_APPROVE_FILE_PATH_REGEX` respectively, the pr will be automatically merged. |
 |[check-actions-name](.github/workflows/check-actions-name.yml)|pull_request|Check actions file name and the name in yaml file are same.|
@@ -21,10 +22,10 @@
 |[docker-layer-cache](.github/workflows/docker-layer-cache.yml)|pull_request|Use `satackey/action-docker-layer-caching`.|
 |[envvar](.github/workflows/envvar.yml)|pull_request|How to set env var and use it.|
 |[keep-only-one-comment-on-pr](.github/workflows/keep-only-one-comment-on-pr.yml)|pull_request|Create a comment if not exist. Otherwise, update the existing comment.|
-|**labeler**|pull_request|Add `label` to a pr based on the title.|
+|[labeler](.github/workflows/labeler.yml)|pull_request|Add `label` to a pr based on the title.|
 |[poetry-cache](.github/workflows/poetry-cache.yml)|pull_request|cache poetry and python dependencies managed by poetry.|
 |[pre-commit](.github/workflows/pre-commit.yml)|pull_request|Run `pre-commit`.|
-|[s3-local](.github/workflows/s3-local.yml)|pull_request|Use `minio` for s3 mock in GitHub Actions. **This workflow is broken.**|
+|[s3-local](.github/workflows/s3-local.yml)|pull_request|Use `minio` for s3 mock in GitHub Actions. **This workflow is broken❌.**|
 |[terrraform-fmt](.github/workflows/terraform-fmt.yml)|pull_request|Run `terraform fmt` for `**.tf`.|
 
 ### 2. release
@@ -44,6 +45,7 @@
 |**branch-and-tag**|push| If change is pushed to `merge` branch or tagged as `v1.*`, the branch will be merged to `main` branch.|
 |**pip-cache**|push|Use `actions/cache` for caching `~/.cache/pip`|
 |**pip-no-cache**|push|For comparison with **pip-cache**|
+|[python-semantic-release](.github/workflows/python-semantic-release.yml)|push|❌ not compatible with branch protection|
 
 ### 4. schedule
 

@@ -2,8 +2,6 @@ name: auto-assign
 
 on:
   pull_request:
-    types:
-      - opened
 
 jobs:
   assign:
@@ -12,8 +10,9 @@ jobs:
     steps:
       - name: Set assignees
         run: |
-          assignee_count=$(echo "${{ github.event_path }}" | jq '.pull_request.assignees | length')
-          if [[ 0 == "$assignee_count" ]]; then
+          assignee_count=$(jq '.pull_request.assignees | length' "${{ github.event_path }}")
+          echo "$assignee_count"
+          if [[ "0" = "$assignee_count" ]]; then
             curl -X POST \
                  -H "Content-Type: application/json" \
                  -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
