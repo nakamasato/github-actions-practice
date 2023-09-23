@@ -1,0 +1,11 @@
+name: pull-request-title-starts-with
+
+on:
+  pull_request:
+
+jobs:
+  if: ! startsWith(${{ github.event.pull_request.title }}, "fix(deps): update dependency langchain to")
+  check:
+    runs-on:
+    steps:
+      - run: echo "run"
