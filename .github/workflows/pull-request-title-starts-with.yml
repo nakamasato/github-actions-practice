@@ -4,8 +4,14 @@ on:
   pull_request:
 
 jobs:
-  check:
+  skip-langchain-update:
     if: "! startsWith(github.event.pull_request.title, 'fix(deps): update dependency langchain to')"
     runs-on: ubuntu-latest
     steps:
-      - run: echo "run"
+      - run: echo "not updating langchain"
+
+  langchain-update:
+    if: "startsWith(github.event.pull_request.title, 'fix(deps): update dependency langchain to')"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "update langchain"
