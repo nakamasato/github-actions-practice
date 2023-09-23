@@ -5,7 +5,7 @@ on:
 
 jobs:
   check:
-    if: "startsWith(github.event.pull_request.title, 'fix(deps): update dependency langchain to')"
+    if: "! startsWith(github.event.pull_request.title, 'fix(deps): update dependency langchain to')"
     runs-on: ubuntu-latest
     steps:
       - run: echo "run"
