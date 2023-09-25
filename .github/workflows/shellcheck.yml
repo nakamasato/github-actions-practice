@@ -21,8 +21,10 @@ jobs:
 
       - name: run shellcheck for all changed shell scripts
         if: steps.changed-files.outputs.shell_any_changed == 'true'
+        env:
+          CHANGED_FILES: ${{ steps.changed-files.outputs.shell_all_changed_files }}
         run: |
-          for file in "${{ steps.changed-files.outputs.shell_all_changed_files }}"; do
+          for file in "$CHANGED_FILES"; do
             echo "$file was changed"
             shellcheck "$file"
           done
