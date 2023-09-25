@@ -1,1 +1,3 @@
-echo "aaa"
+#!/bin/bash
+
+echo "test"
