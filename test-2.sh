@@ -1,1 +1,3 @@
-echo "2"
+#!/bin/bash
+
+echo "test-2"
