@@ -22,7 +22,8 @@ jobs:
       - name: run shellcheck for all changed shell scripts
         if: steps.changed-files.outputs.shell_any_changed == 'true'
         run: |
-          # shellcheck disable=SC2043 https://github.com/rhysd/actionlint/issues/355
+          # https://github.com/rhysd/actionlint/issues/355
+          # shellcheck disable=SC2043
           for file in ${{ steps.changed-files.outputs.shell_all_changed_files }}; do
             echo "$file was changed"
             shellcheck "$file"
