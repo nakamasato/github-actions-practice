@@ -17,7 +17,7 @@ jobs:
         run: |
           latest_version=$(curl --silent "https://api.github.com/repos/kubernetes-sigs/kubebuilder/releases" | jq -r '. | sort_by(.published_at) | reverse | .[] | select(.tag_name | test("^v[0-9]+.[0-9]+.0$") ) | .tag_name' | head -1)
           latest_minor_version=${latest_version%.*}
-          current_version=$(grep kubebuilder README.md | sed 's/.*\(v[0-9]\+.[0-9]\+.[0-9]\+\).*/\1/')
+          current_version=$(grep '\[kubebuilder\]' README.md | sed 's/.*\(v[0-9]\+.[0-9]\+.[0-9]\+\).*/\1/')
           current_minor_version=${current_version%.*}          
           echo "current: $current_version ($current_minor_version), latest: $latest_version ($latest_minor_version)"
           if [ "$current_minor_version" = "$latest_minor_version" ]; then
