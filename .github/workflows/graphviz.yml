@@ -4,13 +4,23 @@ on:
   pull_request:
 
 jobs:
-  install:
+  setup-graphviz:
     runs-on: ubuntu-latest
     steps:
       - name: install graphviz
         uses: ts-graphviz/setup-graphviz@v1
         with:
           ubuntu-skip-apt-update: 'false' # default false
+
+      - name: check version
+        run: dot -V
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - name: install graphviz
+        run: |
+          sudo apt-get update
+          sudo apt-get install graphviz
 
       - name: check version
         run: dot -V
