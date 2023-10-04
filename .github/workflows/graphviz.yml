@@ -9,6 +9,8 @@ jobs:
     steps:
       - name: install graphviz
         uses: ts-graphviz/setup-graphviz@v1
+        with:
+          ubuntu-skip-apt-update: 'false' # default false
 
       - name: check version
         run: dot -V
