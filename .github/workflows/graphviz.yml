@@ -1,0 +1,13 @@
+name: graphviz
+
+on:
+  pull_request:
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - name: install graphviz
+        run: |
+          apt install -y graphviz
+          dot -V
