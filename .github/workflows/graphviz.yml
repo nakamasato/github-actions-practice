@@ -19,8 +19,9 @@ jobs:
     steps:
       - name: install graphviz
         run: |
-          sudo apt-get update
-          sudo apt-get install graphviz
+          # sudo apt-get update
+          wget https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/9.0.0/ubuntu_20.04_graphviz-9.0.0-cmake.deb
+          sudo apt-get install -y ubuntu_20.04_graphviz-9.0.0-cmake.deb
 
       - name: check version
         run: dot -V
