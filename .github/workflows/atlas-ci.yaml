@@ -31,7 +31,7 @@ jobs:
       - uses: actions/checkout@v4.1.0
         with:
           fetch-depth: 0 # Mandatory unless "latest" is set below.
-      - uses: ariga/atlas-action@v0
+      - uses: ariga/atlas-action@v1
         with:
           dir: atlas/migrations
           dir-format: atlas # Or: golang-migrate, liquibase, flyway, goose, dbmate
