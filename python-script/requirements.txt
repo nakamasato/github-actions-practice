@@ -1,4 +1,4 @@
-awscli==1.29.81
+awscli==1.29.82
 pytest-cov==4.1.0
 flake8==6.1.0
 flake8-docstrings==1.7.0
