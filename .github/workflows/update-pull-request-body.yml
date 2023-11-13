@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
       - name: update pull request body
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         env:
           pr_number: 316
         with:

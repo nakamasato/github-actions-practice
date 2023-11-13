@@ -26,7 +26,7 @@ jobs:
           sed -i "s/.*Last Merged PR: \(.*\)/- Last Merged PR: #${{ github.event.pull_request.number }}/" README.md
 
       - name: leave a comment to the original PR
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             github.rest.issues.createComment({
@@ -115,7 +115,7 @@ jobs:
 
       - name: leave a comment to the original PR
         if: steps.get_pr_number.outputs.pr_number != ''
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             github.rest.issues.createComment({
