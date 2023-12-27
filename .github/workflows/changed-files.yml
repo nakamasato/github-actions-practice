@@ -10,7 +10,7 @@ jobs:
         with:
           fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
       - name: add test.txt file
-        run: touch test.txt
+        run: touch test-$(date '+%s').txt
 
       - name: get all changes
         id: changed-files-yaml
@@ -21,4 +21,5 @@ jobs:
               - '*'
       - name: output change
         run: |
-          echo "changed: ${{ steps.changed-files-yaml.outputs.test_any_changed }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "any_changed: ${{ steps.changed-files-yaml.outputs.test_any_changed }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "all_changed_files: ${{ steps.changed-files-yaml.outputs.test_all_changed_files }}" >> "$GITHUB_STEP_SUMMARY"
