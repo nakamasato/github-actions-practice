@@ -16,9 +16,11 @@ jobs:
         id: changed-files-yaml
         uses: tj-actions/changed-files@v41
         with:
+          sha: ${{ github.sha }}
+          base_sha: ${{ github.head_sha }}
           files_yaml: |
             test:
-              - '*'
+              - 'test-*'
       - name: output change
         run: |
           echo "any_changed: ${{ steps.changed-files-yaml.outputs.test_any_changed }}" >> "$GITHUB_STEP_SUMMARY"
