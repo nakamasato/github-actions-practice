@@ -1,0 +1,24 @@
+name: changed-files
+on:
+  pull_request:
+
+jobs:
+  change-on-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+        with:
+          fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
+      - name: add test.txt file
+        run: touch test.txt
+
+      - name: get all changes
+        id: changed-files-yaml
+        uses: tj-actions/changed-files@v41
+        with:
+          files_yaml: |
+            test:
+              - '*'
+      - name: output change
+        run: |
+          echo "changed: ${{ steps.changed-files-yaml.outputs.test_any_changed }}" >> "$GITHUB_STEP_SUMMARY"
