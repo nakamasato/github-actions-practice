@@ -12,7 +12,7 @@ jobs:
       - name: add test.txt file
         id: add-file
         run: |
-          touch test-$(date '+%s').txt
+          touch "test-$(date '+%s').txt"
           if [[ -n "$(git status --porcelain)" ]]; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
           else
@@ -30,6 +30,8 @@ jobs:
               - 'test-*'
       - name: output change
         run: |
-          echo "any_changed: ${{ steps.changed-files-yaml.outputs.test_any_changed }}" >> "$GITHUB_STEP_SUMMARY"
-          echo "all_changed_files: ${{ steps.changed-files-yaml.outputs.test_all_changed_files }}" >> "$GITHUB_STEP_SUMMARY"
-          echo "add-file: ${{ steps.add-file.outputs.changed }}" >> "$GITHUB_STEP_SUMMARY"
+          {
+            echo "any_changed: ${{ steps.changed-files-yaml.outputs.test_any_changed }}";
+            echo "all_changed_files: ${{ steps.changed-files-yaml.outputs.test_all_changed_files }}";
+            echo "add-file: ${{ steps.add-file.outputs.changed }}";
+          } >> "$GITHUB_STEP_SUMMARY"
