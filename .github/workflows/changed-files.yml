@@ -1,0 +1,37 @@
+name: changed-files
+on:
+  pull_request:
+
+jobs:
+  change-on-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+        with:
+          fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
+      - name: add test.txt file
+        id: add-file
+        run: |
+          touch "test-$(date '+%s').txt"
+          if [[ -n "$(git status --porcelain)" ]]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: get all changes
+        id: changed-files-yaml
+        uses: tj-actions/changed-files@v41
+        with:
+          sha: ${{ github.sha }}
+          base_sha: ${{ github.head_ref }}
+          files_yaml: |
+            test:
+              - 'test-*'
+      - name: output change
+        run: |
+          {
+            echo "any_changed: ${{ steps.changed-files-yaml.outputs.test_any_changed }}";
+            echo "all_changed_files: ${{ steps.changed-files-yaml.outputs.test_all_changed_files }}";
+            echo "add-file: ${{ steps.add-file.outputs.changed }}";
+          } >> "$GITHUB_STEP_SUMMARY"
