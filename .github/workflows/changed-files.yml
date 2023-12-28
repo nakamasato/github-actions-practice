@@ -24,7 +24,7 @@ jobs:
         uses: tj-actions/changed-files@v41
         with:
           sha: ${{ github.sha }}
-          base_sha: ${{ github.head_sha }}
+          base_sha: ${{ github.head_ref }}
           files_yaml: |
             test:
               - 'test-*'
