@@ -7,8 +7,8 @@
 
 ### 1. pull_request
 
-- `github.sha` is not the latest commit sha [ref](https://sue445.hatenablog.com/entry/2021/01/07/004835)
-- `github.event.pull_request.head.sha` is the sha of the lastest commit [ref](https://github.com/orgs/community/discussions/26676)
+- `github.sha` is not the latest commit sha [ref](https://sue445.hatenablog.com/entry/2021/01/07/004835) <- you can use this sha for the `closed` type to get the latest commit on the `main` branch.
+- `github.event.pull_request.head.sha` is the sha of the lastest commit on the pr branch [ref](https://github.com/orgs/community/discussions/26676)
 
 |GitHub Actions|Trigger|Description|
 |---|---|---|
