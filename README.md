@@ -30,6 +30,7 @@
 |[pre-commit](.github/workflows/pre-commit.yml)|pull_request|Run `pre-commit`.|
 |[s3-local](.github/workflows/s3-local.yml)|pull_request|Use `minio` for s3 mock in GitHub Actions. **This workflow is broken❌.**|
 |[terrraform-fmt](.github/workflows/terraform-fmt.yml)|pull_request|Run `terraform fmt` for `**.tf`.|
+|[changed-files](.github/workflows/changed-files.yml)|pull_request|do sth for changed files/dir using https://github.com/tj-actions/changed-files|
 
 ### 2. release
 
