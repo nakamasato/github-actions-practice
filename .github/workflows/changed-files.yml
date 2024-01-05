@@ -84,5 +84,6 @@ jobs:
       - get-changed-dirs
     steps:
       - uses: actions/checkout@v3
-      - run: |
+      - name: "do sth on changed dir ${{ matrix.dir }}"
+        run: |
           echo "do sth on changed dir ${{ matrix.dir }}" >> "$GITHUB_STEP_SUMMARY"
