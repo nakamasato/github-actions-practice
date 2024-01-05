@@ -48,7 +48,7 @@
 |**branch-and-tag**|push| If change is pushed to `merge` branch or tagged as `v1.*`, the branch will be merged to `main` branch.|
 |**pip-cache**|push|Use `actions/cache` for caching `~/.cache/pip`|
 |**pip-no-cache**|push|For comparison with **pip-cache**|
-|[python-semantic-release](.github/workflows/python-semantic-release.yml)|push|❌ not compatible with branch protection|
+|[python-semantic-release](.github/workflows/python-semantic-release.yml)|push|❌ not compatible with branch protection [ref](https://github.com/semantic-release/github/issues/175)|
 
 ### 4. schedule
 
