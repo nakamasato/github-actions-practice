@@ -59,7 +59,7 @@ jobs:
 
       - name: check output
         run: |
-          echo "changed_dirs: ${{ steps.changed-files.outputs.all_changed_files }}"
+          echo "changed_dirs: ${{ steps.changed-files.outputs.all_changed_files }}" >> "$GITHUB_STEP_SUMMARY"
 
   do-sth-on-changed-dirs:
     runs-on: ubuntu-latest
