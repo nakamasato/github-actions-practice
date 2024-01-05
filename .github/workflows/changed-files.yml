@@ -54,8 +54,10 @@ jobs:
           dir_names: true
           dir_names_max_depth: 2 # e.g. check-change/app
           json: true
+          escape_json: false
           files: 'check-change/**'
           files_ignore: '**/README.md'
+        # Reference: https://github.com/tj-actions/changed-files/blob/main/.github/workflows/matrix-test.yml
 
       - name: check output
         run: |
@@ -66,12 +68,10 @@ jobs:
     if: ${{ needs.get-changed-dirs.outputs.changed_dirs != '[]' }}  # Without it, the strategy parser will fail if the changed_directories is empty.
     strategy:
       matrix:
-        dir: ["check-change/test-2"] # ${{ fromJson(needs.get-changed-dirs.outputs.changed_dirs) }}
+        dir: ${{ fromJson(needs.get-changed-dirs.outputs.changed_dirs) }}
     needs:
       - get-changed-dirs
     steps:
       - uses: actions/checkout@v3
       - run: |
           echo "do sth on changed dir ${{ matrix.dir }}" >> "$GITHUB_STEP_SUMMARY"
-      - run: |
-          echo "json: ${{ fromJson(needs.get-changed-dirs.outputs.changed_dirs) }}" >> >> "$GITHUB_STEP_SUMMARY"
