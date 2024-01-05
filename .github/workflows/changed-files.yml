@@ -66,7 +66,7 @@ jobs:
     if: ${{ needs.get-changed-dirs.outputs.changed_dirs != '[]' }}  # Without it, the strategy parser will fail if the changed_directories is empty.
     strategy:
       matrix:
-        dir: ${{ fromJson(needs.get-changed-dirs.outputs.changed_dirs) }}
+        dir: ${{ needs.get-changed-dirs.outputs.changed_dirs }}
     needs:
       - get-changed-dirs
     steps:
