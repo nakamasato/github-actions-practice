@@ -60,7 +60,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ needs.get-changed-dirs.outputs.changed_dirs != '' }}  # Without it, the strategy parser will fail if the changed_directories is empty.
     strategy:
-      matrix: 
+      matrix:
         dir: ${{ fromJson(needs.get-changed-dirs.outputs.changed_dirs) }}
     needs:
       - get-changed-dirs
