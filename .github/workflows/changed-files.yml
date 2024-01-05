@@ -2,11 +2,11 @@ name: changed-files
 on:
   pull_request:
     branches:
-      - main    
+      - main
   push:
     branches:
       - main
-  
+
 
 env:
   LOCAL_DIR_FOR_SYNC: check-change
