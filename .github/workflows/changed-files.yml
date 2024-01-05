@@ -55,7 +55,7 @@ jobs:
           dir_names_max_depth: 2 # e.g. check-change/app
           json: true
           files: 'check-change/**'
-          files_ignore: 'README.md'
+          files_ignore: '**/README.md'
 
       - name: check output
         run: |
