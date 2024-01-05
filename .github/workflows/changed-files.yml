@@ -3,12 +3,13 @@ on:
   pull_request:
 
 jobs:
-  change-on-branch:
+  changes-in-ga-steps:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
         with:
           fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
+
       - name: add test.txt file
         id: add-file
         run: |
@@ -28,6 +29,7 @@ jobs:
           files_yaml: |
             test:
               - 'test-*'
+
       - name: output change
         run: |
           {
@@ -35,3 +37,33 @@ jobs:
             echo "all_changed_files: ${{ steps.changed-files-yaml.outputs.test_all_changed_files }}";
             echo "add-file: ${{ steps.add-file.outputs.changed }}";
           } >> "$GITHUB_STEP_SUMMARY"
+
+  get-changed-dirs:
+    runs-on: [ubuntu-latest]
+    outputs:
+      changed_dirs: ${{ steps.changed-files.outputs.all_changed_files }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
+
+      - name: get all changes
+        id: changed-files
+        uses: tj-actions/changed-files@v41
+        with:
+          dir_names: true
+          dir_names_max_depth: 2 # e.g. check-change/app
+          json: true
+          files: 'check-change/**'
+
+  do-sth-on-changed-dirs:
+    runs-on: ubuntu-latest
+    if: ${{ needs.get-changed-dirs.outputs.changed_dirs != '' }}  # Without it, the strategy parser will fail if the changed_directories is empty.
+    strategy:
+      matrix: 
+        dir: ${{ fromJson(needs.get-changed-dirs.outputs.changed_dirs) }}
+    needs:
+      - get-changed-dirs
+    steps:
+      - uses: actions/checkout@v3
+      - run: echo "do sth on changed dir ${{ matrix.dir }}"
