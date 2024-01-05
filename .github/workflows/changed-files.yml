@@ -56,6 +56,10 @@ jobs:
           json: true
           files: 'check-change/**'
 
+      - name: check output
+        run: |
+          echo "changed_dirs: ${{ steps.changed-files.outputs.all_changed_files }}"
+
   do-sth-on-changed-dirs:
     runs-on: ubuntu-latest
     if: ${{ needs.get-changed-dirs.outputs.changed_dirs != '' }}  # Without it, the strategy parser will fail if the changed_directories is empty.
