@@ -20,9 +20,15 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
       - name: github.event.action
+        env:
+          PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
         run: |
           echo "- github.event.action : ${{ github.event.action }}"
-          echo "- github.event.action : ${{ github.event.action }}" >> "$GITHUB_STEP_SUMMARY"
+          {
+            echo "- github.event.action : ${{ github.event.action }}"
+            echo "- github.ref_name : ${{ github.ref_name }}"
+            echo "- github.event.pull_request.head.ref : $PR_HEAD_REF"
+          } >> "$GITHUB_STEP_SUMMARY"
 
   label:
     runs-on: ubuntu-latest
