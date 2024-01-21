@@ -23,6 +23,8 @@ jobs:
         run: |
           echo "- github.event.action : ${{ github.event.action }}"
           echo "- github.event.action : ${{ github.event.action }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- github.ref_name : ${{ github.ref_name }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- github.event.pull_request.head.ref : ${{ github.event.pull_request.head.ref }}" >> "$GITHUB_STEP_SUMMARY"
 
   label:
     runs-on: ubuntu-latest
