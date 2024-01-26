@@ -1,3 +1,4 @@
+# https://zenn.dev/shunsuke_suzuki/articles/improve-cicd-with-github-comment
 name: github-comment
 
 on: pull_request
@@ -6,19 +7,15 @@ jobs:
   comment:
     runs-on: ubuntu-latest
     steps:
-      - name: Set up github-comment
-        id: github-comment
+      - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3
+      - uses: aquaproj/aqua-installer@928a2ee4243a9ee8312d80dc8cbaca88fb602a91 # v2.2.0
+        with:
+          aqua_version: v2.17.0
+
+      - run: github-comment hide
         env:
-          GHCMT_VERSION: 4.1.0
-        run: |
-          cmdDir="${{ runner.tool_cache }}/github-comment/${GHCMT_VERSION}"
-          if [[ ! -x "${cmdDir}/github-comment" ]]; then
-            mkdir -p "${cmdDir}"
-            cd "${{ runner.temp }}"
-            curl -fLO "https://github.com/suzuki-shunsuke/github-comment/releases/download/v${GHCMT_VERSION}/github-comment_${GHCMT_VERSION}_linux_amd64.tar.gz"
-            tar -C "${cmdDir}" -xzf "github-comment_${GHCMT_VERSION}_linux_amd64.tar.gz"
-          fi
-          echo "${cmdDir}" >> "$GITHUB_PATH"
+          GITHUB_TOKEN: ${{ github.token }}
+
       - name: Check github-comment
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
