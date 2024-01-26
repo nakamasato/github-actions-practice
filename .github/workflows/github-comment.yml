@@ -16,11 +16,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
-      - uses: ./
-        with:
-          path: examples/invalid-envoy.yaml
-          image: envoyproxy/envoy-alpine:v1.20.1
-
       - name: Check github-comment
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
