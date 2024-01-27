@@ -1,14 +1,24 @@
 name: changed-files
 on:
   pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+
+env:
+  LOCAL_DIR_FOR_SYNC: check-change
 
 jobs:
-  change-on-branch:
+  changes-in-ga-steps:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
         with:
           fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
+
       - name: add test.txt file
         id: add-file
         run: |
@@ -21,13 +31,14 @@ jobs:
 
       - name: get all changes
         id: changed-files-yaml
-        uses: tj-actions/changed-files@v41
+        uses: tj-actions/changed-files@v42
         with:
           sha: ${{ github.sha }}
           base_sha: ${{ github.head_ref }}
           files_yaml: |
             test:
               - 'test-*'
+
       - name: output change
         run: |
           {
@@ -35,3 +46,44 @@ jobs:
             echo "all_changed_files: ${{ steps.changed-files-yaml.outputs.test_all_changed_files }}";
             echo "add-file: ${{ steps.add-file.outputs.changed }}";
           } >> "$GITHUB_STEP_SUMMARY"
+
+  get-changed-dirs:
+    runs-on: [ubuntu-latest]
+    outputs:
+      changed_dirs: ${{ steps.changed-files.outputs.all_changed_files }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
+
+      - name: get all changes
+        id: changed-files
+        uses: tj-actions/changed-files@v42
+        with:
+          dir_names: true
+          dir_names_max_depth: 2 # e.g. check-change/test-2
+          json: true
+          escape_json: false
+          files: "${{ env.LOCAL_DIR_FOR_SYNC }}/**"
+          files_ignore: '**/README.md'
+        # Reference: https://github.com/tj-actions/changed-files/blob/main/.github/workflows/matrix-test.yml
+
+      - name: check output
+        run: |
+          echo "changed_dirs: ${{ steps.changed-files.outputs.all_changed_files }}" >> "$GITHUB_STEP_SUMMARY"
+
+  do-sth-on-changed-dirs:
+    runs-on: ubuntu-latest
+    if: ${{ needs.get-changed-dirs.outputs.changed_dirs != '[]' }}  # Without it, the strategy parser will fail if the changed_directories is empty.
+    strategy:
+      matrix:
+        dir: ${{ fromJson(needs.get-changed-dirs.outputs.changed_dirs) }}
+        exclude: # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstrategymatrixexclude
+          - dir: check-change # exclude the parent dir (you can't use ${{ env.LOCAL_DIR_FOR_SYNC }} in matrix)
+    needs:
+      - get-changed-dirs
+    steps:
+      - uses: actions/checkout@v4
+      - name: "do sth on changed dir ${{ matrix.dir }}"
+        run: |
+          echo "do sth on changed dir ${{ matrix.dir }}" >> "$GITHUB_STEP_SUMMARY"

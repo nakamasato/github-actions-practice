@@ -1,11 +1,14 @@
 # github-actions-practice
 
-- Last Updated: 2023-09-15
-- Last Merged PR: #653
+- Last Updated: 2024-01-25
+- Last Merged PR: #960
 
 ## Github Actions Table
 
 ### 1. pull_request
+
+- `github.sha` is not the latest commit sha [ref](https://sue445.hatenablog.com/entry/2021/01/07/004835) <- you can use this sha for the `closed` type to get the latest commit on the `main` branch.
+- `github.event.pull_request.head.sha` is the sha of the lastest commit on the pr branch [ref](https://github.com/orgs/community/discussions/26676)
 
 |GitHub Actions|Trigger|Description|
 |---|---|---|
@@ -27,6 +30,7 @@
 |[pre-commit](.github/workflows/pre-commit.yml)|pull_request|Run `pre-commit`.|
 |[s3-local](.github/workflows/s3-local.yml)|pull_request|Use `minio` for s3 mock in GitHub Actions. **This workflow is broken❌.**|
 |[terrraform-fmt](.github/workflows/terraform-fmt.yml)|pull_request|Run `terraform fmt` for `**.tf`.|
+|[changed-files](.github/workflows/changed-files.yml)|pull_request|do sth for changed files/dir using https://github.com/tj-actions/changed-files|
 
 ### 2. release
 
@@ -45,7 +49,7 @@
 |**branch-and-tag**|push| If change is pushed to `merge` branch or tagged as `v1.*`, the branch will be merged to `main` branch.|
 |**pip-cache**|push|Use `actions/cache` for caching `~/.cache/pip`|
 |**pip-no-cache**|push|For comparison with **pip-cache**|
-|[python-semantic-release](.github/workflows/python-semantic-release.yml)|push|❌ not compatible with branch protection|
+|[python-semantic-release](.github/workflows/python-semantic-release.yml)|push|❌ not compatible with branch protection [ref](https://github.com/semantic-release/github/issues/175)|
 
 ### 4. schedule
 
