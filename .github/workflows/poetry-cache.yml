@@ -54,7 +54,7 @@ jobs:
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         shell: bash
         run: |
-          "$HOME/.local/bin/poetry" install --no-interaction --no-root
+          poetry install --no-interaction --no-root
 
       #----------------------------------------------
       # install your root project, if required
@@ -63,7 +63,7 @@ jobs:
         shell: bash
         run: |
           ls ~/.local/bin
-          "$HOME/.local/bin/poetry" install --no-interaction
+          poetry install --no-interaction
 
       - name: Run
         run: poetry run python main.py
