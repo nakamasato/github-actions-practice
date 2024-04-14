@@ -17,6 +17,8 @@ jobs:
       - id: setup-python
         name: Set up Python
         uses: actions/setup-python@v5 # version is determined by .python-version
+        with:
+          python-version: 3.9
 
       - name: Load cached Poetry installation
         id: cached-poetry
@@ -52,7 +54,6 @@ jobs:
       #----------------------------------------------
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        shell: bash
         run: |
           poetry install --no-interaction --no-root
 
@@ -60,7 +61,6 @@ jobs:
       # install your root project, if required
       #----------------------------------------------
       - name: Install project
-        shell: bash
         run: |
           ls ~/.local/bin
           poetry install --no-interaction
