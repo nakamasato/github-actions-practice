@@ -55,7 +55,6 @@ jobs:
         shell: bash
         run: |
           "$HOME/.local/bin/poetry" install --no-interaction --no-root
-  
       #----------------------------------------------
       # install your root project, if required
       #----------------------------------------------
