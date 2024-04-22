@@ -11,6 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-      - name: echo ${{ github.event.pull_request.edited }}
-        run: | 
-          echo "${{ github.event.pull_request.edited }}"
+      - name: echo ${{ github.event.pull_request.type }}
+        run: |
+          echo "${{ github.event.pull_request.type }}"
