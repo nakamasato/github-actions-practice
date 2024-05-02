@@ -21,12 +21,15 @@ jobs:
         name: Set up Python
         uses: actions/setup-python@v5 # version is determined by .python-version
 
+      - name: Check python version
+        run: echo "Python version is ${{ steps.setup-python.outputs.python-version }}"
+
       - name: Load cached Poetry installation
         id: cached-poetry
         uses: actions/cache@v4
         with:
           path: ~/.local  # the path depends on the OS
-          key: poetry-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}  # increment to reset cache
+          key: poetry-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}
 
       - name: Install poetry
         if: steps.cached-poetry.outputs.cache-hit != 'true'
