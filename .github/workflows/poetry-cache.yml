@@ -21,7 +21,7 @@ jobs:
         name: Set up Python
         uses: actions/setup-python@v5 # version is determined by .python-version
 
-      - name: Check python version
+      - name: Check python version ${{ steps.setup-python.outputs.python-version }}"
         run: echo "Python version is ${{ steps.setup-python.outputs.python-version }}"
 
       - name: Load cached Poetry installation
