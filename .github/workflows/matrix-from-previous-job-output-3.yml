@@ -1,7 +1,7 @@
 name: matrix-from-previous-job-output-3
 on:
   pull_request:
-  push
+  push:
 
 jobs:
   # From https://github.com/dorny/paths-filter
