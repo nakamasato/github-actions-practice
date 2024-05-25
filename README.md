@@ -80,6 +80,7 @@
 |---|---|---|
 |[matrix-from-previous-job-output](.github/workflows/matrix-from-previous-job-output.yml)|pull_request|matrix execution from the output of the previous step. `fromJson`|
 |[matrix-from-previous-job-output-2](.github/workflows/matrix-from-previous-job-output-2.yml)|pull_request, push|matrix execution from the output of the previous step. `fromJson`|
+|[matrix-from-previous-job-output-3](.github/workflows/matrix-from-previous-job-output-3.yml)|pull_request, push| do something for both `prod` and `dev` for `push` event and do sth only for `dev` for `pull_request` event|
 |[matrix-by-condition](.github/workflows/matrix-by-condition.yml)|pull_request, push|run for dev and prod when merged to main. run only for dev for pull_request.|
 
 ## CheatSheet
