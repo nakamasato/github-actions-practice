@@ -1,7 +1,7 @@
 name: matrix-from-previous-job-output-3
 on:
   pull_request:
-  push:
+  push
 
 jobs:
   # From https://github.com/dorny/paths-filter
@@ -9,32 +9,25 @@ jobs:
   set-matrix:
     runs-on: ubuntu-latest
     outputs:
-      # Expose matched filters as job 'app' output variable
-      app: ${{ steps.filter.outputs.changes }}
       include: ${{ steps.set-matrix.outputs.include }}
     steps:
     - uses: actions/checkout@v4
-    - uses: dorny/paths-filter@v3
-      id: filter
-      with:
-        filters: |
-          github-actions:
-            - '.github/workflows/**'
-          poetry:
-            - 'poetry/**'
     - name: set matrix
       id: set-matrix
       run: |
-        echo "include=[{\"app\": \"github-actions\", \"region\": \"pull_request1\"}, {\"app\": \"github-actions\", \"region\": \"pull_request2\"}]"  >> "$GITHUB_OUTPUT"
+        if [[ "${{ github.event_name }}" = "pull_request" ]]; then
+          echo "include=[{\"app\": \"app1\", \"env\": \"dev\"}, {\"app\": \"app2\", \"env\": \"dev\"}]"  >> "$GITHUB_OUTPUT"
+        elif [[ "${{ github.event_name }}" = "push" ]]; then
+          echo "include=[{\"app\": \"app1\", \"env\": \"dev\"}, {\"app\": \"app1\", \"env\": \"prod\"}, {\"app\": \"app2\", \"env\": \"dev\"}, {\"app\": \"app2\", \"env\": \"prod\"}]"  >> "$GITHUB_OUTPUT"
+        fi
 
   execute:
     strategy:
       matrix:
-        # app: ${{ fromJson(needs.set-matrix.outputs.app) }}
         include: ${{ fromJson(needs.set-matrix.outputs.include) }}
     runs-on: ubuntu-latest
     needs: [set-matrix]
     steps:
-      - name: "app: ${{ matrix.app }}, matrix: ${{ matrix.region }}"
+      - name: "app: ${{ matrix.app }}, matrix: ${{ matrix.env }}"
         run: |
-          echo "app: ${{ matrix.app }}, matrix: ${{ matrix.region }}"
+          echo "app: ${{ matrix.app }}, matrix: ${{ matrix.env }}"
