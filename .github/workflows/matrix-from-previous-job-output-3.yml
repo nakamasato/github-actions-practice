@@ -30,7 +30,7 @@ jobs:
   execute:
     strategy:
       matrix:
-        app: ${{ fromJson(needs.set-matrix.outputs.app) }}
+        # app: ${{ fromJson(needs.set-matrix.outputs.app) }}
         include: ${{ fromJson(needs.set-matrix.outputs.include) }}
     runs-on: ubuntu-latest
     needs: [set-matrix]
