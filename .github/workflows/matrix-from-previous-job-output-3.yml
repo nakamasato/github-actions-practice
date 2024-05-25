@@ -25,6 +25,7 @@ jobs:
     - name: set matrix
       id: set-matrix
       run: |
+        echo "include=[{\"app\": \"github-actions\", \"region\": [\"pull_request1\", \"pull_request2\"]}]"
         echo "include=[{\"app\": \"github-actions\", \"region\": [\"pull_request1\", \"pull_request2\"]}]" >> "$GITHUB_OUTPUT"
 
   execute:
@@ -35,6 +36,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [set-matrix]
     steps:
-      - name: "app: ${{ matrix.app }}, matrix: ${{ matrix.matrix }}"
+      - name: "app: ${{ matrix.app }}, matrix: ${{ matrix.region }}"
         run: |
-          echo "app: ${{ matrix.app }}, matrix: ${{ matrix.matrix }}"
+          echo "app: ${{ matrix.app }}, matrix: ${{ matrix.region }}"
