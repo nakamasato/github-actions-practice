@@ -1,7 +1,10 @@
 name: matrix-from-previous-job-output-3
+
 on:
   pull_request:
   push:
+    branches:
+      - main
 
 jobs:
   # From https://github.com/dorny/paths-filter
@@ -12,6 +15,8 @@ jobs:
       include: ${{ steps.set-matrix.outputs.include }}
     steps:
     - uses: actions/checkout@v4
+    # Deploy each app to dev for pull request
+    # Deploy each app to both prod and dev for push (main)
     - name: set matrix
       id: set-matrix
       run: |
