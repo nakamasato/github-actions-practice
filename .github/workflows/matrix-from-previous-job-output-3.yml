@@ -25,7 +25,7 @@ jobs:
     - name: set matrix
       id: set-matrix
       run: |
-        echo "include=[{\"app\": \"github-actions\", \"region\": \"pull_request1\"}, {\"app\": \"github-actions\", \"region\": \"pull_request2\"]}]"  >> "$GITHUB_OUTPUT"
+        echo "include=[{\"app\": \"github-actions\", \"region\": \"pull_request1\"}, {\"app\": \"github-actions\", \"region\": \"pull_request2\"}]"  >> "$GITHUB_OUTPUT"
 
   execute:
     strategy:
