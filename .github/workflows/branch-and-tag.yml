@@ -3,6 +3,7 @@ name: branch-and-tag
 on:
   push:
     branches:
+      - '*'
     tags:
       - v1.*
 
