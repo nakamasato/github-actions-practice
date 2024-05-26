@@ -31,6 +31,11 @@ jobs:
             echo "- github.event.pull_request.head.ref : $PR_HEAD_REF"
           } >> "$GITHUB_STEP_SUMMARY"
 
+      - name: branch name
+        run: |
+          branch=${{ github.head_ref || github.ref_name }}
+          echo "$branch"
+
   label:
     runs-on: ubuntu-latest
     env:
