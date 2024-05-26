@@ -11,6 +11,7 @@ on:
       - unlabeled
       - closed
   workflow_dispatch:
+  push:
 
 jobs:
   check:
