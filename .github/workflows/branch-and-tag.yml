@@ -2,8 +2,6 @@ name: branch-and-tag
 
 on:
   push:
-    branches:
-      - merge
     tags:
       - v1.*
 
@@ -12,13 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - name: Merge to main branch
-        uses: devmasx/merge-branch@v1.4.0
-        with:
-          type: now
-          target_branch: 'main'
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - name: check
         run: |
           if [ ${{ startsWith( github.ref, 'refs/tags/' ) }} == 'true' ]; then
