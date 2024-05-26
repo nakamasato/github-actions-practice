@@ -33,7 +33,7 @@ jobs:
 
       - name: branch name
         run: |
-          branch=${{ github.head_ref || github.ref_name }}
+          branch="${{ github.head_ref || github.ref_name }}"
           echo "$branch"
 
   label:
