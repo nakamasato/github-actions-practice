@@ -33,9 +33,10 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: branch name
+        env:
+          BRANCH: ${{ github.event_name == 'push' && github.ref_name || github.event.pull_request.head.ref }}
         run: |
-          tag=${{ github.event_name == 'push' && github.ref_name || github.event.pull_request.head.ref }}
-          echo "$tag"
+          echo "$BRANCH"
 
   label:
     if: github.event_name == 'pull_request'
