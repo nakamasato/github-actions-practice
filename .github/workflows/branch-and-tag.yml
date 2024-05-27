@@ -19,3 +19,8 @@ jobs:
           else
             echo 'push'
           fi
+      - name: get env
+        env:
+          TAG: ${{ github.event_name == 'push' && github.ref_name || github.event.number }} # REF_NAME is branch name or tag name for push
+        run: |
+          echo "$TAG"
