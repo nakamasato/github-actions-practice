@@ -9,7 +9,8 @@
 
 - `github.sha` is not the latest commit sha [ref](https://sue445.hatenablog.com/entry/2021/01/07/004835) <- you can use this sha for the `closed` type to get the latest commit on the `main` branch.
 - `github.event.pull_request.head.sha` is the sha of the lastest commit on the pr branch [ref](https://github.com/orgs/community/discussions/26676)
--  `BRANCH: ${{ github.event_name == 'push' && github.ref_name || github.event.pull_request.head.ref }}`: branch name for `push` and `pull_request` event (need to set in `env`)
+-  `github.event.pull_request.head.ref`: pr branch name. e.g. `BRANCH: ${{ github.event_name == 'push' && github.ref_name || github.event.pull_request.head.ref }}`: branch name for `push` and `pull_request` event (need to set in `env`)
+-  `github.event.number`: pull request number. e.g. `${{ github.event_name == 'push' && github.ref_name || format('pr-{0}', github.event.number) }}` get tag name (branch name for push and `pr-xxx` for pr)
 
 |GitHub Actions|Trigger|Description|
 |---|---|---|
