@@ -42,9 +42,9 @@ jobs:
     if: github.event_name == 'pull_request' || github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
-      - name: get env
+      - name: get tag
         env:
-          TAG: ${{ github.event_name == 'push' && github.ref_name || github.event.number }} # REF_NAME is branch name or tag name for push
+          TAG: ${{ github.event_name == 'push' && github.ref_name || format('pr-{0}', github.event.number) }} # branch for push and pr-xx for pull request
         run: |
           echo "event_name: ${{ github.event_name }}, tag: $TAG"
 
