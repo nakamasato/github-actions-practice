@@ -38,6 +38,16 @@ jobs:
         run: |
           echo "$BRANCH"
 
+  push-and-pull-request:
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: get env
+        env:
+          TAG: ${{ github.event_name == 'push' && github.ref_name || github.event.number }} # REF_NAME is branch name or tag name for push
+        run: |
+          echo "event_name: ${{ github.event_name }}, tag: $TAG"
+
   label:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
