@@ -118,7 +118,7 @@
               pull_request:
                 types: [assigned, opened, synchronize, reopened, ready_for_review]
             ```
-            - action: `${{ github.event.action }}`: You can get `edited`
+            - action: `${{ github.event.action }}`: You can get `edited`, `synchronize`, (`opened` ❌)
         - Get PR number: `PR_NUMBER=${{ github.event.number }}`
         - Get sha: `${{ github.sha }}`
         - Get repository: `${{ github.repository }}`
