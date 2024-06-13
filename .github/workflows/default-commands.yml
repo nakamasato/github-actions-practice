@@ -34,7 +34,7 @@ jobs:
       - name: bc
         run: printf "%.2f" "$(echo "scale=2;3/2" | bc)"
 
-      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4 # to get the context
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4 # to get the context
 
       # https://docs.github.com/en/actions/using-workflows/using-github-cli-in-workflows
       # https://cli.github.com/manual/gh_pr_comment
