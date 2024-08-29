@@ -13,6 +13,9 @@ on:
   workflow_dispatch:
   push:
 
+env:
+  TEST_ENV: ${{ (github.event_name == 'release' && 'prod') || 'dev' }}
+
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -21,6 +24,8 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
+      - name: env ${{ env.TEST_ENV }}
+        run: echo "$TEST_ENV"
       - name: github.event.action
         env:
           PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
