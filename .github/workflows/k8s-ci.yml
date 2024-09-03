@@ -57,7 +57,7 @@ jobs:
           yq e -i "(.spec.template.spec.containers[]|select(.name == \"${CONTAINER_NAME}\").image)|=\"${IMAGE_FULL_NAME}\"" "${YAML_PATH}"
           cat "${YAML_PATH}"
       - name: Create PR
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }} # need to use PAT if you create a pr to another repo
           title: "[k8s-ci] update nginx image"
