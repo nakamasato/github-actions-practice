@@ -88,6 +88,15 @@
 |[matrix-by-condition](.github/workflows/matrix-by-condition.yml)|pull_request, push|run for dev and prod when merged to main. run only for dev for pull_request.|
 
 ## CheatSheet
+- conditional `needs`: you can run `main-job` when `dependent-job` completed successfully or is skipped
+    ```yaml
+    jobs:
+      dependent-job:
+        ...
+      main-job:
+        needs: dependent-job
+        if: needs.dependent-job.result == 'success' || needs.dependent-job.result == 'skipped'`
+    ```
 - Available commands by default ([default-commands.yml](.github/workflows/default-commands.yml))
     - `zip`, `aws`, `jq`, `yq`
     - [gh](https://docs.github.com/en/actions/using-workflows/using-github-cli-in-workflows)
