@@ -8,13 +8,13 @@ on:
     branches:
       - main
 env:
-  ENVIRONMENT: ${{ github.event_name == 'release' && 'production' || github.event_name == 'push' && 'development' || github.event_name == 'pull_request' && 'pull_request'  }}
+  ENVIRONMENT: ${{ github.event_name == 'release' && 'production' || github.event_name == 'push' && 'development' || github.event_name == 'pull_request' && 'pull_request' }}
 
 jobs:
   run:
     runs-on: ubuntu-latest
     environment:
-      name: ${{ github.event_name == 'release' && 'production' || github.event_name == 'push' && 'development' || github.event_name == 'pull_request' && 'pull_request' 
+      name: ${{ github.event_name == 'release' && 'production' || github.event_name == 'push' && 'development' || github.event_name == 'pull_request' && 'pull_request' }}
     steps:
       - name: check environment (${{ github.event_name == 'release' && 'production' || github.event_name == 'push' && 'development' || github.event_name == 'pull_request' && 'pull_request' }})
         run: |
