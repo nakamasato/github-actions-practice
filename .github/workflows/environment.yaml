@@ -8,7 +8,7 @@ on:
     branches:
       - main
 env:
-  ENVIRONMENT: ${{ github.event_name == 'release' && 'production' || github.event_name == 'push' && 'development' || github.event_name == 'pull_request' && 'pull_request' 
+  ENVIRONMENT: ${{ github.event_name == 'release' && 'production' || github.event_name == 'push' && 'development' || github.event_name == 'pull_request' && 'pull_request'  }}
 
 jobs:
   run:
