@@ -14,7 +14,7 @@ jobs:
   run:
     runs-on: ubuntu-latest
     environment:
-      name: ${{ env.ENVIRONMENT }}
+      name: ${{ github.event_name == 'release' && 'production' || github.event_name == 'push' && 'development' || github.event_name == 'pull_request' && 'pull_request' }} # ${{ env.ENVIRONMENT }} ❌
     steps:
       - name: check environment (${{ env.ENVIRONMENT }})
         run: |
