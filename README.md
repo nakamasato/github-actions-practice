@@ -187,10 +187,13 @@
         </details>
 
 - [Environment](https://docs.github.com/en/actions/managing-workflow-runs-and-deployments/managing-deployments/managing-environments-for-deployment)
+
     ```yaml
     environment:
       name: ${{ github.event_name == 'release' && 'production' || github.event_name == 'push' && 'development' || github.event_name == 'pull_request' && 'pull_request' }}
     ```
+
+    Example: .github/workflows/environment.yaml
 
 - [Caching](https://docs.github.com/en/actions/advanced-guides/caching-dependencies-to-speed-up-workflows)
 
