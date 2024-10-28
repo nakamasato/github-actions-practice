@@ -78,7 +78,7 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git add updated_on.txt
           git commit -m "Update updated_on.txt with today's date"
-          git push origin update-updated-on-github-app
+          git push -u origin update-updated-on-github-app
 
       - name: Create PR
         if: steps.date_check.outputs.updated == 'true'
