@@ -1,10 +1,10 @@
 name: create-pull-request
 
 on:
-  pull_request:
   push:
     branches:
       - nakamasato-patch-2
+      - main
 
 jobs:
   create-pr-with-github-token:
