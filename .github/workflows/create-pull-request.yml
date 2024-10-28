@@ -77,13 +77,13 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git add updated_on.txt
           git commit -m "Update updated_on.txt with today's date"
-          git push
+          git push origin update-updated-on-github-app
 
       - name: Create PR
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
-          gh pr create --base "main" --title "Test" --body "Test"
+          gh pr create --base main --head update-updated-on-github-app --title "Test" --body "Test"
 
       # failed
       # - name: create-pull-request
