@@ -2,6 +2,9 @@ name: push-commit-with-github-app
 
 on:
   pull_request:
+  push:
+    branches:
+      - nakamasato-patch-2
 
 jobs:
   push:
