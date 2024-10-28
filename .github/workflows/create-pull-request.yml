@@ -72,14 +72,18 @@ jobs:
 
       - name: Commit and Push Changes
         if: steps.date_check.outputs.updated == 'true'
-        env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git add updated_on.txt
           git commit -m "Update updated_on.txt with today's date"
           git push
+
+      - name: Create PR
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          gh pr create --base "main" --title "Test" --body "Test"
 
       # failed
       # - name: create-pull-request
