@@ -3,7 +3,6 @@ name: create-pull-request
 on:
   push:
     branches:
-      - nakamasato-patch-2
       - main
 
 jobs:
@@ -24,15 +23,7 @@ jobs:
             echo "updated=false" >> "$GITHUB_OUTPUT"
           fi
 
-      # - name: Commit and Push Changes
-      #   if: steps.date_check.outputs.updated == 'true'
-      #   run: |
-      #     git config --local user.name "github-actions[bot]"
-      #     git config --local user.email "github-actions[bot]@users.noreply.github.com"
-      #     git add updated_on.txt
-      #     git commit -m "Update updated_on.txt with today's date"
-      #     git push
-
+      # GitHub Actions are NOT triggered in this PR
       - name: create-pull-request
         if: steps.date_check.outputs.updated == 'true'
         uses: peter-evans/create-pull-request@v5
@@ -71,23 +62,7 @@ jobs:
           private-key: ${{ secrets.GH_TEST_PRIVATE_KEY }}
           owner: ${{ github.repository_owner }}
 
-      # - name: Commit and Push Changes
-      #   if: steps.date_check.outputs.updated == 'true'
-      #   run: |
-      #     git config --local user.name "github-actions[bot]"
-      #     git config --local user.email "github-actions[bot]@users.noreply.github.com"
-      #     git add updated_on.txt
-      #     git commit -m "Update updated_on.txt with today's date"
-      #     git push -u origin update-updated-on-github-app
-
-      # - name: Create PR
-      #   if: steps.date_check.outputs.updated == 'true'
-      #   env:
-      #     GH_TOKEN: ${{ steps.app-token.outputs.token }}
-      #   run: |
-      #     gh pr create --base main --head update-updated-on-github-app --title "Test" --body "Test"
-
-      # failed
+      # GitHub Actions are triggered in this PR
       - name: create-pull-request
         if: steps.date_check.outputs.updated == 'true'
         uses: peter-evans/create-pull-request@v5
