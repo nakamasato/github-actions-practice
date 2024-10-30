@@ -26,7 +26,7 @@ jobs:
       # GitHub Actions are NOT triggered in this PR
       - name: create-pull-request
         if: steps.date_check.outputs.updated == 'true'
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: 'chore: update updated_on (github token)'
@@ -65,7 +65,7 @@ jobs:
       # GitHub Actions are triggered in this PR
       - name: create-pull-request
         if: steps.date_check.outputs.updated == 'true'
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ steps.app-token.outputs.token }}
           commit-message: 'chore: update updated_on (github app)'
