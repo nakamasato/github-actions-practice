@@ -1,9 +1,8 @@
 name: create-pr-with-github-app
 
 on:
-  push:
-    branches:
-      - main
+  schedule:
+    - cron: '0 0 * * MON'
 
 jobs:
   create-pr-with-github-token:
