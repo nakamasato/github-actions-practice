@@ -1,4 +1,4 @@
-name: create-pull-request
+name: create-pr-with-github-app
 
 on:
   push:
