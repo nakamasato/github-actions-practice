@@ -1,6 +1,7 @@
 # github-actions-practice
 
 - Last Updated: 2024-11-01
+- Python Version: 3.12
 
 ## Github Actions Table
 
