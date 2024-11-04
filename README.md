@@ -61,6 +61,7 @@
 |---|---|---|
 |[schedule](.github/workflows/schedule.yml)|schedule|Echo "test" at 00:00 every Monday.|
 |[create-pr-if-outdated](.github/workflows/create-pr-if-outdated.yml)|schedule|create a pr when last update in readme is outdated|
+|[create-pr-with-github-app](.github/workflows/create-pr-with-github-app.yml)|schedule|create a pr with github app -> CI can be triggered|
 
 ### 5. workflow_dispatch
 
