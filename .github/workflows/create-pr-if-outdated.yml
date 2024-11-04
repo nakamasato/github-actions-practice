@@ -18,11 +18,13 @@ jobs:
         with:
           ref: ${{ env.BASE_BRANCH_NAME }}
 
-      - name: update date in readme
+      - name: update readme
         run: |
           git_last_updated_date=$(git log -1 --format="%at" -- . ":(exclude)README.md" | xargs -I{} date -d @{} +%Y-%m-%d)
+          python_version=$(cat .python-version)
           echo "git_last_updated_date: $git_last_updated_date"
           sed -i "s/.*Last Updated: \(.*\)/- Last Updated: $git_last_updated_date/" README.md
+          sed -i "s/.*Python Version: \(.*\)/- Python Version: $python_version/" README.md
 
       - name: check if need to commit
         id: need_commit
@@ -39,10 +41,10 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: 'chore: update updated_on (github token)'
-          branch: update-updated-on-github-token
-          title: 'chore: update updated_on (github token)'
-          body: 'Update updated_on automatically (github token)'
+          commit-message: 'chore: update readme (github token)'
+          branch: update-readme
+          title: 'chore: update readme (github token)'
+          body: 'Update readme automatically (github token)'
           base: main
           delete-branch: true
 
@@ -53,11 +55,13 @@ jobs:
         with:
           ref: ${{ env.BASE_BRANCH_NAME }}
 
-      - name: update date in readme
+      - name: update readme
         run: |
           git_last_updated_date=$(git log -1 --format="%at" -- . ":(exclude)README.md" | xargs -I{} date -d @{} +%Y-%m-%d)
+          python_version=$(cat .python-version)
           echo "git_last_updated_date: $git_last_updated_date"
           sed -i "s/.*Last Updated: \(.*\)/- Last Updated: $git_last_updated_date/" README.md
+          sed -i "s/.*Python Version: \(.*\)/- Python Version: $python_version/" README.md
 
       - name: check if need to commit
         id: need_commit
@@ -83,9 +87,9 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ steps.app-token.outputs.token }}
-          commit-message: 'chore: update updated_on (github app)'
-          branch: update-updated-on-github-app
-          title: 'chore: update updated_on (github app)'
-          body: 'Update updated_on automatically (github app)'
+          commit-message: 'chore: update readme (github app)'
+          branch: update-readme-github-app
+          title: 'chore: update readme (github app)'
+          body: 'Update readme automatically (github app)'
           base: main
           delete-branch: true
