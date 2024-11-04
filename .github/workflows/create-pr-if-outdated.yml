@@ -11,10 +11,10 @@ env:
 
 jobs:
   create-pr-if-outdated:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/checkout@v4
         with:
           ref: ${{ env.BASE_BRANCH_NAME }}
 
@@ -33,27 +33,59 @@ jobs:
             echo "need_commit=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: commit and push
+      # GitHub Actions are NOT triggered in this PR
+      - name: create-pull-request
         if: steps.need_commit.outputs.need_commit == 'true'
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git checkout -b ${{ env.BRANCH_NAME }}
-          git add .
-          git commit -m 'update date'
-          git push -u origin HEAD -f
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore: update updated_on (github token)'
+          branch: update-updated-on-github-token
+          title: 'chore: update updated_on (github token)'
+          body: 'Update updated_on automatically (github token)'
+          base: main
+          delete-branch: true
 
-      - name: check if pr exists
-        id: check_pr
+  create-pr-with-github-app:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BASE_BRANCH_NAME }}
+
+      - name: update date in readme
+        run: |
+          git_last_updated_date=$(git log -1 --format="%at" -- . ":(exclude)README.md" | xargs -I{} date -d @{} +%Y-%m-%d)
+          echo "git_last_updated_date: $git_last_updated_date"
+          sed -i "s/.*Last Updated: \(.*\)/- Last Updated: $git_last_updated_date/" README.md
+
+      - name: check if need to commit
+        id: need_commit
+        run: |
+          if [[ -n "$(git status --porcelain)" ]]; then
+            echo "need_commit=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "need_commit=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: create-github-app-token
         if: steps.need_commit.outputs.need_commit == 'true'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # used by gh
-        run: |
-          echo "count=$(gh pr list -S head:${{ env.BRANCH_NAME }} -B ${{ env.BASE_BRANCH_NAME }} | wc -l)" >> "$GITHUB_OUTPUT"
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.GH_TEST_APP_ID }}
+          private-key: ${{ secrets.GH_TEST_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
 
-      - name: create pr
-        if: ${{ steps.need_commit.outputs.need_commit == 'true' && steps.check_pr.outputs.count == 0 }}
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # used by gh
-        run: |
-          gh pr create -B "${{ env.BASE_BRANCH_NAME }}" -t "Update last updated date in README" -b ""
+      # GitHub Actions are triggered in this PR
+      - name: create-pull-request
+        if: steps.need_commit.outputs.need_commit == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          commit-message: 'chore: update updated_on (github app)'
+          branch: update-updated-on-github-app
+          title: 'chore: update updated_on (github app)'
+          body: 'Update updated_on automatically (github app)'
+          base: main
+          delete-branch: true
