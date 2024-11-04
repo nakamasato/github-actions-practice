@@ -60,8 +60,7 @@
 |GitHub Actions|Trigger|Description|
 |---|---|---|
 |[schedule](.github/workflows/schedule.yml)|schedule|Echo "test" at 00:00 every Monday.|
-|[create-pr-if-outdated](.github/workflows/create-pr-if-outdated.yml)|schedule|create a pr when last update in readme is outdated|
-|[create-pr-with-github-app](.github/workflows/create-pr-with-github-app.yml)|schedule|create a pr with github app -> CI can be triggered|
+|[create-pr-if-outdated](.github/workflows/create-pr-if-outdated.yml)|schedule|create a pr when last update in readme is outdated (create pr with **GitHub App**) ref: [Create GitHub App](https://qiita.com/nakamasato/items/275a687b8d5760d26d65)|
 
 ### 5. workflow_dispatch
 
