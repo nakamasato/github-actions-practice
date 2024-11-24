@@ -1,0 +1,28 @@
+name: workflow-job
+
+on:
+  pull_request:
+  workflow_job:
+    workflows: [test-job]
+    types: 
+      - queued
+      - completed
+jobs:
+  test-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Determine action ${{ github.event.action }}"
+        id: determine-action
+        run: |
+
+          if [[ "${{ github.event.action }}" == "queud" ]];then
+            echo "action=start" >> "$GITHUB_OUTPUT"
+          else
+            echo "action=stop" >> "$GITHUB_OUTPUT"
+          fi
+      - name: "echo ${{ github.event.action }} ${{ steps.determine-action.outputs.action }}"
+        run: echo "${{ steps.determine-action.outputs.action }}"
+  other-job:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo running
