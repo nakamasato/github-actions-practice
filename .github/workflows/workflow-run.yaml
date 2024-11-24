@@ -1,11 +1,11 @@
-name: workflow-job
+name: workflow-run
 
 on:
   pull_request:
-  workflow_job:
+  workflow_run:
     workflows: [test-job]
     types: 
-      - queued
+      - requested
       - completed
 jobs:
   test-job:
@@ -15,7 +15,7 @@ jobs:
         id: determine-action
         run: |
 
-          if [[ "${{ github.event.action }}" == "queud" ]];then
+          if [[ "${{ github.event.action }}" == "requested" ]];then
             echo "action=start" >> "$GITHUB_OUTPUT"
           else
             echo "action=stop" >> "$GITHUB_OUTPUT"
