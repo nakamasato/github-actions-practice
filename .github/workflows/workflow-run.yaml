@@ -1,14 +1,13 @@
 name: workflow-run
 
 on:
-  pull_request:
   workflow_run:
-    workflows: [test-job]
+    workflows: [pull-request-and-push-to-main]
     types:
       - requested
       - completed
 jobs:
-  test-job:
+  run:
     runs-on: ubuntu-latest
     steps:
       - name: "Determine action ${{ github.event.action }}"
@@ -21,7 +20,3 @@ jobs:
           fi
       - name: "echo ${{ github.event.action }} ${{ steps.determine-action.outputs.action }}"
         run: echo "${{ steps.determine-action.outputs.action }}"
-  other-job:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo running
