@@ -5,7 +5,7 @@ on:
   workflow_run:
     workflows: [test-job]
     types:
-      - requested
+      - in_progress
       - completed
 jobs:
   test-job:
@@ -14,7 +14,7 @@ jobs:
       - name: "Determine action ${{ github.event.action }}"
         id: determine-action
         run: |
-          if [[ "${{ github.event.action }}" == "requested" ]];then
+          if [[ "${{ github.event.action }}" == "in_progress" ]];then
             echo "action=start" >> "$GITHUB_OUTPUT"
           else
             echo "action=stop" >> "$GITHUB_OUTPUT"
