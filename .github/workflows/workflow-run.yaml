@@ -14,7 +14,6 @@ jobs:
       - name: "Determine action ${{ github.event.action }}"
         id: determine-action
         run: |
-
           if [[ "${{ github.event.action }}" == "requested" ]];then
             echo "action=start" >> "$GITHUB_OUTPUT"
           else
