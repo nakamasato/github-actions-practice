@@ -83,6 +83,7 @@ jobs:
 
       # GitHub Actions are triggered in this PR
       - name: create-pull-request
+        id: create-pull-request
         if: steps.need_commit.outputs.need_commit == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
@@ -93,3 +94,8 @@ jobs:
           body: 'Update readme automatically (github app)'
           base: main
           delete-branch: true
+
+      - name: enable pr auto merge
+        run: gh pr merge --merge --auto ${{ steps.create-pull-request.outputs.pull-request-number }}
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
