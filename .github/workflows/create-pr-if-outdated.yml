@@ -96,6 +96,6 @@ jobs:
           delete-branch: true
 
       - name: enable pr auto merge
-        run: gh pr merge --merge --auto ${{ steps.create-pull-request.outputs.pull-request-number }}
+        run: gh pr merge --squash --auto ${{ steps.create-pull-request.outputs.pull-request-number }}
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
