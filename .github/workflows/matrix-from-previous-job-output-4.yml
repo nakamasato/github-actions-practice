@@ -108,11 +108,11 @@ jobs:
               echo "pattern not matched"
               exit 1
             fi
-            echo "DATASET=$DATASET" >> $GITHUB_OUTPUT
-            echo "TABLE=$TABLE" >> $GITHUB_OUTPUT
+            echo "DATASET=$DATASET" >> "$GITHUB_OUTPUT"
+            echo "TABLE=$TABLE" >> "$GITHUB_OUTPUT"
           else
-            echo "DATASET=${{ inputs.dataset }}" >> $GITHUB_OUTPUT
-            echo "TABLE=${{ inputs.table }}" >> $GITHUB_OUTPUT
+            echo "DATASET=${{ inputs.dataset }}" >> "$GITHUB_OUTPUT"
+            echo "TABLE=${{ inputs.table }}" >> "$GITHUB_OUTPUT"
           fi
 
       - name: ${{ matrix.schemafile }}
