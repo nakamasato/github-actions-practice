@@ -81,6 +81,13 @@ jobs:
       - name: List all changed files
         run: echo '${{ steps.changed-schema-files.outputs.all_changed_files }}'
 
+  check:
+    needs: [set-matrix]
+    runs-on: ubuntu-latest
+    steps:
+      - name: check - ${{ needs.set-matrix.outputs.CHANGED_SCHEMA_FILES }}
+        run: echo ${{ needs.set-matrix.outputs.CHANGED_SCHEMA_FILES }}
+
   update:
     if: needs.set-matrix.outputs.CHANGED_SCHEMA_FILES != ''
     needs: [set-matrix]
