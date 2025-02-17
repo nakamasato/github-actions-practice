@@ -58,9 +58,7 @@ jobs:
   set-matrix:
     runs-on: ubuntu-latest
     outputs:
-      schemafiles: ${{ steps.set-matrix.outputs.matrix }}
-      dataset: ${{ steps.set-matrix.outputs.table }}
-      table: ${{ steps.set-matrix.outputs.table }}
+      SCHEMAFILES: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - uses: actions/checkout@v4
       - name: Get changed schema files
@@ -87,23 +85,23 @@ jobs:
     needs: [set-matrix]
     runs-on: ubuntu-latest
     steps:
-      - name: check - ${{ needs.set-matrix.outputs.schemafiles }}
-        run: echo "${{ needs.set-matrix.outputs.schemafiles }}"
+      - name: check - ${{ needs.set-matrix.outputs.SCHEMAFILES }}
+        run: echo "${{ needs.set-matrix.outputs.SCHEMAFILES }}"
 
   update:
-    if: needs.set-matrix.outputs.schemafiles != ''
+    if: needs.set-matrix.outputs.SCHEMAFILES != ''
     needs: [set-matrix]
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        schemafile: ${{ fromJson(needs.set-matrix.outputs.schemafiles) }}
+        schemafile: ${{ fromJson(needs.set-matrix.outputs.SCHEMAFILES) }}
     steps:
       - name: Parse dataset and table from path
         id: parse-path
         run: |
           if [[ "${{ github.event_name }}" = "pull_request" ]]; then
-            FILE_PATH="${{ matrix.schema_file }}"
+            FILE_PATH="${{ matrix.schemafile }}"
             DATASET="$(echo "$FILE_PATH" | cut -d'/' -f3)"
             TABLE="$(basename "$FILE_PATH" .json)"
 
