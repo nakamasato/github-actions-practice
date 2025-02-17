@@ -55,7 +55,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  make-matrix:
+  set-matrix:
     runs-on: ubuntu-latest
     outputs:
       CHANGED_SCHEMA_FILES: ${{ steps.set-matrix.outputs.matrix }}
@@ -80,12 +80,12 @@ jobs:
           fi
 
   update:
-    needs: [make-matrix]
+    needs: [set-matrix]
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        schemafile: ${{ fromJson(needs.changed_files.outputs.CHANGED_SCHEMA_FILES) }}
+        schemafile: ${{ fromJson(needs.set-matrix.outputs.CHANGED_SCHEMA_FILES) }}
     steps:
       - name: ${{ matrix.schemafile }}
         run: echo ${{ matrix.schemafile }}
