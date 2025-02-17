@@ -78,8 +78,11 @@ jobs:
           elif [[ "${{ github.event_name }}" = "workflow_call" ]]; then
             echo "matrix=[\"${{ inputs.schemafile }}\"]" >> "$GITHUB_OUTPUT"
           fi
+      - name: List all changed files
+        run: echo '${{ steps.changed-schema-files.outputs.all_changed_files }}'
 
   update:
+    if: needs.set-matrix.outputs.CHANGED_SCHEMA_FILES != ''
     needs: [set-matrix]
     runs-on: ubuntu-latest
     strategy:
