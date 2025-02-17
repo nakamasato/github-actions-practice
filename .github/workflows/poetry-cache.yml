@@ -17,39 +17,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
-      - id: setup-python
-        name: Set up Python
-        uses: actions/setup-python@v5 # version is determined by .python-version
-
-      - name: Check python version ${{ steps.setup-python.outputs.python-version }}"
-        run: echo "Python version is ${{ steps.setup-python.outputs.python-version }}"
-
-      - name: Load cached Poetry installation
-        id: cached-poetry
-        uses: actions/cache@v4
-        with:
-          path: ~/.local  # the path depends on the OS
-          key: poetry-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}
-
-      - name: Install poetry
-        if: steps.cached-poetry.outputs.cache-hit != 'true'
-        uses: snok/install-poetry@v1
-        with:
-          version: 1.8.2
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-          installer-parallel: true
-
-      - name: Load cached venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pypoetry/virtualenvs
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
-
-      - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: poetry install
+      - name: Set up Python & Poetry
+        uses: nakamasato/github-actions/setup-poetry@1.6.3
 
       - name: Run
         run: poetry run python main.py
