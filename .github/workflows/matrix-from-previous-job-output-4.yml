@@ -3,7 +3,7 @@ name: matrix-from-previous-job-output-4
 on:
   pull_request:
     paths:
-      - .github/workflows/changed-files.yml
+      - .github/workflows/matrix-from-previous-job-output-4.yml
       - schemas/**.json
   workflow_dispatch:
     inputs:
