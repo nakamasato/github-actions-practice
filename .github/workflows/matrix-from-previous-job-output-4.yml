@@ -72,7 +72,7 @@ jobs:
       - id: set-matrix
         run: |
           if [[ "${{ github.event_name }}" = "pull_request" ]]; then
-            echo "matrix=${{ steps.changed-files.outputs.all_changed_files }}" >> $GITHUB_OUTPUT
+            echo "matrix=${{ steps.changed-files.outputs.all_changed_files }}" >> "$GITHUB_OUTPUT"
           elif [[ "${{ github.event_name }}" = "workflow_dispatch" ]]; then
             echo "matrix=[\"schemas/${{ inputs.dataset }}/${{ inputs.table }}.json\"]" >> "$GITHUB_OUTPUT"
           elif [[ "${{ github.event_name }}" = "workflow_call" ]]; then
