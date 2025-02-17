@@ -101,10 +101,13 @@ jobs:
         id: parse-path
         run: |
           if [[ "${{ github.event_name }}" = "pull_request" ]]; then
-            FILE_PATH="${{ matrix.schemafile }}"
-            DATASET="$(echo "$FILE_PATH" | cut -d'/' -f3)"
-            TABLE="$(basename "$FILE_PATH" .json)"
-
+            if [[ $file =~ schemas/([^/]+)/([^/]+)\.json ]]; then
+              DATASET="${BASH_REMATCH[1]}"
+              TABLE="${BASH_REMATCH[2]}"
+            else
+              echo "pattern not matched"
+              exit 1
+            fi
             echo "DATASET=$DATASET" >> $GITHUB_OUTPUT
             echo "TABLE=$TABLE" >> $GITHUB_OUTPUT
           else
