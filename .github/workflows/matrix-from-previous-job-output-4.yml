@@ -67,7 +67,7 @@ jobs:
         uses: tj-actions/changed-files@v45
         with:
           files: |
-            schemas/**.json
+            schemas/*/*.json
           matrix: true
       - id: set-matrix
         run: |
