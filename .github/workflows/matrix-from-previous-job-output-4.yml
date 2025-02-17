@@ -1,0 +1,120 @@
+name: matrix-from-previous-job-output-4
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/matrix-from-previous-job-output-4.yml
+      - schemas/**.json
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to run the workflow'
+        type: choice
+        required: true
+        default: 'dev'
+        options:
+          - 'dev'
+          - 'prod'
+      dataset:
+        description: 'Dataset to sync'
+        type: choice
+        required: true
+        options:
+          - 'dataset1'
+          - 'dataset2'
+      table:
+        description: 'Table to sync'
+        type: choice
+        required: true
+        options:
+          - 'table1'
+          - 'table2'
+
+  # this is used in dbt-test.yaml
+  workflow_call:
+    inputs:
+      environment:
+        description: 'Environment to run the workflow (dev)'
+        type: string
+        default: 'dev'
+      dataset:
+        description: 'Dataset to sync'
+        type: string
+        required: true
+      table:
+        description: 'Table to sync'
+        type: string
+        required: true
+      schemafile:
+        description: 'Schema file to sync (optional) default is schemas/<dataset>/<table>.json'
+        type: string
+        required: true
+
+concurrency:
+  group: table-sync-${{ github.ref }}-${{ inputs.dataset }}-${{ inputs.table }}
+  cancel-in-progress: true
+
+jobs:
+  set-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      SCHEMAFILES: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get changed schema files
+        if: ${{ github.event_name == 'pull_request' }}
+        id: changed-schema-files
+        uses: tj-actions/changed-files@v45
+        with:
+          files: |
+            schemas/*/*.json
+          json: true # matrix doesn't work as it's not directly passed.
+      - id: set-matrix
+        run: |
+          if [[ "${{ github.event_name }}" = "pull_request" ]]; then
+            echo "matrix=${{ steps.changed-schema-files.outputs.all_changed_files }}" >> "$GITHUB_OUTPUT"
+          elif [[ "${{ github.event_name }}" = "workflow_dispatch" ]]; then
+            echo "matrix=[\"schemas/${{ inputs.dataset }}/${{ inputs.table }}.json\"]" >> "$GITHUB_OUTPUT"
+          elif [[ "${{ github.event_name }}" = "workflow_call" ]]; then
+            echo "matrix=[\"${{ inputs.schemafile }}\"]" >> "$GITHUB_OUTPUT"
+          fi
+      - name: List all changed files
+        run: echo '${{ steps.changed-schema-files.outputs.all_changed_files }}'
+
+  check:
+    needs: [set-matrix]
+    runs-on: ubuntu-latest
+    steps:
+      - name: check - ${{ needs.set-matrix.outputs.SCHEMAFILES }}
+        run: echo "${{ needs.set-matrix.outputs.SCHEMAFILES }}"
+
+  update:
+    if: needs.set-matrix.outputs.SCHEMAFILES != ''
+    needs: [set-matrix]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        schemafile: ${{ fromJson(needs.set-matrix.outputs.SCHEMAFILES) }}
+    steps:
+      - name: Parse dataset and table from path
+        id: parse-path
+        run: |
+          if [[ "${{ github.event_name }}" = "pull_request" ]]; then
+            if [[ "${{ matrix.schemafile }}" =~ schemas/([^/]+)/([^/]+)\.json ]]; then
+              DATASET="${BASH_REMATCH[1]}"
+              TABLE="${BASH_REMATCH[2]}"
+            else
+              echo "pattern not matched"
+              exit 1
+            fi
+            echo "DATASET=$DATASET" >> "$GITHUB_OUTPUT"
+            echo "TABLE=$TABLE" >> "$GITHUB_OUTPUT"
+          else
+            echo "DATASET=${{ inputs.dataset }}" >> "$GITHUB_OUTPUT"
+            echo "TABLE=${{ inputs.table }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: ${{ matrix.schemafile }}
+        run: |
+          echo "${{ matrix.schemafile }} ${{ steps.parse-path.outputs.DATASET }} ${{ steps.parse-path.outputs.TABLE }}"
