@@ -1,4 +1,4 @@
-name: changed-files
+name: matrix-from-previous-job-output-4
 
 on:
   pull_request:
@@ -58,7 +58,7 @@ jobs:
   make-matrix:
     runs-on: ubuntu-latest
     outputs:
-      CHANGED_SCHEMA_FILES: ${{ steps.changed-schema-files.outputs.changed-schema-files }}
+      CHANGED_SCHEMA_FILES: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - uses: actions/checkout@v4
       - name: Get changed schema files
@@ -68,15 +68,25 @@ jobs:
         with:
           files: |
             schemas/**.json
-      - name: Get input schema file
+      - id: set-matrix
         run: |
-          echo "[\"schemas/${{github.event.inputs.dataset}}/${{github.event.inputs.table}}.json\" ]"
+          if [[ "${{ github.event_name }}" = "pull_request" ]]; then
+            FILE_LIST="${{ steps.changed-files.outputs.all_modified_files }}"
+            FILE_LIST_JSON=$(echo "$FILE_LIST" | awk '$1=$1' ORS=',' | sed 's/,$//')
+            JSON_ARRAY="[$(printf "\"%s\"" "${FILE_LIST_JSON//,/\",\"}")]"
+            echo "matrix=$JSON_ARRAY" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.event_name }}" = "workflow_dispatch" ]]; then
+            echo "matrix=[\"schemas/${{ inputs.dataset }}/${{ inputs.table }}.json\"]" >> "$GITHUB_OUTPUT"
+          elif [[ "${{ github.event_name }}" = "workflow_call" ]]; then
+            echo "matrix=[\"${{ inputs.schemafile }}\"]" >> "$GITHUB_OUTPUT"
+          fi
+
   update:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        schema_file: ${{ fromJson(needs.changed_files.outputs.CHANGED_SCHEMA_FILES) }}
+        schemafile: ${{ fromJson(needs.changed_files.outputs.CHANGED_SCHEMA_FILES) }}
     steps:
-      - name: ${{ matrix.schema_file }}
-        run: echo ${{ matrix.schema_file }}
+      - name: ${{ matrix.schemafile }}
+        run: echo ${{ matrix.schemafile }}
