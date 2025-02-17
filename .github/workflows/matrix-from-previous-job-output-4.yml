@@ -68,13 +68,11 @@ jobs:
         with:
           files: |
             schemas/**.json
+          matrix: true
       - id: set-matrix
         run: |
           if [[ "${{ github.event_name }}" = "pull_request" ]]; then
-            FILE_LIST="${{ steps.changed-files.outputs.all_modified_files }}"
-            FILE_LIST_JSON=$(echo "$FILE_LIST" | awk '$1=$1' ORS=',' | sed 's/,$//')
-            JSON_ARRAY="[$(printf "\"%s\"" "${FILE_LIST_JSON//,/\",\"}")]"
-            echo "matrix=$JSON_ARRAY" >> $GITHUB_OUTPUT
+            echo "matrix=${{ steps.changed-files.outputs.all_changed_files }}" >> $GITHUB_OUTPUT
           elif [[ "${{ github.event_name }}" = "workflow_dispatch" ]]; then
             echo "matrix=[\"schemas/${{ inputs.dataset }}/${{ inputs.table }}.json\"]" >> "$GITHUB_OUTPUT"
           elif [[ "${{ github.event_name }}" = "workflow_call" ]]; then
