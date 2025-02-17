@@ -102,8 +102,8 @@ jobs:
       fail-fast: false
       matrix:
         schemafile: ${{ fromJson(needs.set-matrix.outputs.schemafiles) }}
-        dataset: ${{ needs.set-matrix.outputs.dataset ? fromJson(needs.set-matrix.outputs.dataset) || '[]' }}
-        table: ${{ needs.set-matrix.outputs.table ? fromJson(needs.set-matrix.outputs.table) || '[]' }}
+        dataset: ${{ needs.set-matrix.outputs.dataset && fromJson(needs.set-matrix.outputs.dataset) || '[]' }}
+        table: ${{ needs.set-matrix.outputs.table && fromJson(needs.set-matrix.outputs.table) || '[]' }}
     steps:
       - name: ${{ matrix.schemafile }} - ${{ matrix.dataset }} - ${{ matrix.table }}
         run: echo "${{ matrix.schemafile }} - ${{ matrix.dataset }} - ${{ matrix.table }}"
