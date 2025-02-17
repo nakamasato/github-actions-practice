@@ -58,7 +58,9 @@ jobs:
   set-matrix:
     runs-on: ubuntu-latest
     outputs:
-      CHANGED_SCHEMA_FILES: ${{ steps.set-matrix.outputs.matrix }}
+      schemafiles: ${{ steps.set-matrix.outputs.matrix }}
+      dataset: ${{ steps.set-matrix.outputs.table }}
+      table: ${{ steps.set-matrix.outputs.table }}
     steps:
       - uses: actions/checkout@v4
       - name: Get changed schema files
@@ -68,15 +70,19 @@ jobs:
         with:
           files: |
             schemas/*/*.json
-          json: true
+          json: true # matrix doesn't work as it's not directly passed.
       - id: set-matrix
         run: |
           if [[ "${{ github.event_name }}" = "pull_request" ]]; then
             echo "matrix=${{ steps.changed-schema-files.outputs.all_changed_files }}" >> "$GITHUB_OUTPUT"
           elif [[ "${{ github.event_name }}" = "workflow_dispatch" ]]; then
             echo "matrix=[\"schemas/${{ inputs.dataset }}/${{ inputs.table }}.json\"]" >> "$GITHUB_OUTPUT"
+            echo "table=${{ inputs.table }}" >> "$GITHUB_OUTPUT"
+            echo "dataset=${{ inputs.dataset }}" >> "$GITHUB_OUTPUT"
           elif [[ "${{ github.event_name }}" = "workflow_call" ]]; then
             echo "matrix=[\"${{ inputs.schemafile }}\"]" >> "$GITHUB_OUTPUT"
+            echo "table=[\"${{ inputs.table }}\"]" >> "$GITHUB_OUTPUT"
+            echo "dataset=[\"${{ inputs.dataset }}\"]" >> "$GITHUB_OUTPUT"
           fi
       - name: List all changed files
         run: echo '${{ steps.changed-schema-files.outputs.all_changed_files }}'
@@ -85,17 +91,19 @@ jobs:
     needs: [set-matrix]
     runs-on: ubuntu-latest
     steps:
-      - name: check - ${{ needs.set-matrix.outputs.CHANGED_SCHEMA_FILES }}
-        run: echo ${{ needs.set-matrix.outputs.CHANGED_SCHEMA_FILES }}
+      - name: check - ${{ needs.set-matrix.outputs.schemafiles }}
+        run: echo "${{ needs.set-matrix.outputs.schemafiles }}"
 
   update:
-    if: needs.set-matrix.outputs.CHANGED_SCHEMA_FILES != ''
+    if: needs.set-matrix.outputs.schemafiles != ''
     needs: [set-matrix]
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        schemafile: ${{ fromJson(needs.set-matrix.outputs.CHANGED_SCHEMA_FILES) }}
+        schemafile: ${{ fromJson(needs.set-matrix.outputs.schemafiles) }}
+        dataset: ${{ fromJson(needs.set-matrix.outputs.dataset) }}
+        table: ${{ fromJson(needs.set-matrix.outputs.table) }}
     steps:
-      - name: ${{ matrix.schemafile }}
-        run: echo ${{ matrix.schemafile }}
+      - name: ${{ matrix.schemafile }} - ${{ matrix.dataset }} - ${{ matrix.table }}
+        run: echo "${{ matrix.schemafile }} - ${{ matrix.dataset }} - ${{ matrix.table }}"
