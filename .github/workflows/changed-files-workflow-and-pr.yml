@@ -1,0 +1,82 @@
+name: changed-files
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/changed-files.yml
+      - schemas/**.json
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to run the workflow'
+        type: choice
+        required: true
+        default: 'dev'
+        options:
+          - 'dev'
+          - 'prod'
+      dataset:
+        description: 'Dataset to sync'
+        type: choice
+        required: true
+        options:
+          - 'dataset1'
+          - 'dataset2'
+      table:
+        description: 'Table to sync'
+        type: choice
+        required: true
+        options:
+          - 'table1'
+          - 'table2'
+
+  # this is used in dbt-test.yaml
+  workflow_call:
+    inputs:
+      environment:
+        description: 'Environment to run the workflow (dev)'
+        type: string
+        default: 'dev'
+      dataset:
+        description: 'Dataset to sync'
+        type: string
+        required: true
+      table:
+        description: 'Table to sync'
+        type: string
+        required: true
+      schemafile:
+        description: 'Schema file to sync (optional) default is schemas/<dataset>/<table>.json'
+        type: string
+        required: true
+
+concurrency:
+  group: table-sync-${{ github.ref }}-${{ inputs.dataset }}-${{ inputs.table }}
+  cancel-in-progress: true
+
+jobs:
+  make-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      CHANGED_SCHEMA_FILES: ${{ steps.changed-schema-files.outputs.changed-schema-files }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get changed schema files
+        if: ${{ github.event_name == 'pull_request' }}
+        id: changed-schema-files
+        uses: tj-actions/changed-files@v45
+        with:
+          files: |
+            schemas/**.json
+      - name: Get input schema file
+        run: |
+          echo "[\"schemas/${{github.event.inputs.dataset}}/${{github.event.inputs.table}}.json\" ]"
+  update:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        schema_file: ${{ fromJson(needs.changed_files.outputs.CHANGED_SCHEMA_FILES) }}
+    steps:
+      - name: ${{ matrix.schema_file }}
+        run: echo ${{ matrix.schema_file }}
