@@ -101,7 +101,7 @@ jobs:
         id: parse-path
         run: |
           if [[ "${{ github.event_name }}" = "pull_request" ]]; then
-            if [[ $file =~ schemas/([^/]+)/([^/]+)\.json ]]; then
+            if [[ "${{ github.event_name }}" =~ schemas/([^/]+)/([^/]+)\.json ]]; then
               DATASET="${BASH_REMATCH[1]}"
               TABLE="${BASH_REMATCH[2]}"
             else
