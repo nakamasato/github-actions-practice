@@ -82,6 +82,7 @@ jobs:
           fi
 
   update:
+    needs: [make-matrix]
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
