@@ -68,7 +68,7 @@ jobs:
         with:
           files: |
             schemas/*/*.json
-          matrix: true
+          json: true
       - id: set-matrix
         run: |
           if [[ "${{ github.event_name }}" = "pull_request" ]]; then
