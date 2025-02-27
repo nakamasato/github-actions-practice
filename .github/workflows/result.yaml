@@ -21,7 +21,6 @@ jobs:
           echo "do something1"
 
   skipped:
-    id: skipped
     if: false
     runs-on: ubuntu-latest
     outputs:
@@ -35,7 +34,7 @@ jobs:
 
   success-or-skipped:
     needs: [skipped, success]
-    if: ${{ steps.skipped.outputs.result == 'skipped' }}
+    if: ${{ needs.skipped.result == 'skipped' || needs.skipped.result == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: step
