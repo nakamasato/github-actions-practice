@@ -34,7 +34,7 @@ jobs:
 
   success-or-skipped:
     needs: [skipped, success]
-    if: ${{ needs.skipped.result == 'skipped' || needs.skipped.result == 'success' }}
+    if: ${{ always() && (needs.skipped.result == 'skipped' || needs.skipped.result == 'success') }}
     runs-on: ubuntu-latest
     steps:
       - name: step
