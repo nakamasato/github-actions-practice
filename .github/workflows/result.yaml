@@ -24,7 +24,6 @@ jobs:
     if: false
     runs-on: ubuntu-latest
     outputs:
-      output_via_command: ${{ steps.step.outputs.command_result }}
       output_via_env: ${{ env.ENV_RESULT }}
     steps:
       - name: step
@@ -35,7 +34,7 @@ jobs:
 
   success-or-skipped:
     needs: [skipped, success]
-    if: ${{ skipped.outputs.result == 'skipped' }}
+    if: ${{ steps.skipped.outputs.result == 'skipped' }}
     runs-on: ubuntu-latest
     steps:
       - name: step
