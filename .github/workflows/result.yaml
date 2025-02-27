@@ -30,12 +30,12 @@ jobs:
       - name: step
         run: |
           echo "do something2"
-          echo "::set-output name=command_result::1234"
-          echo "ENV_RESULT=5678" >> $GITHUB_ENV
+          echo "command_result=1234" >> "GITHUB_OUTPUT"
+          echo "ENV_RESULT=5678" >> "$GITHUB_ENV"
 
   success-or-skipped:
     needs: [skipped, success]
-    if: ${{ skipped.outputs.result = 'skipped' }}
+    if: ${{ skipped.outputs.result == 'skipped' }}
     runs-on: ubuntu-latest
     steps:
       - name: step
