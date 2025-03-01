@@ -1,0 +1,42 @@
+name: result
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  fail:
+    runs-on: ubuntu-latest
+    steps:
+      - name: step
+        run: |
+          echo "setup something"
+          echo "${{ toJSON(github) }}"
+
+  success:
+    runs-on: ubuntu-latest
+    steps:
+      - name: step
+        run: |
+          echo "do something1"
+
+  skipped:
+    if: false
+    runs-on: ubuntu-latest
+    outputs:
+      output_via_env: ${{ env.ENV_RESULT }}
+    steps:
+      - name: step
+        run: |
+          echo "do something2"
+          echo "command_result=1234" >> "GITHUB_OUTPUT"
+          echo "ENV_RESULT=5678" >> "$GITHUB_ENV"
+
+  success-or-skipped:
+    needs: [skipped, success]
+    if: ${{ always() && (needs.skipped.result == 'skipped' || needs.skipped.result == 'success') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: step
+        run: |
+          echo "do something3"
