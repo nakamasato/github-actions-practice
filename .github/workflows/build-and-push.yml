@@ -9,7 +9,7 @@ on:
       - 'v*'
     branches:
       - main # this is necessary for pr to utilize the cache
-  pull_requests:
+  pull_request:
     paths:
       - .github/workflows/build-and-push.yml
       - docker-layer-cache/*
