@@ -7,6 +7,12 @@ on:
   push:
     tags:
       - 'v*'
+    branches:
+      - main # this is necessary for pr to utilize the cache
+  pull_requests:
+    paths:
+      - .github/workflows/build-and-push.yml
+      - docker-layer-cache/*
 
 env:
   REGISTRY: ghcr.io
