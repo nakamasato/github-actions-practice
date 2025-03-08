@@ -36,7 +36,7 @@ google-ai-generativelanguage==0.6.16 ; python_version >= "3.11" and python_versi
 google-api-core==2.24.1 ; python_version >= "3.11" and python_version < "3.13"
 google-auth==2.38.0 ; python_version >= "3.11" and python_version < "3.13"
 google-cloud-appengine-logging==1.6.0 ; python_version >= "3.11" and python_version < "3.13"
-google-cloud-audit-log==0.3.0 ; python_version >= "3.11" and python_version < "3.13"
+google-cloud-audit-log==0.3.1 ; python_version >= "3.11" and python_version < "3.13"
 google-cloud-core==2.4.2 ; python_version >= "3.11" and python_version < "3.13"
 google-cloud-logging==3.11.4 ; python_version >= "3.11" and python_version < "3.13"
 google-cloud-run==0.10.16 ; python_version >= "3.11" and python_version < "3.13"
