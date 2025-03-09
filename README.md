@@ -228,7 +228,7 @@
         </details>
     - [GitHub Actions cache](https://docs.docker.com/build/cache/backends/gha/)
 
-        - Case1: No cache 
+        - Case1: No cache
             - first PR or first push: 1m45s ([ref](https://github.com/nakamasato/github-actions-practice/actions/runs/13742614126?pr=2096))
             - first push to main: 1m53s ([ref](https://github.com/nakamasato/github-actions-practice/actions/runs/13742646460))
         - Case2: Cache on PR (cached: 38%): 3s ([ref](https://github.com/nakamasato/github-actions-practice/actions/runs/13742855012/job/38434151866?pr=2102))
