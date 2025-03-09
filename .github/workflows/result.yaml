@@ -5,6 +5,7 @@ on:
   pull_request:
 
 jobs:
+  if: github.event_name == 'pull_request'
   fail:
     runs-on: ubuntu-latest
     steps:
