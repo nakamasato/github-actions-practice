@@ -226,24 +226,15 @@
             - action/cache: 0s (skipped)
 
         </details>
-    - [Docker Layer Cache](https://github.com/marketplace/actions/docker-layer-caching)
+    - [GitHub Actions cache](https://docs.docker.com/build/cache/backends/gha/)
 
-        <details>
+        - Case1: No cache (first PR or first push to main):
+        - Case2: Cache on PR:
+        - Case3: Cache on main:
 
-        Example Docker image:
-        - Case1: No cache:
-            - Build Docker image: 3m 13s
-        - Case2: with cache but couldn't use layer cache:
-            - Run satackey/action-docker-layer-caching@v0.0.8: 2m 30s
-            - Build Docker image: 3m10s
-            - Run satackey/action-docker-layer-caching@v0.0.8: 3m 58s
-        - Case3: with cache and all the layers could use cache:
-            - Run satackey/action-docker-layer-caching@v0.0.8: 3m 48s
-            - Build Docker image: 1s
-            - Run satackey/action-docker-layer-caching@v0.0.8: 3m 40s
-        </details>
-
-        In some case, no cache might be rather faster due to the time to spend storing and restoring a cache.
+        > [!NOTE]
+        > The cache is not shared among PRs. A workflow on PR can access to the cache from main branch.
+        > [ref](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/caching-dependencies-to-speed-up-workflows#restrictions-for-accessing-a-cache)
 - Failure
 
     <details>
