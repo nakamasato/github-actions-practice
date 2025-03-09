@@ -17,11 +17,7 @@ RUN --mount=type=cache,target=/var/cache/apt \
 COPY requirements.txt requirements.txt
 
 RUN --mount=type=cache,target=/root/.cache/pip \
-    python -m venv /opt/venv && \
-    /opt/venv/bin/pip install --upgrade pip && \
-    /opt/venv/bin/pip install -r requirements.txt
-
-ENV PATH="/opt/venv/bin:$PATH"
+    pip install -r requirements.txt
 
 COPY . .
 
