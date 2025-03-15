@@ -128,7 +128,7 @@ pygments==2.19.1
 pyjwt==2.10.1
 pypika==0.48.9
 pyproject-hooks==1.2.0
-pyreadline3==3.5.4 and sys_platform == "win32"
+pyreadline3==3.5.4; sys_platform == "win32"
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 pyyaml==6.0.2
