@@ -88,7 +88,6 @@ multidict==6.1.0
 mypy-extensions==1.0.0
 nodeenv==1.9.1
 notion-client==2.3.0
-numpy==1.26.4
 oauthlib==3.2.2
 onnxruntime==1.20.1
 openai==1.65.2
