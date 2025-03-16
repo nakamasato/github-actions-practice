@@ -7,7 +7,7 @@ on:
       - .github/workflows/pip-cache.yml
 
 jobs:
-  build:
+  with-cache:
     runs-on: ubuntu-latest
 
     steps:
