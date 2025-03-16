@@ -6,29 +6,17 @@ WORKDIR /app
 # ビルドステージ（依存関係のインストール）
 FROM base AS builder
 
-# 必要なツールをインストール
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    gcc \
-    python3-dev \
-    && rm -rf /var/lib/apt/lists/*
-
 # 依存関係のみをコピーしてレイヤーキャッシュを最適化
 COPY requirements.txt .
 
-# ホイールをビルドするためのディレクトリを作成
-RUN mkdir -p /wheels
-RUN pip wheel --no-cache-dir --wheel-dir=/wheels -r requirements.txt
+# パッケージをインストール
+RUN pip install --no-cache-dir -r requirements.txt --target=/install
 
 # 最終イメージの構築
 FROM base AS final
 
-# ビルドステージからwheelをコピー
-COPY --from=builder /wheels /wheels
-
-# wheelからインストール（ビルド不要でキャッシュ効率向上）
-RUN pip install --no-cache --no-index --find-links=/wheels -r requirements.txt && \
-    rm -rf /wheels
+# ビルドステージからインストール済みのパッケージをコピー
+COPY --from=builder /install /usr/local/lib/python3.12/site-packages/
 
 # アプリケーションコードをコピー
 COPY . .
