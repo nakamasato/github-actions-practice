@@ -155,9 +155,8 @@ jobs:
             type=semver,pattern={{version}}
             type=sha
 
-      # pip キャッシュ用のアクション
-      - name: Cache pip dependencies
-        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
+      - name: Restore pip cache
+        uses: actions/cache/restore@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
         id: pip-cache
         with:
           path: root-dot-cache-pip
@@ -188,3 +187,9 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             BUILDKIT_INLINE_CACHE=1
+
+      - name: Save pip cache
+        uses: actions/cache/restore@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
+        with:
+          path: root-dot-cache-pip
+          key: ${{ steps.pip-cache.outputs.cache-primary-key }}
