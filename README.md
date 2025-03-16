@@ -28,6 +28,7 @@
 |[envvar](.github/workflows/envvar.yml)|pull_request|How to set env var and use it.|
 |[keep-only-one-comment-on-pr](.github/workflows/keep-only-one-comment-on-pr.yml)|pull_request|Create a comment if not exist. Otherwise, update the existing comment.|
 |[labeler](.github/workflows/labeler.yml)|pull_request|Add `label` to a pr based on the title.|
+|[pinact](.github/workflows/pinact.yml)|pull_request|[pinact-action](https://github.com/suzuki-shunsuke/pinact-action)|
 |[poetry-cache](.github/workflows/poetry-cache.yml)|pull_request|cache poetry and python dependencies managed by poetry.|
 |[pre-commit](.github/workflows/pre-commit.yml)|pull_request|Run `pre-commit`.|
 |[s3-local](.github/workflows/s3-local.yml)|pull_request|Use `minio` for s3 mock in GitHub Actions. **This workflow is broken❌.**|

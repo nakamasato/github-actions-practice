@@ -12,7 +12,7 @@ jobs:
   option1:
     runs-on: ubuntu-latest
     steps:
-      - uses: 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683' # v4
+      - uses: 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683' # v4.2.2
 
       - name: Set upload config
         id: set-conf
@@ -30,7 +30,7 @@ jobs:
   option2:
     runs-on: ubuntu-latest
     steps:
-      - uses: 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683' # v4
+      - uses: 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683' # v4.2.2
 
       - name: Set upload config
         if: github.event_name == 'pull_request'

@@ -14,7 +14,7 @@ jobs:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           ref: ${{ env.BASE_BRANCH_NAME }}
 
@@ -38,7 +38,7 @@ jobs:
       # GitHub Actions are NOT triggered in this PR
       - name: create-pull-request
         if: steps.need_commit.outputs.need_commit == 'true'
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7.0.8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: 'chore: update readme (github token)'
@@ -51,7 +51,7 @@ jobs:
   create-pr-with-github-app:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           ref: ${{ env.BASE_BRANCH_NAME }}
 
@@ -75,7 +75,7 @@ jobs:
       - name: create-github-app-token
         if: steps.need_commit.outputs.need_commit == 'true'
         id: app-token
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@21cfef2b496dd8ef5b904c159339626a10ad380e # v1.11.6
         with:
           app-id: ${{ secrets.GH_TEST_APP_ID }}
           private-key: ${{ secrets.GH_TEST_PRIVATE_KEY }}
@@ -85,7 +85,7 @@ jobs:
       - name: create-pull-request
         id: create-pull-request
         if: steps.need_commit.outputs.need_commit == 'true'
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7.0.8
         with:
           token: ${{ steps.app-token.outputs.token }}
           commit-message: 'chore: update readme (github app)'

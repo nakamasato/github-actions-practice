@@ -10,13 +10,13 @@ jobs:
       CHANGED_ENVS: ${{ steps.matrix.outputs.CHANGED_ENVS }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
 
       - name: get all changes for static/dev and static/prod
         id: changed-files-yaml
-        uses: tj-actions/changed-files@v45
+        uses: tj-actions/changed-files@48d8f15b2aaa3d255ca5af3eba4870f807ce6b3c # v45.0.2
         with:
           files_yaml: |
             dev:

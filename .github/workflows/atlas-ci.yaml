@@ -28,10 +28,10 @@ jobs:
           --health-retries 5
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0 # Mandatory unless "latest" is set below.
-      - uses: ariga/atlas-action@v1
+      - uses: ariga/atlas-action@1ae5b3b8756e7746441879935c78c845e720ae33 # v1.5.2
         with:
           dir: atlas/migrations
           dir-format: atlas # Or: golang-migrate, liquibase, flyway, goose, dbmate
