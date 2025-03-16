@@ -45,4 +45,3 @@ jobs:
 
       - name: pip install
         run: pip install -r python-script/requirements.txt
-
