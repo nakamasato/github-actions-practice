@@ -14,7 +14,7 @@ jobs:
     outputs:
       include: ${{ steps.set-matrix.outputs.include }}
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
     # Deploy each app to dev for pull request
     # Deploy each app to both prod and dev for push (main)
     - name: set matrix
