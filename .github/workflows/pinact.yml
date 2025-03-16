@@ -1,4 +1,4 @@
-name: Pinact
+name: pinact
 on:
   pull_request: {}
 jobs:
@@ -12,3 +12,6 @@ jobs:
 
       - name: Pin actions
         uses: suzuki-shunsuke/pinact-action@d735505f3decf76fca3fdbb4c952e5b3eba0ffdd # v0.1.2
+        with:
+          app_id: ${{secrets.GH_TEST_APP_ID}}
+          app_private_key: ${{secrets.GH_TEST_PRIVATE_KEY}}
