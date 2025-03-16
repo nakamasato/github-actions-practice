@@ -32,7 +32,7 @@ jobs:
         if: steps.pip-cache.outputs.cache-hit != 'true'
         run: pip install -r python-script/requirements.txt
 
-      -- name: pip cache save
+      - name: pip cache save
         uses: actions/cache/save@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
         if: github.ref_name == 'main'
         with:
