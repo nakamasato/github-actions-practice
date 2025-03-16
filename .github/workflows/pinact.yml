@@ -12,6 +12,6 @@ jobs:
 
       - name: Pin actions
         uses: suzuki-shunsuke/pinact-action@56efd2c1e82a807c939fe31dfbeb12fb73258566 # v0.1.1
-        #with:
-        #  app_id: ${{secrets.GH_TEST_APP_ID}}
-        #  app_private_key: ${{secrets.GH_TEST_PRIVATE_KEY}}
+        with:
+          app_id: ${{secrets.GH_TEST_APP_ID}}
+          app_private_key: ${{secrets.GH_TEST_PRIVATE_KEY}}
