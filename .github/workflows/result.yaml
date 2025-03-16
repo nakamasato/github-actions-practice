@@ -5,15 +5,6 @@ on:
   pull_request:
 
 jobs:
-  fail:
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - name: step
-        run: |
-          echo "setup something"
-          echo "${{ toJSON(github) }}"
-
   success:
     runs-on: ubuntu-latest
     steps:
