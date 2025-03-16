@@ -165,7 +165,7 @@ jobs:
 
       # pip キャッシュ用のアクション
       - name: Cache pip dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: pip-cache
         with:
           path: root-dot-cache-pip
@@ -185,9 +185,10 @@ jobs:
 
       # Docker イメージをビルドして必要に応じてプッシュ
       - name: Build and push Docker image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@471d1dc4e07e5cdedd4c2171150001c434f0b7a4 # v6.15.0
         with:
-          context: .
+          context: docker-layer-cache
+          file: docker-layer-cache/Dockerfile.cache
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
