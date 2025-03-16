@@ -166,7 +166,7 @@ jobs:
 
       # buildkit-cache-dance を使ってキャッシュを Docker ビルドに注入
       - name: Inject cache into Docker build
-        uses: reproducible-containers/buildkit-cache-dance@5de31fc1534ed8789e63d41ea933c5df9944a261 # v3.1.0
+        uses: reproducible-containers/buildkit-cache-dance@5b6db76d1da5c8b307d5d2e0706d266521b710de # v3.1.2
         with:
           cache-map: |
             {
