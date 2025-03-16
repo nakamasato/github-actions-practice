@@ -19,8 +19,8 @@ jobs:
           python-version-file: .python-version
 
       # https://github.com/actions/cache/blob/master/examples.md#python---pip
-      - name: pip cache
-        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
+      - name: pip cache restore
+        uses: actions/cache/restore@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
         id: pip-cache
         with:
           path: ~/.cache/pip
@@ -31,6 +31,13 @@ jobs:
       - name: pip install
         if: steps.pip-cache.outputs.cache-hit != 'true'
         run: pip install -r python-script/requirements.txt
+
+      -- name: pip cache save
+        uses: actions/cache/save@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
+        if: github.ref_name == 'main'
+        with:
+          path: ~/.cache/pip
+          key: ${{ steps.pip-cache.outputs.cache-primary-key }}
 
   no-cache:
     runs-on: ubuntu-latest
