@@ -1,0 +1,18 @@
+FROM python:3.12.7-slim
+
+WORKDIR /app
+
+# requirements.txtのみをコピー（レイヤーキャッシュ最適化）
+COPY requirements.txt .
+
+# pip cache を使用して依存関係をインストール
+RUN --mount=type=cache,target=/root/.cache/pip,sharing=locked \
+    pip install -r requirements.txt
+
+# アプリケーションコードをコピー
+COPY . .
+
+ENV PORT=8080
+EXPOSE 8080
+
+CMD ["python", "app.py"]
