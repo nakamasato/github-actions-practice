@@ -52,8 +52,7 @@
 |GitHub Actions|Trigger|Description|
 |---|---|---|
 |~~**branch-and-tag**~~|push| If change is pushed to `merge` branch or tagged as `v1.*`, the branch will be merged to `main` branch. disabled due to branch protection in [#1348](https://github.com/nakamasato/github-actions-practice/pull/1348)❌|
-|**pip-cache**|push|Use `actions/cache` for caching `~/.cache/pip`|
-|**pip-no-cache**|push|For comparison with **pip-cache**|
+|[pip-cache](.github/workflows/pip-cache.yml)|push|Use `actions/cache` for caching `~/.cache/pip`|
 |[python-semantic-release](.github/workflows/python-semantic-release.yml)|push|❌ not compatible with branch protection [ref](https://github.com/semantic-release/github/issues/175)|
 
 ### 4. schedule

@@ -1,0 +1,27 @@
+# ベースイメージとして使用するステージ
+FROM python:3.12.7-slim AS base
+
+WORKDIR /app
+
+# ビルドステージ（依存関係のインストール）
+FROM base AS builder
+
+# 依存関係のみをコピーしてレイヤーキャッシュを最適化
+COPY requirements.txt .
+
+# パッケージをインストール
+RUN pip install --no-cache-dir -r requirements.txt --target=/install
+
+# 最終イメージの構築
+FROM base AS final
+
+# ビルドステージからインストール済みのパッケージをコピー
+COPY --from=builder /install /usr/local/lib/python3.12/site-packages/
+
+# アプリケーションコードをコピー
+COPY . .
+
+ENV PORT=8080
+EXPOSE 8080
+
+CMD ["python", "app.py"]
