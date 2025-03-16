@@ -64,7 +64,7 @@ jobs:
       - name: Get changed schema files
         if: ${{ github.event_name == 'pull_request' }}
         id: changed-schema-files
-        uses: tj-actions/changed-files@48d8f15b2aaa3d255ca5af3eba4870f807ce6b3c # v45.0.2
+        uses: tj-actions/changed-files@a284dc1814e3fd07f2e34267fc8f81227ed29fb8 # v45.0.9
         with:
           files: |
             schemas/*/*.json
