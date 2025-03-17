@@ -19,7 +19,7 @@ env:
 jobs:
   paths-filter:
     runs-on: ubuntu-latest
-    outpus:
+    outputs:
       changed: ${{ steps.changes.outputs.src }}
     steps:
       - name: Checkout repository
