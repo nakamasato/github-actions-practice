@@ -21,7 +21,7 @@ jobs:
             src:
               - '.github/workflows/*'
 
-  build-and-push-status:
+  actionlint-status:
     runs-on: ubuntu-latest
     needs:
       - actionlint
