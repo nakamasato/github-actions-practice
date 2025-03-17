@@ -32,7 +32,7 @@ flask==3.1.0
 flatbuffers==25.2.10
 frozenlist==1.5.0
 fsspec==2025.2.0
-google-ai-generativelanguage==0.6.16
+google-ai-generativelanguage==0.6.17
 google-api-core==2.24.1
 google-auth==2.38.0
 google-cloud-appengine-logging==1.6.0
