@@ -1,4 +1,4 @@
-name: matrix-from-previous-job-output-merge.yaml
+name: matrix-from-previous-job-output-merge
 on:
   pull_request:
   push:
@@ -16,24 +16,53 @@ jobs:
           elif [[ "${{ github.event_name }}" = "push" ]]; then
             echo "matrix=[\"push1\", \"push2\"]" >> "$GITHUB_OUTPUT"
           fi
+  
   execute:
-    outputs:
-      execute: ${{ steps.execute.ouputs.matrix }}
+    runs-on: ubuntu-latest
+    needs: [setup]
     strategy:
       matrix:
         matrix: ${{ fromJson(needs.setup.outputs.matrix) }}
-    runs-on: ubuntu-latest
-    needs: [setup]
+    outputs:
+      # 各マトリックス値ごとに個別の出力変数を定義
+      result_pull_request1: ${{ steps.execute.outputs.result_pull_request1 }}
+      result_pull_request2: ${{ steps.execute.outputs.result_pull_request2 }}
+      result_push1: ${{ steps.execute.outputs.result_push1 }}
+      result_push2: ${{ steps.execute.outputs.result_push2 }}
+      # 全てのマトリックス項目をカンマ区切りで保存
+      all_items: ${{ steps.set-output.outputs.all_items }}
     steps:
       - id: execute
         run: |
           echo "matrix: ${{ matrix.matrix }}"
-          echo "matrix=${{ matrix.matrix }}" >> "$GITHUB_OUTPUT"
-
+          # マトリックス値に基づいた出力名を使用
+          echo "result_${{ matrix.matrix }}=Value for ${{ matrix.matrix }}" >> "$GITHUB_OUTPUT"
+      
+      - id: set-output
+        run: |
+          # マトリックスの全アイテムを出力（次のジョブでパースするため）
+          echo "all_items=${{ toJson(fromJson(needs.setup.outputs.matrix)) }}" >> "$GITHUB_OUTPUT"
+  
   merge:
     needs: execute
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo "${{ needs.execute.outputs.execute }}"
+      - name: Show individual outputs
+        run: |
+          echo "Pull Request 1: ${{ needs.execute.outputs.result_pull_request1 }}"
+          echo "Pull Request 2: ${{ needs.execute.outputs.result_pull_request2 }}"
+          echo "Push 1: ${{ needs.execute.outputs.result_push1 }}"
+          echo "Push 2: ${{ needs.execute.outputs.result_push2 }}"
+      
+      - name: Parse and merge all outputs
+        run: |
+          # マトリックスの全アイテムを取得
+          ITEMS='${{ needs.execute.outputs.all_items }}'
           
+          # 結果を構築
+          echo "Combined results:"
+          for item in $(echo $ITEMS | jq -r '.[]'); do
+            output_name="result_$item"
+            output_value="${{ needs.execute.outputs[format('result_{0}', item)] }}"
+            echo "$item: $output_value"
+          done
