@@ -1,0 +1,39 @@
+name: matrix-from-previous-job-output-merge.yaml
+on:
+  pull_request:
+  push:
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - id: set-matrix
+        run: |
+          if [[ "${{ github.event_name }}" = "pull_request" ]]; then
+            echo "matrix=[\"pull_request1\", \"pull_request2\"]" >> "$GITHUB_OUTPUT"
+          elif [[ "${{ github.event_name }}" = "push" ]]; then
+            echo "matrix=[\"push1\", \"push2\"]" >> "$GITHUB_OUTPUT"
+          fi
+  execute:
+    outputs:
+      execute: ${{ steps.execute.ouputs.matrix }}
+    strategy:
+      matrix:
+        matrix: ${{ fromJson(needs.setup.outputs.matrix) }}
+    runs-on: ubuntu-latest
+    needs: [setup]
+    steps:
+      - id: execute
+        run: |
+          echo "matrix: ${{ matrix.matrix }}"
+          echo "matrix=${{ matrix.matrix }}" >> "$GITHUB_OUTPUT"
+
+  merge:
+    needs: execute
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "${{ needs.execute.outputs.execute }}"
+          
