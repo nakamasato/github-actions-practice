@@ -1,0 +1,29 @@
+name: stale
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 * * * *"
+
+permissions:
+  contents: write # only for delete-branch option
+  issues: write
+  pull-requests: write
+  actions: write # to use cache https://github.com/actions/stale/issues/1090#issuecomment-1710940734
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v9.1.0
+        with:
+          days-before-pr-stale: 7
+          days-before-pr-close: 7
+          stale-pr-message: |
+            This PR has been automatically marked as stale
+          close-pr-message: |
+            This PR has been automatically closed by actions/stale
+          stale-pr-label: stale
+          exempt-pr-labels: wip
+          operations-per-run: 30
+          ascending: true # Should focus on the old ones
+          delete-branch: true
