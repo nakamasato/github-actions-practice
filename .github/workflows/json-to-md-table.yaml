@@ -2,6 +2,9 @@ name: json-to-md-table
 on:
   pull_request:
 
+env:
+  AGENT_RESULTS_IDENTIFIER: json-to-md-table
+
 jobs:
   job:
     runs-on: ubuntu-latest
@@ -11,3 +14,21 @@ jobs:
         with:
           json: "[{\"column1\": \"First line\"}, {\"column1\": \"Second line\"}]"
       - run: echo ${{ steps.table.outputs.table }}
+      - name: Find existing comment
+        if: github.event_name == 'pull_request'
+        uses: peter-evans/find-comment@v3
+        id: fc
+        with:
+          issue-number: ${{ github.event.number }}
+          body-includes: ${{ env.AGENT_RESULTS_IDENTIFIER }}
+      - name: Post combined results as comment
+        if: github.event_name == 'pull_request'
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          edit-mode: replace
+          issue-number: ${{ github.event.number }}
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          body: |
+            <!-- ${{ env.AGENT_RESULTS_IDENTIFIER }} -->
+
+            ${{ steps.table.outputs.table }}
