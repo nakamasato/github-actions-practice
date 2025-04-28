@@ -9,7 +9,7 @@ jobs:
   json:
     runs-on: ubuntu-latest
     steps:
-      - uses: buildingcash/json-to-markdown-table-action@3212cd4ed03822b88cc1f1f96353100a3ef98474 # v1.0.0
+      - uses: buildingcash/json-to-markdown-table-action@v1.1.0 # v1.0.0
         id: table
         with:
           json: "[{\"column1\": \"First line\"}, {\"column1\": \"Second line\"}]"
@@ -41,7 +41,7 @@ jobs:
         run: |
           echo "[{\"column1\": \"First line\"}, {\"column1\": \"Second line\"}]" >> tmp.json 
 
-      - uses: buildingcash/json-to-markdown-table-action@3212cd4ed03822b88cc1f1f96353100a3ef98474 # v1.0.0
+      - uses: buildingcash/json-to-markdown-table-action@v1.1.0 # v1.0.0
         id: table
         with:
           json_file_path: tmp.json
