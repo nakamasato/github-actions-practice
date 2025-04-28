@@ -1,0 +1,13 @@
+name: json-to-md-table
+on:
+  pull_request:
+
+jobs:
+  job:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: buildingcash/json-to-markdown-table-action@v1
+        id: table
+        with:
+          json: "[{\"column1\": \"First line\"}, {\"column1\": \"Second line\"}]"
+      - run: echo ${{ steps.table.outputs.table }}
