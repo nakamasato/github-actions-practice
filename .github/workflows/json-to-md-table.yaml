@@ -20,7 +20,7 @@ jobs:
         id: fc
         with:
           issue-number: ${{ github.event.number }}
-          body-includes: ${{ env.AGENT_RESULTS_IDENTIFIER }}
+          body-includes: ${{ env.AGENT_RESULTS_IDENTIFIER }}-json
 
       - name: Post combined results as comment
         if: github.event_name == 'pull_request'
@@ -30,7 +30,7 @@ jobs:
           issue-number: ${{ github.event.number }}
           comment-id: ${{ steps.fc.outputs.comment-id }}
           body: |
-            <!-- ${{ env.AGENT_RESULTS_IDENTIFIER }} -->
+            <!-- ${{ env.AGENT_RESULTS_IDENTIFIER }}-json -->
 
             ${{ steps.table.outputs.table }}
 
@@ -52,7 +52,7 @@ jobs:
         id: fc
         with:
           issue-number: ${{ github.event.number }}
-          body-includes: ${{ env.AGENT_RESULTS_IDENTIFIER }}
+          body-includes: ${{ env.AGENT_RESULTS_IDENTIFIER }}-file
 
       - name: Post combined results as comment
         if: github.event_name == 'pull_request'
@@ -62,6 +62,6 @@ jobs:
           issue-number: ${{ github.event.number }}
           comment-id: ${{ steps.fc.outputs.comment-id }}
           body: |
-            <!-- ${{ env.AGENT_RESULTS_IDENTIFIER }} -->
+            <!-- ${{ env.AGENT_RESULTS_IDENTIFIER }}-file -->
 
             ${{ steps.table.outputs.table }}
