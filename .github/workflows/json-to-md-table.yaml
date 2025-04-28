@@ -39,7 +39,7 @@ jobs:
     steps:
       - name: create json
         run: |
-          echo "[{\"column1\": \"First line\"}, {\"column1\": \"Second line\"}]" >> tmp.json 
+          echo "[{\"column1\": \"First line\"}, {\"column1\": \"Second line\"}]" >> tmp.json
 
       - uses: buildingcash/json-to-markdown-table-action@v1.1.0 # v1.0.0
         id: table
