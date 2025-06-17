@@ -54,7 +54,7 @@ httpx-sse==0.4.0
 httpx==0.28.1
 huggingface-hub==0.29.1
 humanfriendly==10.0
-identify==2.6.8
+identify==2.6.12
 idna==3.10
 importlib-metadata==8.5.0
 importlib-resources==6.5.2
