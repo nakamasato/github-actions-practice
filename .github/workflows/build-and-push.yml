@@ -100,7 +100,7 @@ jobs:
           buildkitd-flags: --debug
 
       - name: Cache Docker layers
-        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
@@ -186,7 +186,7 @@ jobs:
             type=sha
 
       - name: Restore pip cache
-        uses: actions/cache/restore@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
+        uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         id: pip-cache
         with:
           path: root-dot-cache-pip
@@ -219,7 +219,7 @@ jobs:
             BUILDKIT_INLINE_CACHE=1
 
       - name: Save pip cache
-        uses: actions/cache/restore@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
+        uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         if: github.ref_name == 'main'
         with:
           path: root-dot-cache-pip
