@@ -39,7 +39,7 @@ google-cloud-appengine-logging==1.6.2
 google-cloud-audit-log==0.3.1
 google-cloud-core==2.4.3
 google-cloud-logging==3.11.4
-google-cloud-run==0.10.16
+google-cloud-run==0.10.18
 google-cloud-trace==1.16.0
 googleapis-common-protos==1.68.0
 greenlet==3.1.1
