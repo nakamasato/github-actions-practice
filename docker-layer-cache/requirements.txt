@@ -25,7 +25,7 @@ deprecated==1.2.18
 distlib==0.3.9
 distro==1.9.0
 durationpy==0.9
-fastapi==0.115.11
+fastapi==0.115.13
 filelock==3.17.0
 filetype==1.2.0
 flask==3.1.1
