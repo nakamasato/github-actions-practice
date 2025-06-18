@@ -19,7 +19,7 @@ chromadb==0.6.3
 click==8.1.8
 colorama==0.4.6
 coloredlogs==15.0.1
-cryptography==44.0.2
+cryptography==44.0.3
 dataclasses-json==0.6.7
 deprecated==1.2.18
 distlib==0.3.9
