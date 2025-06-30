@@ -1,3 +1,4 @@
+# .github/workflows/matrix-failure-detection.yml
 name: matrix-failure-detection
 
 on:
@@ -14,9 +15,18 @@ jobs:
       fail-fast: false  # 一つが失敗しても他を続行
       matrix:
         node-version: [14, 16, 18, 20]
+    name: matrix-job-${{ matrix.node-version }}
     
     steps:
       - uses: actions/checkout@v4
+      
+      - name: Get current job ID
+        id: get-job-id
+        uses: ayachensiyuan/get-action-job-id@v1.6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          job-name: matrix-job-${{ matrix.node-version }}
       
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
@@ -40,12 +50,9 @@ jobs:
       - name: Save job result
         if: always()
         run: |
-          # ユニークなジョブIDを生成
-          JOB_ID="node-${{ matrix.node-version }}"
-          
           mkdir -p results
           echo "{
-            \"job_id\": \"$JOB_ID\",
+            \"job_id\": \"${{ steps.get-job-id.outputs.jobId }}\",
             \"node_version\": \"${{ matrix.node-version }}\",
             \"test_status\": \"${{ steps.tests.outcome }}\",
             \"github_job_status\": \"${{ job.status }}\",
@@ -53,14 +60,14 @@ jobs:
             \"run_number\": \"${{ github.run_number }}\"
           }" > results/result.json
           
-          echo "Job ID: $JOB_ID"
+          echo "GitHub Job ID: ${{ steps.get-job-id.outputs.jobId }}"
           echo "Test outcome: ${{ steps.tests.outcome }}"
       
       - name: Upload job result
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: job-result-node-${{ matrix.node-version }}
+          name: job-result-${{ steps.get-job-id.outputs.jobId }}
           path: results/
 
   # 失敗したジョブを検出・集約するジョブ
@@ -108,12 +115,12 @@ jobs:
                 github_job_status=$(jq -r '.github_job_status' "$result_file")
                 node_version=$(jq -r '.node_version' "$result_file")
                 
-                echo "Job: $job_id | Test Status: $test_status | Job Status: $github_job_status | Node: $node_version"
+                echo "Job ID: $job_id | Test Status: $test_status | Job Status: $github_job_status | Node: $node_version"
                 
                 # テストが失敗した場合、またはジョブ自体が失敗した場合
                 if [[ "$test_status" == "failure" ]] || [[ "$github_job_status" == "failure" ]]; then
                   failed_jobs+=("$job_id")
-                  failed_details+="- **$job_id**: Node.js $node_version (Test: $test_status, Job: $github_job_status)\n"
+                  failed_details+="- **Job ID $job_id**: Node.js $node_version (Test: $test_status, Job: $github_job_status)\n"
                 fi
               fi
             fi
@@ -204,31 +211,11 @@ jobs:
     steps:
       - name: Process failed job
         run: |
-          echo "Processing failed job: ${{ matrix.job_id }}"
-          echo "This job will handle the failure for: ${{ matrix.job_id }}"
+          echo "Processing failed job ID: ${{ matrix.job_id }}"
           
-          # 失敗したジョブIDに応じた処理
-          case "${{ matrix.job_id }}" in
-            "node-14")
-              echo "Handling Node.js 14 specific failure..."
-              # Node.js 14特有の処理
-              ;;
-            "node-16")
-              echo "Handling Node.js 16 specific failure..."
-              # Node.js 16特有の処理
-              ;;
-            "node-18")
-              echo "Handling Node.js 18 specific failure..."
-              # Node.js 18特有の処理
-              ;;
-            "node-20")
-              echo "Handling Node.js 20 specific failure..."
-              # Node.js 20特有の処理
-              ;;
-            *)
-              echo "Handling unknown job failure: ${{ matrix.job_id }}"
-              ;;
-          esac
+          # ここで失敗したジョブIDに対する処理を実行
+          # 例：再実行、通知、レポート生成など
+          echo "Handling failure for job: ${{ matrix.job_id }}"
       
       - name: Send specific notification
         run: |
