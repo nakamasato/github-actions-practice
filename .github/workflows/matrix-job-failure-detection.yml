@@ -44,7 +44,7 @@ jobs:
         run: |
           mkdir -p results
           echo "{
-            \"job_name\": \"${{ github.job }}\",
+            \"job_name\": \"matrix-job-${{ matrix.node-version }}\",
             \"node_version\": \"${{ matrix.node-version }}\",
             \"test_status\": \"${{ steps.tests.outcome }}\",
             \"github_job_status\": \"${{ job.status }}\",
@@ -52,14 +52,14 @@ jobs:
             \"run_number\": \"${{ github.run_number }}\"
           }" > results/result.json
           
-          echo "Job name: ${{ github.job }}"
+          echo "Job name: matrix-job-${{ matrix.node-version }}"
           echo "Test outcome: ${{ steps.tests.outcome }}"
       
       - name: Upload job result
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: job-result-${{ github.job }}
+          name: job-result-matrix-job-${{ matrix.node-version }}
           path: results/
 
   # 失敗したジョブを検出・集約するジョブ
