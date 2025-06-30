@@ -1,4 +1,4 @@
-name: matrix-job-failure-detection
+name: matrix-failure-detection
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 jobs:
   # Matrix戦略を使用するメインジョブ
   matrix-job:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false  # 一つが失敗しても他を続行
       matrix:
@@ -21,46 +21,54 @@ jobs:
           - node-version: 16
             experimental: false
     
-    outputs:
-      # 各ジョブの結果を出力として設定
-      job-${{ strategy.job-index }}-result: ${{ job.status }}
-      job-${{ strategy.job-index }}-node: ${{ matrix.node-version }}
-      job-${{ strategy.job-index }}-os: ${{ matrix.os }}
-    
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@v4
       
       - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
       
-      # 実際のテスト/ビルド処理
+      # 実際のテスト/ビルド処理（デモ用に意図的に一部を失敗させる）
       - name: Run tests
+        id: tests
         run: |
           echo "Testing with Node.js ${{ matrix.node-version }} on ${{ matrix.os }}"
-          # ここに実際のテストコマンドを記述
-          npm test
-        continue-on-error: true  # エラーでも続行
+          # デモ用：Node.js 14では失敗させる
+          if [ "${{ matrix.node-version }}" = "14" ]; then
+            echo "Simulating test failure for Node.js 14"
+            exit 1
+          fi
+          echo "Tests passed!"
+        continue-on-error: true
       
       # 結果をアーティファクトとして保存
       - name: Save job result
         if: always()
         run: |
+          # ユニークなジョブIDを生成
+          JOB_ID="node-${{ matrix.node-version }}-${{ matrix.os }}"
+          JOB_ID=$(echo "$JOB_ID" | sed 's/[^a-zA-Z0-9-]/-/g')
+          
           mkdir -p results
           echo "{
-            \"job_id\": \"${{ github.job }}-${{ strategy.job-index }}\",
+            \"job_id\": \"$JOB_ID\",
             \"node_version\": \"${{ matrix.node-version }}\",
             \"os\": \"${{ matrix.os }}\",
-            \"status\": \"${{ job.status }}\",
-            \"conclusion\": \"${{ job.conclusion }}\"
-          }" > results/job-${{ strategy.job-index }}.json
+            \"test_status\": \"${{ steps.tests.outcome }}\",
+            \"github_job_status\": \"${{ job.status }}\",
+            \"run_id\": \"${{ github.run_id }}\",
+            \"run_number\": \"${{ github.run_number }}\"
+          }" > results/result.json
+          
+          echo "Job ID: $JOB_ID"
+          echo "Test outcome: ${{ steps.tests.outcome }}"
       
       - name: Upload job result
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@v4
         with:
-          name: job-result-${{ strategy.job-index }}
+          name: job-result-node-${{ matrix.node-version }}-${{ matrix.os }}
           path: results/
 
   # 失敗したジョブを検出・集約するジョブ
@@ -69,46 +77,68 @@ jobs:
     runs-on: ubuntu-latest
     if: always()  # matrix-jobが失敗しても実行
     
+    outputs:
+      failed_count: ${{ steps.analyze.outputs.failed_count }}
+      has_failures: ${{ steps.analyze.outputs.has_failures }}
+      failed_jobs_list: ${{ steps.analyze.outputs.failed_jobs_list }}
+      failed_details: ${{ steps.analyze.outputs.failed_details }}
+    
     steps:
       - name: Download all job results
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        uses: actions/download-artifact@v4
         with:
           path: all-results/
           pattern: job-result-*
+      
+      - name: Install jq
+        run: |
+          if ! command -v jq &> /dev/null; then
+            sudo apt-get update && sudo apt-get install -y jq
+          fi
       
       - name: Analyze failed jobs
         id: analyze
         run: |
           failed_jobs=()
           failed_details=""
+          total_jobs=0
           
           echo "=== Job Results Analysis ==="
           
+          # 結果ディレクトリを探索
           for result_dir in all-results/job-result-*/; do
             if [ -d "$result_dir" ]; then
-              result_file="$result_dir/job-*.json"
-              if [ -f $result_file ]; then
-                job_id=$(jq -r '.job_id' $result_file)
-                status=$(jq -r '.status' $result_file)
-                conclusion=$(jq -r '.conclusion' $result_file)
-                node_version=$(jq -r '.node_version' $result_file)
-                os=$(jq -r '.os' $result_file)
+              result_file="$result_dir/result.json"
+              if [ -f "$result_file" ]; then
+                total_jobs=$((total_jobs + 1))
                 
-                echo "Job: $job_id | Status: $status | Conclusion: $conclusion | Node: $node_version | OS: $os"
+                job_id=$(jq -r '.job_id' "$result_file")
+                test_status=$(jq -r '.test_status' "$result_file")
+                github_job_status=$(jq -r '.github_job_status' "$result_file")
+                node_version=$(jq -r '.node_version' "$result_file")
+                os=$(jq -r '.os' "$result_file")
                 
-                if [[ "$conclusion" == "failure" || "$status" == "failure" ]]; then
+                echo "Job: $job_id | Test Status: $test_status | Job Status: $github_job_status | Node: $node_version | OS: $os"
+                
+                # テストが失敗した場合、またはジョブ自体が失敗した場合
+                if [[ "$test_status" == "failure" ]] || [[ "$github_job_status" == "failure" ]]; then
                   failed_jobs+=("$job_id")
-                  failed_details+="- Job ID: $job_id (Node.js $node_version on $os)\n"
+                  failed_details+="- **$job_id**: Node.js $node_version on $os (Test: $test_status, Job: $github_job_status)\n"
                 fi
               fi
             fi
           done
           
+          echo ""
           echo "=== Failed Jobs Summary ==="
+          echo "Total jobs: $total_jobs"
+          
           if [ ${#failed_jobs[@]} -eq 0 ]; then
             echo "✅ All matrix jobs succeeded!"
             echo "failed_count=0" >> $GITHUB_OUTPUT
             echo "has_failures=false" >> $GITHUB_OUTPUT
+            echo "failed_jobs_list=" >> $GITHUB_OUTPUT
+            echo "failed_details=" >> $GITHUB_OUTPUT
           else
             echo "❌ Failed jobs count: ${#failed_jobs[@]}"
             echo "Failed job IDs:"
@@ -117,32 +147,47 @@ jobs:
             # GitHub Outputに設定
             echo "failed_count=${#failed_jobs[@]}" >> $GITHUB_OUTPUT
             echo "has_failures=true" >> $GITHUB_OUTPUT
-            echo "failed_jobs_list<<EOF" >> $GITHUB_OUTPUT
-            printf '%s\n' "${failed_jobs[@]}" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
+            
+            # 配列を改行区切りの文字列として出力
+            {
+              echo "failed_jobs_list<<EOF"
+              printf '%s\n' "${failed_jobs[@]}"
+              echo "EOF"
+            } >> $GITHUB_OUTPUT
             
             # 詳細情報も出力
-            echo "failed_details<<EOF" >> $GITHUB_OUTPUT
-            echo -e "$failed_details" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
+            {
+              echo "failed_details<<EOF"
+              echo -e "$failed_details"
+              echo "EOF"
+            } >> $GITHUB_OUTPUT
           fi
       
       - name: Create failure summary
         if: steps.analyze.outputs.has_failures == 'true'
         run: |
-          echo "## 🚨 Matrix Job Failures Detected" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Failed Jobs Count:** ${{ steps.analyze.outputs.failed_count }}" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Failed Job Details:**" >> $GITHUB_STEP_SUMMARY
-          echo "${{ steps.analyze.outputs.failed_details }}" >> $GITHUB_STEP_SUMMARY
+          {
+            echo "## 🚨 Matrix Job Failures Detected"
+            echo ""
+            echo "**Failed Jobs Count:** ${{ steps.analyze.outputs.failed_count }}"
+            echo ""
+            echo "**Failed Job Details:**"
+            echo ""
+            echo "${{ steps.analyze.outputs.failed_details }}"
+            echo ""
+            echo "**Failed Job IDs:**"
+            echo '```'
+            echo "${{ steps.analyze.outputs.failed_jobs_list }}"
+            echo '```'
+          } >> $GITHUB_STEP_SUMMARY
       
       - name: Post comment on PR (if applicable)
         if: github.event_name == 'pull_request' && steps.analyze.outputs.has_failures == 'true'
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        uses: actions/github-script@v7
         with:
           script: |
-            const failedJobs = `${{ steps.analyze.outputs.failed_jobs_list }}`.split('\n').filter(job => job.trim());
+            const failedJobsList = `${{ steps.analyze.outputs.failed_jobs_list }}`;
+            const failedJobs = failedJobsList.split('\n').filter(job => job.trim());
             const failedDetails = `${{ steps.analyze.outputs.failed_details }}`;
             
             const comment = `## 🚨 Matrix Job Failures
@@ -150,6 +195,11 @@ jobs:
             **${failedJobs.length} job(s) failed in the matrix build:**
             
             ${failedDetails}
+            
+            **Failed Job IDs:**
+            \`\`\`
+            ${failedJobsList}
+            \`\`\`
             
             Please check the workflow logs for more details.`;
             
@@ -159,10 +209,52 @@ jobs:
               repo: context.repo.repo,
               body: comment
             });
-      
-      # 失敗時にワークフロー全体を失敗させる（オプション）
-      - name: Fail workflow if jobs failed
-        if: steps.analyze.outputs.has_failures == 'true'
+
+  # 失敗したジョブIDを使用する後続ジョブの例
+  handle-failures:
+    needs: collect-failures
+    runs-on: ubuntu-latest
+    if: needs.collect-failures.outputs.has_failures == 'true'
+    
+    steps:
+      - name: Process failed jobs
         run: |
-          echo "::error::${{ steps.analyze.outputs.failed_count }} matrix job(s) failed"
-          exit 1
+          echo "Processing failed jobs..."
+          echo "Failed count: ${{ needs.collect-failures.outputs.failed_count }}"
+          echo ""
+          echo "Failed job IDs:"
+          echo "${{ needs.collect-failures.outputs.failed_jobs_list }}"
+          echo ""
+          echo "Details:"
+          echo "${{ needs.collect-failures.outputs.failed_details }}"
+          
+          # 失敗したジョブIDを配列として処理
+          IFS=$'\n' read -rd '' -a failed_jobs_array <<< "${{ needs.collect-failures.outputs.failed_jobs_list }}" || true
+          
+          echo ""
+          echo "Processing each failed job:"
+          for job_id in "${failed_jobs_array[@]}"; do
+            if [[ -n "$job_id" ]]; then
+              echo "- Processing failed job: $job_id"
+              # ここで個別の失敗ジョブに対する処理を実行
+              # 例：再試行、通知送信、チケット作成など
+            fi
+          done
+      
+      - name: Send notification (example)
+        run: |
+          echo "🚨 Sending notification about failed jobs..."
+          echo "Failed jobs: ${{ needs.collect-failures.outputs.failed_jobs_list }}"
+          # ここで実際の通知処理（Slack、Teams、メールなど）を実装
+
+  # 成功時の処理例
+  handle-success:
+    needs: collect-failures
+    runs-on: ubuntu-latest
+    if: needs.collect-failures.outputs.has_failures == 'false'
+    
+    steps:
+      - name: All jobs succeeded
+        run: |
+          echo "✅ All matrix jobs completed successfully!"
+          echo "No failed jobs to process."
