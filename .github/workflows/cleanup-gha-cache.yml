@@ -14,9 +14,9 @@ jobs:
         run: |
           REPO=${{ github.repository }}
           PR_REF="refs/pull/${{ github.event.pull_request.number }}/merge"
-          
+
           echo "Fetching caches for PR #${{ github.event.pull_request.number }}"
-          
+
           # キャッシュリストを取得し、各キャッシュIDを削除
           gh cache list \
             --repo "$REPO" \
@@ -30,7 +30,7 @@ jobs:
               gh cache delete "$cache_id" --repo "$REPO"
             fi
           done
-          
+
           echo "Cache cleanup completed for PR #${{ github.event.pull_request.number }}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
