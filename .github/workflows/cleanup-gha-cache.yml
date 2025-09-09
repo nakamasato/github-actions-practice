@@ -24,7 +24,7 @@ jobs:
             --limit 100 \
             --json id \
             --jq '.[].id' | \
-          while read cache_id; do
+          while IFS= read -r cache_id; do
             if [ -n "$cache_id" ]; then
               echo "Deleting cache ID: $cache_id"
               gh cache delete "$cache_id" --repo "$REPO"
