@@ -19,7 +19,7 @@ jobs:
           
           # キャッシュリストを取得し、各キャッシュIDを削除
           gh cache list \
-            --repo $REPO \
+            --repo "$REPO" \
             --ref "$PR_REF" \
             --limit 100 \
             --json id \
@@ -27,7 +27,7 @@ jobs:
           while read cache_id; do
             if [ -n "$cache_id" ]; then
               echo "Deleting cache ID: $cache_id"
-              gh cache delete "$cache_id" --repo $REPO
+              gh cache delete "$cache_id" --repo "$REPO"
             fi
           done
           
