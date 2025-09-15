@@ -7,7 +7,7 @@ jobs:
   debug:
     runs-on: ubuntu-latest
     steps:
-      - name: Show removed label
+      - name: Show added/removed label
         run: |
           echo "${{ github.event.action }} label: ${{ github.event.label.name }}"
           echo "all labels attached to pr: ${{ toJson(github.event.pull_request.labels.*.name) }}"
