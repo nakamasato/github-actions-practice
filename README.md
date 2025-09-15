@@ -132,7 +132,8 @@
         - Get PR number: `PR_NUMBER=${{ github.event.number }}`
         - Get sha: `${{ github.sha }}`
         - Get repository: `${{ github.repository }}`
-        - Get label name for `labeled` type: `${{ github.event.label.name }}`
+        - Get label name for `labeled`/`unlabeled` type: `${{ github.event.label.name }}`
+        - Get labels attached to a pull request: `${{ github.event.pull_request.labels.*.name }}`
         - Get source branch: `${{ github.head_ref }}`
         - Get base branch: `${{ github.base_ref }}`
         - Whether the PR is `draft`: `github.event.pull_request.draft`
