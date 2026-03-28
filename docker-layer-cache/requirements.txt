@@ -136,7 +136,7 @@ requests-oauthlib==2.0.0
 requests-toolbelt==1.0.0
 requests==2.33.0
 rich==13.9.4
-rsa==4.9
+rsa==4.9.1
 shellingham==1.5.4
 six==1.17.0
 slack-sdk==3.34.0
