@@ -1,4 +1,4 @@
 boto3==1.38.39
 botocore==1.38.39
-Django==5.2.16
+Django==5.2.17
 djangorestframework==3.17.2
