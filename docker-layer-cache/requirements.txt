@@ -64,7 +64,7 @@ jiter==0.8.2
 jsonpatch==1.33
 jsonpointer==3.0.0
 kubernetes==32.0.1
-langchain-chroma==0.2.2
+langchain-chroma==0.2.6
 langchain-community==0.3.18
 langchain-core==0.3.40
 langchain-google-genai==2.0.11
