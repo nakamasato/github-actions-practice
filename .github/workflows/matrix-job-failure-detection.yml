@@ -1,0 +1,278 @@
+# .github/workflows/matrix-failure-detection.yml
+name: matrix-failure-detection
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # Matrix戦略を使用するメインジョブ
+  matrix-job:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false  # 一つが失敗しても他を続行
+      matrix:
+        node-version: [14, 16, 18, 20]
+    name: matrix-job-${{ matrix.node-version }}
+    
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: ${{ matrix.node-version }}
+      
+      # 実際のテスト/ビルド処理（デモ用に意図的に一部を失敗させる）
+      - name: Run tests
+        id: tests
+        run: |
+          echo "Testing with Node.js ${{ matrix.node-version }}"
+          # デモ用：Node.js 14では失敗させる
+          if [ "${{ matrix.node-version }}" = "14" ]; then
+            echo "Simulating test failure for Node.js 14"
+            exit 1
+          fi
+          echo "Tests passed!"
+        continue-on-error: true
+      
+      # 結果をアーティファクトとして保存
+      - name: Save job result
+        if: always()
+        run: |
+          mkdir -p results
+          echo "{
+            \"job_name\": \"matrix-job-${{ matrix.node-version }}\",
+            \"node_version\": \"${{ matrix.node-version }}\",
+            \"test_status\": \"${{ steps.tests.outcome }}\",
+            \"github_job_status\": \"${{ job.status }}\",
+            \"run_id\": \"${{ github.run_id }}\",
+            \"run_number\": \"${{ github.run_number }}\"
+          }" > results/result.json
+          
+          echo "Job name: matrix-job-${{ matrix.node-version }}"
+          echo "Test outcome: ${{ steps.tests.outcome }}"
+      
+      - name: Upload job result
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: job-result-matrix-job-${{ matrix.node-version }}
+          path: results/
+
+  # 失敗したジョブを検出・集約するジョブ
+  collect-failures:
+    needs: matrix-job
+    runs-on: ubuntu-latest
+    if: always()  # matrix-jobが失敗しても実行
+    
+    outputs:
+      failed_count: ${{ steps.analyze.outputs.failed_count }}
+      has_failures: ${{ steps.analyze.outputs.has_failures }}
+      failed_job_names_matrix: ${{ steps.analyze.outputs.failed_job_names_matrix }}
+    
+    steps:
+      - name: Download all job results
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          path: all-results/
+          pattern: job-result-*
+      
+      - name: Install jq
+        run: |
+          if ! command -v jq &> /dev/null; then
+            sudo apt-get update && sudo apt-get install -y jq
+          fi
+      
+      - name: Analyze failed jobs
+        id: analyze
+        run: |
+          failed_job_names=()
+          failed_details=""
+          total_jobs=0
+          
+          echo "=== Job Results Analysis ==="
+          
+          # 結果ディレクトリを探索
+          for result_dir in all-results/job-result-*/; do
+            if [ -d "$result_dir" ]; then
+              result_file="$result_dir/result.json"
+              if [ -f "$result_file" ]; then
+                total_jobs=$((total_jobs + 1))
+                
+                job_name=$(jq -r '.job_name' "$result_file")
+                test_status=$(jq -r '.test_status' "$result_file")
+                github_job_status=$(jq -r '.github_job_status' "$result_file")
+                node_version=$(jq -r '.node_version' "$result_file")
+                
+                echo "Job Name: $job_name | Test Status: $test_status | Job Status: $github_job_status | Node: $node_version"
+                
+                # テストが失敗した場合、またはジョブ自体が失敗した場合
+                if [[ "$test_status" == "failure" ]] || [[ "$github_job_status" == "failure" ]]; then
+                  failed_job_names+=("$job_name")
+                  failed_details+="- **$job_name**: Node.js $node_version (Test: $test_status, Job: $github_job_status)\n"
+                fi
+              fi
+            fi
+          done
+          
+          echo ""
+          echo "=== Failed Jobs Summary ==="
+          echo "Total jobs: $total_jobs"
+          
+          if [ ${#failed_job_names[@]} -eq 0 ]; then
+            echo "✅ All matrix jobs succeeded!"
+            echo "failed_count=0" >> $GITHUB_OUTPUT
+            echo "has_failures=false" >> $GITHUB_OUTPUT
+            echo "failed_job_names_matrix=[]" >> $GITHUB_OUTPUT
+          else
+            echo "❌ Failed jobs count: ${#failed_job_names[@]}"
+            echo "Failed job names:"
+            printf '%s\n' "${failed_job_names[@]}"
+            
+            # matrixで使用するためのJSON配列を生成
+            failed_job_names_json="["
+            for i in "${!failed_job_names[@]}"; do
+              if [ $i -gt 0 ]; then
+                failed_job_names_json+=","
+              fi
+              failed_job_names_json+="\"${failed_job_names[$i]}\""
+            done
+            failed_job_names_json+="]"
+            
+            echo "Failed job names JSON for matrix: $failed_job_names_json"
+            
+            # GitHub Outputに設定
+            echo "failed_count=${#failed_job_names[@]}" >> $GITHUB_OUTPUT
+            echo "has_failures=true" >> $GITHUB_OUTPUT
+            echo "failed_job_names_matrix=$failed_job_names_json" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Create failure summary
+        if: steps.analyze.outputs.has_failures == 'true'
+        run: |
+          {
+            echo "## 🚨 Matrix Job Failures Detected"
+            echo ""
+            echo "**Failed Jobs Count:** ${{ steps.analyze.outputs.failed_count }}"
+            echo ""
+            echo "**Failed Job Names for matrix:**"
+            echo '```json'
+            echo "${{ steps.analyze.outputs.failed_job_names_matrix }}"
+            echo '```'
+          } >> $GITHUB_STEP_SUMMARY
+      
+      - name: Post comment on PR (if applicable)
+        if: github.event_name == 'pull_request' && steps.analyze.outputs.has_failures == 'true'
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            const failedJobNames = JSON.parse(`${{ steps.analyze.outputs.failed_job_names_matrix }}`);
+            
+            const comment = `## 🚨 Matrix Job Failures
+            
+            **${failedJobNames.length} job(s) failed in the matrix build:**
+            
+            Failed Job Names: ${failedJobNames.join(', ')}
+            
+            **Matrix JSON for reprocessing:**
+            \`\`\`json
+            ${{ steps.analyze.outputs.failed_job_names_matrix }}
+            \`\`\`
+            
+            Please check the workflow logs for more details.`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  # 失敗したジョブ名に対してmatrix戦略で処理するジョブ
+  handle-failures:
+    needs: collect-failures
+    runs-on: ubuntu-latest
+    if: needs.collect-failures.outputs.has_failures == 'true'
+    strategy:
+      matrix:
+        job_name: ${{ fromJson(needs.collect-failures.outputs.failed_job_names_matrix) }}
+    
+    steps:
+      - name: Install GitHub CLI
+        run: |
+          if ! command -v gh &> /dev/null; then
+            curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+            sudo apt update
+            sudo apt install gh -y
+          fi
+      
+      - name: Get job ID from job name
+        id: get-job-id
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          JOB_ID=$(gh run --repo ${{ github.repository }} view ${{ github.run_id }} --json jobs --jq '.jobs[] | select(.name == "${{ matrix.job_name }}") | .databaseId')
+          echo "Job ID for ${{ matrix.job_name }}: $JOB_ID"
+          echo "job_id=$JOB_ID" >> $GITHUB_OUTPUT
+          
+          # ジョブの詳細情報も取得
+          JOB_DETAILS=$(gh run --repo ${{ github.repository }} view ${{ github.run_id }} --json jobs --jq '.jobs[] | select(.name == "${{ matrix.job_name }}")')
+          echo "Job details:"
+          echo "$JOB_DETAILS" | jq .
+      
+      - name: Process failed job
+        run: |
+          echo "Processing failed job name: ${{ matrix.job_name }}"
+          echo "Job ID: ${{ steps.get-job-id.outputs.job_id }}"
+          
+          # ジョブ名からNode.jsバージョンを抽出
+          NODE_VERSION=$(echo "${{ matrix.job_name }}" | sed 's/matrix-job-//')
+          echo "Node.js version: $NODE_VERSION"
+          
+          # Node.jsバージョンに応じた処理
+          case "$NODE_VERSION" in
+            "14")
+              echo "Handling Node.js 14 specific failure..."
+              echo "- Checking compatibility issues"
+              echo "- Running fallback tests"
+              ;;
+            "16")
+              echo "Handling Node.js 16 specific failure..."
+              echo "- Analyzing dependency conflicts"
+              ;;
+            "18")
+              echo "Handling Node.js 18 specific failure..."
+              echo "- Checking ESM compatibility"
+              ;;
+            "20")
+              echo "Handling Node.js 20 specific failure..."
+              echo "- Verifying latest features"
+              ;;
+            *)
+              echo "Handling unknown Node.js version failure: $NODE_VERSION"
+              ;;
+          esac
+      
+      - name: Send specific notification
+        run: |
+          echo "🚨 Sending notification for failed job:"
+          echo "  Job Name: ${{ matrix.job_name }}"
+          echo "  Job ID: ${{ steps.get-job-id.outputs.job_id }}"
+          # ここで個別の通知処理を実装
+          # 例：Slack、Teams、メールなど
+
+  # 成功時の処理例
+  handle-success:
+    needs: collect-failures
+    runs-on: ubuntu-latest
+    if: needs.collect-failures.outputs.has_failures == 'false'
+    
+    steps:
+      - name: All jobs succeeded
+        run: |
+          echo "✅ All matrix jobs completed successfully!"
+          echo "No failed jobs to process."
