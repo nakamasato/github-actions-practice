@@ -91,7 +91,7 @@ notion-client==2.3.0
 oauthlib==3.2.2
 onnxruntime==1.20.1
 openai==1.65.2
-opentelemetry-api==1.30.0
+opentelemetry-api==1.45.1
 opentelemetry-exporter-gcp-trace==1.9.0
 opentelemetry-exporter-otlp-proto-common==1.30.0
 opentelemetry-exporter-otlp-proto-grpc==1.30.0
